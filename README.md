@@ -1,66 +1,119 @@
 # SynchroDesk
 
-Prototipo de interfaz de **SynchroDesk**: plataforma SaaS multi-tenant de SynchroDev. Incluye mesa de ayuda IT e inventario, con consola de administrador de plataforma.
+Prototipo de interfaz de **SynchroDesk**: plataforma SaaS multi-tenant de SynchroDev. Incluye mesa de ayuda IT, inventario y consola de administrador de plataforma.
 
-Stack: Next.js 16.3, TypeScript, MUI v6, Turbopack. Solo vistas y datos mock; no hay backend ni persistencia.
+**Stack:** Next.js 16.3 · TypeScript · MUI v6 · Turbopack  
+**Fase actual:** maqueta navegable. Datos mock. Sin backend ni persistencia.
 
 ```bash
 npm install
 npm run dev
 ```
 
-Abrir [http://localhost:3000](http://localhost:3000). Redirige a `/login`.
+Abrir [http://localhost:3000](http://localhost:3000) → `/login`.
 
-## Alcance actual
+---
 
-Esta demo es la **vista del administrador de la plataforma (SynchroDev)**, no la del usuario final del cliente.
+## Qué es este producto
 
-| Rol | Quién |
+SynchroDesk no es un único módulo de tickets: es una **plataforma de sistemas** que SynchroDev opera para empresas clientes (tenants).
+
+| Capa | Qué es |
 |---|---|
-| Operador de la plataforma | SynchroDev |
-| Cliente / tenant activo | Google (logo en sidebar y header) |
-| Usuario de consola | Elena Ruiz, administradora de plataforma |
+| Operador | SynchroDev administra la plataforma |
+| Tenant | Empresa contratada (p. ej. Google) |
+| Sistemas | Productos dentro del tenant (mesa de ayuda, inventario, …) |
+| Consola actual | Vista del **administrador de plataforma**, no del usuario final del cliente |
 
-### Multi-tenant
+Usuario de demo: Elena Ruiz (`prueba@synchrodev.cl`).
 
-- Cada empresa contratada es un tenant (Google, Nexus Salud, Andes Logistics, etc.).
+---
+
+## Acceso (`/login`)
+
+Pantalla de inicio de sesión con el mismo lenguaje visual (liquid glass).
+
+- Correo y contraseña (demo; cualquier valor entra al dashboard)
+- Botones **Continuar con Google** y **Continuar con Microsoft** (solo diseño)
+- Cerrar sesión desde el perfil del header vuelve a `/login`
+
+**Auth real:** no está implementada. El plan es **Better Auth** (ver más abajo).
+
+---
+
+## Multi-tenant
+
+- Cada empresa contratada es un tenant.
 - El selector del header muestra las **5 empresas recientes**.
-- Se pueden buscar el resto por nombre, dominio, plan o región.
-- Al elegir un tenant cambia la marca; los datos siguen siendo de demostración.
-- `/clientes` lista todos los tenants. `/clientes/[id]` muestra el contrato.
+- El filtro busca por nombre, dominio, plan o región.
+- Al elegir un tenant cambia la marca (logo). Los datos siguen siendo mock.
+- `/clientes` lista tenants. `/clientes/[id]` muestra el contrato.
 
-### Sistemas
+Tenants de demo: Google (activo por defecto), Nexus Salud, Andes Logistics, Aurora Bank, Costa Retail, Órbita Energía, Pulso Media, Sierra Mining, Lumen Hospitals, Nova Airlines, Quilla Foods, Atlas Telecom.
 
-SynchroDesk agrupa varios productos. El sidebar cambia según el sistema activo. Al abrir un segundo sistema aparecen pestañas para saltar entre ellos.
+---
+
+## Sistemas
+
+El sidebar cambia según el sistema activo. Al abrir un segundo sistema aparecen pestañas.
 
 | Sistema | Secciones |
 |---|---|
 | Mesa de ayuda | Dashboard, tickets, usuarios, roles, equipos, activos TI, conocimiento, configuración |
 | Inventario | Dashboard, movimientos, artículos, almacenes, proveedores |
 
-### Permisos
+La sección **Plataforma → Clientes** está siempre visible para el admin de SynchroDev.
 
-Los roles se asignan **por sistema y módulo**:
+---
+
+## Permisos
+
+Matriz por **sistema y módulo** (`/roles`):
 
 - Mesa de ayuda (acceso + módulos)
 - Sistema de inventario (acceso + módulos)
 - Plataforma SynchroDev (clientes / tenants)
 
-La fila **Acceso al sistema** habilita abrir ese producto. El resto son acciones: ver, crear, editar, eliminar, exportar, aprobar.
+Acciones: ver, crear, editar, eliminar, exportar, aprobar.  
+La fila **Acceso al sistema** habilita abrir ese producto.
+
+---
 
 ## Rutas
 
-**Acceso:** `/login`
+| Área | Rutas |
+|---|---|
+| Acceso | `/login` |
+| Plataforma | `/clientes` · `/clientes/[id]` |
+| Mesa de ayuda | `/dashboard` · `/tickets` · `/tickets/nuevo` · `/tickets/[id]` · `/usuarios` · `/roles` · `/roles/nuevo` · `/roles/[id]` · `/equipos` · `/activos` · `/conocimiento` · `/configuracion` |
+| Inventario | `/inventario` · `/inventario/movimientos` · `/inventario/articulos` · `/inventario/almacenes` · `/inventario/proveedores` |
 
-**Plataforma:** `/clientes` · `/clientes/[id]`
+---
 
-**Mesa de ayuda:** `/dashboard` · `/tickets` · `/tickets/nuevo` · `/tickets/[id]` · `/usuarios` · `/roles` · `/roles/nuevo` · `/roles/[id]` · `/equipos` · `/activos` · `/conocimiento` · `/configuracion`
+## Auth — plan Better Auth (aún no)
 
-**Inventario:** `/inventario` · `/inventario/movimientos` · `/inventario/articulos` · `/inventario/almacenes` · `/inventario/proveedores`
+No instalar ni cablear Better Auth en esta fase.
+
+Cuando se implemente:
+
+- Librería: [Better Auth](https://www.better-auth.com/) sobre Next.js App Router
+- Sesión real (cookies httpOnly), sin persistir en `localStorage` del cliente de negocio
+- Proveedores sociales previstos: **Google** y **Microsoft (Azure AD / Entra ID)**
+- Correo + contraseña como fallback para operadores SynchroDev
+- Multi-tenant: la sesión pertenece a un usuario de plataforma; el tenant activo se elige después del login
+- Sustituir el `router.push('/dashboard')` del login por el flujo Better Auth (`signIn.social`, `signIn.email`)
+- Proteger rutas del `(dashboard)` con middleware / session check
+
+Hasta entonces, Google, Microsoft y el formulario solo navegan a `/dashboard`.
+
+Detalle: `docs/auth.md`.
+
+---
 
 ## Fuera de alcance (esta fase)
 
-No hay API, autenticación real, persistencia, CRUD ni validaciones. Todo sale de `src/shared/mock/`.
+API, autenticación real, persistencia, CRUD, validaciones, WebSockets.  
+Datos: `src/shared/mock/`.
 
-Documentación de diseño: `docs/DESIGN-README.md`  
-Especificación original: `docs/system-design.md`
+Diseño visual: `docs/DESIGN-README.md`  
+Especificación inicial de UI: `docs/system-design.md`
