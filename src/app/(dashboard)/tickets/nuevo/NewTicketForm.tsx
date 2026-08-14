@@ -1,16 +1,19 @@
 'use client'
 
+import { useState } from 'react'
 import { Box, Button, MenuItem, Stack, TextField, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import Link from 'next/link'
 import AppCard from '@/components/ui/AppCard'
 import PageHeader from '@/components/ui/PageHeader'
+import ImageAttachField, { filesToLocalImages, type LocalImage } from '@/components/tickets/ImageAttachField'
 
 const categories = ['Conectividad', 'Hardware', 'Correo', 'Acceso remoto', 'Solicitud', 'Seguridad', 'Licencias']
 const priorities = ['Baja', 'Media', 'Alta', 'Crítica']
 const technicians = ['Sin asignar', 'Carlos Soto', 'Elena Ruiz', 'Sofía Vega', 'Andrés Silva']
 
 export default function NewTicketForm() {
+  const [images, setImages] = useState<LocalImage[]>([])
   return (
     <Box>
       <PageHeader
@@ -84,25 +87,23 @@ export default function NewTicketForm() {
               Evidencias
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Zona decorativa. En el prototipo no se suben archivos.
+              Adjunta capturas. En el prototipo no se suben al servidor.
             </Typography>
-            <Box
-              sx={{
-                border: '1px dashed',
-                borderColor: 'divider',
-                borderRadius: '18px',
-                py: 4,
-                textAlign: 'center',
-                bgcolor: 'rgba(238,243,250,0.55)',
+            <ImageAttachField
+              images={images}
+              onAdd={(incoming) => {
+                const next = filesToLocalImages(incoming)
+                setImages((current) => {
+                  const ids = new Set(current.map((item) => item.id))
+                  return [...current, ...next.filter((item) => !ids.has(item.id))]
+                })
               }}
-            >
-              <Typography variant="body2" sx={{ fontWeight: 650 }}>
-                Arrastra capturas o logs
-              </Typography>
-              <Typography variant="caption" color="text.secondary">
-                PNG, JPG, PDF, TXT
-              </Typography>
-            </Box>
+              onRemove={(id) => {
+                const target = images.find((item) => item.id === id)
+                if (target) URL.revokeObjectURL(target.previewUrl)
+                setImages((current) => current.filter((item) => item.id !== id))
+              }}
+            />
             <Button variant="contained" fullWidth sx={{ mt: 2 }} disabled>
               Crear ticket (demo)
             </Button>

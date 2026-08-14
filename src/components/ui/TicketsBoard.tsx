@@ -1,7 +1,19 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { Box, Chip, Stack, TextField } from '@mui/material'
+import ChevronLeftRounded from '@mui/icons-material/ChevronLeftRounded'
+import ChevronRightRounded from '@mui/icons-material/ChevronRightRounded'
+import {
+  Box,
+  Chip,
+  FormControl,
+  IconButton,
+  MenuItem,
+  Select,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material'
 import type { Ticket, TicketStatus } from '@/shared/types/ticket'
 import AppTable from '@/components/ui/AppTable'
 import EmptyState from '@/components/ui/EmptyState'
@@ -16,6 +28,8 @@ const statuses: Array<TicketStatus | 'Todos'> = [
   'Cerrado',
 ]
 
+const pageSizes = [10, 25, 50] as const
+
 const columns = [
   { key: 'id', label: 'ID', width: '110px' },
   { key: 'title', label: 'Asunto' },
@@ -28,6 +42,8 @@ const columns = [
 export default function TicketsBoard({ tickets }: { tickets: Ticket[] }) {
   const [query, setQuery] = useState('')
   const [status, setStatus] = useState<(typeof statuses)[number]>('Todos')
+  const [pageSize, setPageSize] = useState<(typeof pageSizes)[number]>(25)
+  const [page, setPage] = useState(1)
 
   const filtered = useMemo(() => {
     return tickets.filter((ticket) => {
@@ -37,6 +53,12 @@ export default function TicketsBoard({ tickets }: { tickets: Ticket[] }) {
     })
   }, [query, status, tickets])
 
+  const pageCount = Math.max(1, Math.ceil(filtered.length / pageSize))
+  const currentPage = Math.min(page, pageCount)
+  const from = filtered.length === 0 ? 0 : (currentPage - 1) * pageSize + 1
+  const to = Math.min(currentPage * pageSize, filtered.length)
+  const paged = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+
   return (
     <AppTable
       columns={columns}
@@ -45,7 +67,10 @@ export default function TicketsBoard({ tickets }: { tickets: Ticket[] }) {
           <TextField
             placeholder="Filtrar por ID, asunto o técnico"
             value={query}
-            onChange={(event) => setQuery(event.target.value)}
+            onChange={(event) => {
+              setQuery(event.target.value)
+              setPage(1)
+            }}
             sx={{ flex: 1, '& .MuiOutlinedInput-root': { borderRadius: '999px', height: 42 } }}
           />
           <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap>
@@ -53,13 +78,75 @@ export default function TicketsBoard({ tickets }: { tickets: Ticket[] }) {
               <Chip
                 key={item}
                 label={item}
-                onClick={() => setStatus(item)}
+                onClick={() => {
+                  setStatus(item)
+                  setPage(1)
+                }}
                 color={status === item ? 'primary' : 'default'}
                 variant={status === item ? 'filled' : 'outlined'}
               />
             ))}
           </Stack>
         </Stack>
+      }
+      footer={
+        filtered.length === 0 ? undefined : (
+          <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            spacing={1.5}
+            alignItems={{ xs: 'stretch', sm: 'center' }}
+            justifyContent="space-between"
+          >
+            <Stack direction="row" spacing={1.25} alignItems="center">
+              <FormControl size="small">
+                <Select
+                  value={pageSize}
+                  onChange={(event) => {
+                    setPageSize(event.target.value as (typeof pageSizes)[number])
+                    setPage(1)
+                  }}
+                  sx={{
+                    borderRadius: '999px',
+                    height: 36,
+                    minWidth: 132,
+                    fontWeight: 600,
+                    bgcolor: 'background.paper',
+                  }}
+                >
+                  {pageSizes.map((size) => (
+                    <MenuItem key={size} value={size}>
+                      Mostrar {size}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <Typography variant="body2" color="text.secondary">
+                {from}–{to} de {filtered.length}
+              </Typography>
+            </Stack>
+            <Stack direction="row" spacing={0.5} alignItems="center" justifyContent="flex-end">
+              <Typography variant="body2" color="text.secondary" sx={{ mr: 0.5 }}>
+                Página {currentPage} de {pageCount}
+              </Typography>
+              <IconButton
+                size="small"
+                aria-label="Página anterior"
+                disabled={currentPage <= 1}
+                onClick={() => setPage((value) => Math.max(1, value - 1))}
+              >
+                <ChevronLeftRounded />
+              </IconButton>
+              <IconButton
+                size="small"
+                aria-label="Página siguiente"
+                disabled={currentPage >= pageCount}
+                onClick={() => setPage((value) => Math.min(pageCount, value + 1))}
+              >
+                <ChevronRightRounded />
+              </IconButton>
+            </Stack>
+          </Stack>
+        )
       }
     >
       {filtered.length === 0 ? (
@@ -70,7 +157,7 @@ export default function TicketsBoard({ tickets }: { tickets: Ticket[] }) {
           />
         </Box>
       ) : (
-        filtered.map((ticket) => <TicketRow key={ticket.id} ticket={ticket} />)
+        paged.map((ticket) => <TicketRow key={ticket.id} ticket={ticket} />)
       )}
     </AppTable>
   )

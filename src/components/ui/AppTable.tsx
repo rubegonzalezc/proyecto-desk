@@ -11,9 +11,10 @@ type AppTableProps = {
   columns: AppTableColumn[]
   children: ReactNode
   toolbar?: ReactNode
+  footer?: ReactNode
 }
 
-export default function AppTable({ columns, children, toolbar }: AppTableProps) {
+export default function AppTable({ columns, children, toolbar, footer }: AppTableProps) {
   return (
     <Box className="fade-up">
       {toolbar ? (
@@ -54,6 +55,19 @@ export default function AppTable({ columns, children, toolbar }: AppTableProps) 
             {children}
           </Box>
         </Box>
+        {footer ? (
+          <Box
+            sx={{
+              px: 2.25,
+              py: 1.25,
+              borderTop: '1px solid',
+              borderColor: 'divider',
+              bgcolor: 'rgba(238, 243, 250, 0.45)',
+            }}
+          >
+            {footer}
+          </Box>
+        ) : null}
       </Box>
     </Box>
   )

@@ -1,12 +1,19 @@
 export type TicketStatus = 'Nuevo' | 'En progreso' | 'Pendiente' | 'Resuelto' | 'Cerrado'
 export type TicketPriority = 'Baja' | 'Media' | 'Alta' | 'Crítica'
 
+export interface TicketCommentAttachment {
+  id: string
+  name: string
+  previewUrl?: string
+}
+
 export interface TicketComment {
   id: string
   author: string
   role: string
   message: string
   createdAt: string
+  attachments?: TicketCommentAttachment[]
 }
 
 export interface TicketEvidence {

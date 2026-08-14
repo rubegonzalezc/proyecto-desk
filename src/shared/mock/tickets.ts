@@ -1,6 +1,6 @@
 import type { Ticket } from '@/shared/types/ticket'
 
-export const tickets: Ticket[] = [
+const authored: Ticket[] = [
   {
     id: 'TCK-1001',
     title: 'No hay acceso a internet en planta 3',
@@ -29,6 +29,7 @@ export const tickets: Ticket[] = [
         role: 'Solicitante',
         message: 'El equipo de finanzas sigue sin acceso. Prioridad alta para cierre de mes.',
         createdAt: '2026-08-14 10:05',
+        attachments: [{ id: 'ca1', name: 'planta3-wifi.jpg' }],
       },
     ],
     evidences: [
@@ -252,4 +253,80 @@ export const tickets: Ticket[] = [
     comments: [],
     evidences: [],
   },
+]
+
+const extrasSeed: Array<Pick<Ticket, 'title' | 'status' | 'priority' | 'technician' | 'requester' | 'team' | 'category'>> = [
+  { title: 'Monitor dual no detecta HDMI', status: 'Nuevo', priority: 'Media', technician: 'Sofía Vega', requester: 'Diego Castro', team: 'Mesa de ayuda', category: 'Estaciones' },
+  { title: 'Licencia de Zoom caduca', status: 'Pendiente', priority: 'Baja', technician: 'Sofía Vega', requester: 'Marketing', team: 'Mesa de ayuda', category: 'Licencias' },
+  { title: 'Backup nocturno incompleto', status: 'En progreso', priority: 'Alta', technician: 'Elena Ruiz', requester: 'NOC', team: 'Infraestructura', category: 'Respaldos' },
+  { title: 'AP de sala de juntas inestable', status: 'En progreso', priority: 'Alta', technician: 'Carlos Soto', requester: 'Operaciones', team: 'Redes', category: 'Conectividad' },
+  { title: 'Mouse inalámbrico sin carga', status: 'Resuelto', priority: 'Baja', technician: 'Sofía Vega', requester: 'Patricia Díaz', team: 'Mesa de ayuda', category: 'Hardware' },
+  { title: 'Alta VPN para contratista', status: 'Nuevo', priority: 'Media', technician: 'Sin asignar', requester: 'RR. HH.', team: 'Infraestructura', category: 'Acceso remoto' },
+  { title: 'Toner de color agotado', status: 'Pendiente', priority: 'Media', technician: 'Andrés Silva', requester: 'Recepción', team: 'Soporte terreno', category: 'Hardware' },
+  { title: 'Error al abrir Excel 365', status: 'Cerrado', priority: 'Baja', technician: 'Carlos Soto', requester: 'Luis Ortega', team: 'Mesa de ayuda', category: 'Aplicaciones' },
+  { title: 'Disco de NVR al 90%', status: 'En progreso', priority: 'Alta', technician: 'Andrés Silva', requester: 'Seguridad física', team: 'Soporte terreno', category: 'CCTV' },
+  { title: 'Solicitud de teclado ergonómico', status: 'Nuevo', priority: 'Baja', technician: 'Sin asignar', requester: 'María Pérez', team: 'Mesa de ayuda', category: 'Solicitud' },
+  { title: 'Fallo DHCP en VLAN invitados', status: 'Pendiente', priority: 'Crítica', technician: 'Carlos Soto', requester: 'NOC', team: 'Redes', category: 'Conectividad' },
+  { title: 'Actualizar firmware de firewall', status: 'En progreso', priority: 'Alta', technician: 'Elena Ruiz', requester: 'Infraestructura', team: 'Infraestructura', category: 'Seguridad' },
+  { title: 'No sincroniza OneDrive', status: 'Resuelto', priority: 'Media', technician: 'Sofía Vega', requester: 'Daniela Mora', team: 'Mesa de ayuda', category: 'Correo' },
+  { title: 'Cámara parking sin imagen', status: 'Nuevo', priority: 'Alta', technician: 'Andrés Silva', requester: 'Seguridad física', team: 'Soporte terreno', category: 'CCTV' },
+  { title: 'Permisos en carpeta de finanzas', status: 'Pendiente', priority: 'Media', technician: 'Elena Ruiz', requester: 'María Pérez', team: 'Infraestructura', category: 'Identidad' },
+  { title: 'Laptop no enciende tras viaje', status: 'En progreso', priority: 'Alta', technician: 'Andrés Silva', requester: 'Ignacio Paredes', team: 'Soporte terreno', category: 'Estaciones' },
+  { title: 'Certificado SSL por vencer', status: 'Pendiente', priority: 'Alta', technician: 'Elena Ruiz', requester: 'Desarrollo', team: 'Desarrollo', category: 'Aplicaciones' },
+  { title: 'Instalar Adobe Acrobat', status: 'Resuelto', priority: 'Baja', technician: 'Sofía Vega', requester: 'Marketing', team: 'Mesa de ayuda', category: 'Licencias' },
+  { title: 'Ruido en switch de planta 2', status: 'Nuevo', priority: 'Media', technician: 'Carlos Soto', requester: 'Operaciones', team: 'Redes', category: 'Infraestructura' },
+  { title: 'Bloqueo de cuenta AD reiterado', status: 'En progreso', priority: 'Media', technician: 'Sofía Vega', requester: 'Patricia Díaz', team: 'Mesa de ayuda', category: 'Identidad' },
+  { title: 'Proyector de directorio no enciende', status: 'Cerrado', priority: 'Baja', technician: 'Andrés Silva', requester: 'RR. HH.', team: 'Soporte terreno', category: 'Hardware' },
+  { title: 'Lentitud en ERP de compras', status: 'Pendiente', priority: 'Alta', technician: 'Elena Ruiz', requester: 'Operaciones', team: 'Desarrollo', category: 'Aplicaciones' },
+  { title: 'Cambio de punto de red', status: 'Nuevo', priority: 'Baja', technician: 'Sin asignar', requester: 'Diego Castro', team: 'Redes', category: 'Conectividad' },
+  { title: 'Alerta de temperatura en UPS', status: 'En progreso', priority: 'Crítica', technician: 'Andrés Silva', requester: 'NOC', team: 'Infraestructura', category: 'Infraestructura' },
+  { title: 'No llega correo de proveedores', status: 'Resuelto', priority: 'Media', technician: 'Carlos Soto', requester: 'Compras', team: 'Mesa de ayuda', category: 'Correo' },
+  { title: 'Kit de terreno incompleto', status: 'Pendiente', priority: 'Media', technician: 'Andrés Silva', requester: 'Soporte terreno', team: 'Soporte terreno', category: 'Solicitud' },
+  { title: 'Error BitLocker al reiniciar', status: 'Nuevo', priority: 'Alta', technician: 'Sofía Vega', requester: 'Luis Ortega', team: 'Mesa de ayuda', category: 'Estaciones' },
+  { title: 'Capacidad de file server al 92%', status: 'En progreso', priority: 'Alta', technician: 'Elena Ruiz', requester: 'Infraestructura', team: 'Infraestructura', category: 'Almacenamiento' },
+  { title: 'Configurar MFA a gerencia', status: 'Pendiente', priority: 'Alta', technician: 'Elena Ruiz', requester: 'RR. HH.', team: 'Infraestructura', category: 'Seguridad' },
+  { title: 'Impresora de logística atascada', status: 'Cerrado', priority: 'Media', technician: 'Andrés Silva', requester: 'Diego Castro', team: 'Soporte terreno', category: 'Hardware' },
+  { title: 'Acceso a Wi-Fi corporativa en móvil', status: 'Nuevo', priority: 'Baja', technician: 'Sin asignar', requester: 'Ignacio Paredes', team: 'Redes', category: 'Conectividad' },
+  { title: 'Job de nómina falló a las 02:00', status: 'En progreso', priority: 'Crítica', technician: 'Elena Ruiz', requester: 'RR. HH.', team: 'Desarrollo', category: 'Aplicaciones' },
+  { title: 'Solicitud de segundo monitor', status: 'Resuelto', priority: 'Baja', technician: 'Sofía Vega', requester: 'Daniela Mora', team: 'Mesa de ayuda', category: 'Solicitud' },
+  { title: 'Puerto PoE caído en recepción', status: 'Pendiente', priority: 'Alta', technician: 'Carlos Soto', requester: 'Recepción', team: 'Redes', category: 'Conectividad' },
+  { title: 'Actualización de Windows atascada', status: 'Nuevo', priority: 'Media', technician: 'Sofía Vega', requester: 'Patricia Díaz', team: 'Mesa de ayuda', category: 'Estaciones' },
+  { title: 'Sensor de puerta no registra', status: 'En progreso', priority: 'Media', technician: 'Andrés Silva', requester: 'Seguridad física', team: 'Soporte terreno', category: 'CCTV' },
+  { title: 'Error 502 en portal interno', status: 'Pendiente', priority: 'Alta', technician: 'Elena Ruiz', requester: 'Mesa de ayuda', team: 'Desarrollo', category: 'Aplicaciones' },
+  { title: 'Cambio de dueño de laptop', status: 'Resuelto', priority: 'Baja', technician: 'Sofía Vega', requester: 'RR. HH.', team: 'Mesa de ayuda', category: 'Activos' },
+  { title: 'Pérdida de enlace WAN sucursal', status: 'En progreso', priority: 'Crítica', technician: 'Carlos Soto', requester: 'NOC', team: 'Redes', category: 'Conectividad' },
+  { title: 'Teclado numérico no responde', status: 'Nuevo', priority: 'Baja', technician: 'Sin asignar', requester: 'Luis Ortega', team: 'Mesa de ayuda', category: 'Hardware' },
+  { title: 'Revisión de ACL de invitados', status: 'Pendiente', priority: 'Media', technician: 'Elena Ruiz', requester: 'Operaciones', team: 'Infraestructura', category: 'Seguridad' },
+  { title: 'Instalar cliente SAP GUI', status: 'Cerrado', priority: 'Media', technician: 'Sofía Vega', requester: 'Diego Castro', team: 'Mesa de ayuda', category: 'Aplicaciones' },
+  { title: 'Batería de UPS en fin de vida', status: 'En progreso', priority: 'Alta', technician: 'Andrés Silva', requester: 'NOC', team: 'Infraestructura', category: 'Infraestructura' },
+  { title: 'No abre Teams en sala Huddle', status: 'Nuevo', priority: 'Media', technician: 'Carlos Soto', requester: 'Operaciones', team: 'Mesa de ayuda', category: 'Aplicaciones' },
+  { title: 'Etiquetar patch panel planta 1', status: 'Pendiente', priority: 'Baja', technician: 'Andrés Silva', requester: 'Redes', team: 'Soporte terreno', category: 'Infraestructura' },
+  { title: 'Alta de buzón compartido', status: 'Resuelto', priority: 'Baja', technician: 'Sofía Vega', requester: 'Marketing', team: 'Mesa de ayuda', category: 'Correo' },
+  { title: 'Falla intermitente en SAN', status: 'En progreso', priority: 'Crítica', technician: 'Elena Ruiz', requester: 'Infraestructura', team: 'Infraestructura', category: 'Almacenamiento' },
+  { title: 'Cámara de bodega desenfocada', status: 'Nuevo', priority: 'Media', technician: 'Andrés Silva', requester: 'Seguridad física', team: 'Soporte terreno', category: 'CCTV' },
+  { title: 'Reset de token MFA', status: 'Pendiente', priority: 'Alta', technician: 'Sofía Vega', requester: 'María Pérez', team: 'Mesa de ayuda', category: 'Identidad' },
+  { title: 'Cableado nuevo en isla 4', status: 'Cerrado', priority: 'Baja', technician: 'Carlos Soto', requester: 'Operaciones', team: 'Redes', category: 'Conectividad' },
+  { title: 'Licencia AutoCAD extra', status: 'Nuevo', priority: 'Media', technician: 'Sin asignar', requester: 'Ingeniería', team: 'Mesa de ayuda', category: 'Licencias' },
+  { title: 'Servidor de impresión offline', status: 'En progreso', priority: 'Alta', technician: 'Elena Ruiz', requester: 'Recepción', team: 'Infraestructura', category: 'Hardware' },
+  { title: 'Lentitud Wi-Fi en cafetería', status: 'Pendiente', priority: 'Media', technician: 'Carlos Soto', requester: 'Facilities', team: 'Redes', category: 'Conectividad' },
+  { title: 'Revisar política de USB', status: 'Nuevo', priority: 'Baja', technician: 'Elena Ruiz', requester: 'Seguridad', team: 'Infraestructura', category: 'Seguridad' },
+  { title: 'Pantalla parpadea en CAD', status: 'Resuelto', priority: 'Media', technician: 'Sofía Vega', requester: 'Ingeniería', team: 'Mesa de ayuda', category: 'Estaciones' },
+  { title: 'Traslado de AP a sala board', status: 'En progreso', priority: 'Baja', technician: 'Andrés Silva', requester: 'Gerencia', team: 'Soporte terreno', category: 'Conectividad' },
+]
+
+export const tickets: Ticket[] = [
+  ...authored,
+  ...extrasSeed.map((item, index) => {
+    const n = 1013 + index
+    return {
+      ...item,
+      id: `TCK-${n}`,
+      description: `${item.title}. Registro de demostración para paginación de la cola.`,
+      createdAt: `2026-08-${String(10 + (index % 5)).padStart(2, '0')} ${String(8 + (index % 10)).padStart(2, '0')}:${String((index * 7) % 60).padStart(2, '0')}`,
+      updatedAt: `2026-08-${String(11 + (index % 4)).padStart(2, '0')} ${String(9 + (index % 9)).padStart(2, '0')}:15`,
+      sla: item.status === 'Resuelto' || item.status === 'Cerrado' ? 'Cumplido' : `${1 + (index % 5)}d restantes`,
+      comments: [],
+      evidences: [],
+    } satisfies Ticket
+  }),
 ]
