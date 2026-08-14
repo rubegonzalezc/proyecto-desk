@@ -12,6 +12,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
+import Link from 'next/link'
 import { useState } from 'react'
 import { notifications } from '@/shared/mock/notifications'
 import { getSystemById } from '@/shared/systems'
@@ -26,6 +27,7 @@ export default function Header({ onMenu }: { onMenu: () => void }) {
   const { activeId } = useWorkspace()
   const system = getSystemById(activeId)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [profileEl, setProfileEl] = useState<null | HTMLElement>(null)
   const unread = notifications.filter((item) => item.unread).length
 
   return (
@@ -80,7 +82,13 @@ export default function Header({ onMenu }: { onMenu: () => void }) {
               <NotificationsNoneOutlined />
             </Badge>
           </IconButton>
-          <Stack direction="row" spacing={1.1} alignItems="center" sx={{ ml: 0.75, display: { xs: 'none', sm: 'flex' } }}>
+          <Stack
+            direction="row"
+            spacing={1.1}
+            alignItems="center"
+            onClick={(event) => setProfileEl(event.currentTarget)}
+            sx={{ ml: 0.75, display: { xs: 'none', sm: 'flex' }, cursor: 'pointer' }}
+          >
             <UserAvatar name="Elena Ruiz" initials="ER" size={34} />
             <Box sx={{ lineHeight: 1.15 }}>
               <Typography variant="body2" sx={{ fontWeight: 700 }}>
@@ -119,6 +127,16 @@ export default function Header({ onMenu }: { onMenu: () => void }) {
             </Box>
           </MenuItem>
         ))}
+      </Menu>
+      <Menu
+        anchorEl={profileEl}
+        open={Boolean(profileEl)}
+        onClose={() => setProfileEl(null)}
+        slotProps={{ paper: { sx: { width: 220, mt: 1.5, borderRadius: '16px', p: 0.5 } } }}
+      >
+        <MenuItem component={Link} href="/login" onClick={() => setProfileEl(null)} sx={{ borderRadius: 2 }}>
+          Cerrar sesión
+        </MenuItem>
       </Menu>
     </Box>
   )

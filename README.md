@@ -9,7 +9,7 @@ npm install
 npm run dev
 ```
 
-Abrir [http://localhost:3000](http://localhost:3000). Redirige a `/dashboard`.
+Abrir [http://localhost:3000](http://localhost:3000). Redirige a `/login`.
 
 ## Alcance actual
 
@@ -49,6 +49,8 @@ Los roles se asignan **por sistema y módulo**:
 La fila **Acceso al sistema** habilita abrir ese producto. El resto son acciones: ver, crear, editar, eliminar, exportar, aprobar.
 
 ## Rutas
+
+**Acceso:** `/login`
 
 **Plataforma:** `/clientes` · `/clientes/[id]`
 
