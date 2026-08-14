@@ -1,0 +1,182 @@
+:root {
+  --sd-primary: #2563eb;
+  --sd-primary-dark: #1d4ed8;
+  --sd-primary-light: #60a5fa;
+  --sd-background: #f3f6fb;
+  --sd-surface: #ffffff;
+  --sd-surface-muted: #eef3fa;
+  --sd-navy: #0f172a;
+  --sd-navy-dark: #020617;
+  --sd-text: #0f172a;
+  --sd-text-secondary: #475467;
+  --sd-text-muted: #667085;
+  --sd-border: #d7e2f0;
+  --sd-success: #10b981;
+  --sd-warning: #f59e0b;
+  --sd-error: #ef4444;
+  --sd-info: #2563eb;
+  --sd-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --sd-radius: 24px;
+  --sd-glass-bg: rgba(255, 255, 255, 0.72);
+  --sd-glass-border: rgba(255, 255, 255, 0.65);
+  --sd-glass-blur: 24px;
+  --sd-sidebar: 268px;
+  --sd-header: 72px;
+}
+
+[data-theme='dark'] {
+  --sd-background: #020617;
+  --sd-surface: #0f172a;
+  --sd-surface-muted: #111827;
+  --sd-text: #f8fafc;
+  --sd-text-secondary: rgba(248, 250, 252, 0.72);
+  --sd-text-muted: rgba(248, 250, 252, 0.48);
+  --sd-border: rgba(255, 255, 255, 0.12);
+  --sd-glass-bg: rgba(15, 23, 42, 0.72);
+  --sd-glass-border: rgba(255, 255, 255, 0.12);
+}
+
+.liquid-glass {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--sd-glass-bg);
+  backdrop-filter: blur(var(--sd-glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--sd-glass-blur)) saturate(180%);
+  border: 1px solid var(--sd-glass-border);
+  border-radius: var(--sd-radius);
+  box-shadow:
+    0 8px 32px rgba(15, 23, 42, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.liquid-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.42) 0%,
+    rgba(255, 255, 255, 0) 38%
+  );
+}
+
+[data-theme='dark'] .liquid-glass::before {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0) 38%
+  );
+}
+
+.liquid-glass-solid {
+  position: relative;
+  overflow: hidden;
+  background: var(--sd-surface);
+  border: 1px solid color-mix(in srgb, var(--sd-border) 80%, transparent);
+  border-radius: var(--sd-radius);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.045);
+}
+
+.hover-lift {
+  transition:
+    transform 420ms var(--sd-ease),
+    box-shadow 420ms var(--sd-ease);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px) scale(1.005);
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+}
+
+.hover-lift:active {
+  transform: scale(0.992);
+}
+
+.press-feedback:active {
+  transform: scale(0.992);
+}
+
+.fade-up {
+  animation: sd-fade-up 700ms var(--sd-ease) both;
+}
+
+.stagger > *:nth-child(1) { animation-delay: 0ms; }
+.stagger > *:nth-child(2) { animation-delay: 60ms; }
+.stagger > *:nth-child(3) { animation-delay: 120ms; }
+.stagger > *:nth-child(4) { animation-delay: 180ms; }
+.stagger > *:nth-child(5) { animation-delay: 240ms; }
+.stagger > *:nth-child(6) { animation-delay: 300ms; }
+.stagger > *:nth-child(7) { animation-delay: 360ms; }
+.stagger > *:nth-child(8) { animation-delay: 420ms; }
+
+@keyframes sd-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nav-pill {
+  border-radius: 999px;
+  transition:
+    background 420ms var(--sd-ease),
+    color 420ms var(--sd-ease),
+    transform 180ms var(--sd-ease);
+}
+
+.nav-pill:active {
+  transform: scale(0.992);
+}
+
+.app-table-row {
+  transition: background 280ms var(--sd-ease);
+}
+
+.app-table-row:hover {
+  background: rgba(37, 99, 235, 0.035);
+}
+
+[data-theme='dark'] .app-table-row:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.ice-wash {
+  background:
+    radial-gradient(1200px 480px at 12% -10%, rgba(96, 165, 250, 0.18), transparent 55%),
+    radial-gradient(900px 420px at 92% 0%, rgba(37, 99, 235, 0.08), transparent 50%),
+    linear-gradient(180deg, #f7f9fd 0%, var(--sd-background) 48%, #eef3fa 100%);
+}
+
+[data-theme='dark'] .ice-wash {
+  background:
+    radial-gradient(1000px 420px at 8% -8%, rgba(37, 99, 235, 0.18), transparent 50%),
+    radial-gradient(800px 380px at 96% 0%, rgba(96, 165, 250, 0.08), transparent 48%),
+    linear-gradient(180deg, #020617 0%, #020617 100%);
+}
+
+.floating-header {
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+}
+
+.sd-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.45) transparent;
+}
+
+.sd-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.sd-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.45);
+  border-radius: 999px;
+}

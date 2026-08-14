@@ -1,0 +1,58 @@
+import type { KnowledgeArticle } from '@/shared/types/knowledge'
+
+export const knowledgeArticles: KnowledgeArticle[] = [
+  {
+    id: 'KB-204',
+    title: 'Restablecer contraseña de Active Directory',
+    category: 'Identidad',
+    excerpt: 'Pasos para desbloquear cuentas, forzar cambio en el próximo inicio y notificar al usuario.',
+    updatedAt: '12 ago 2026',
+    views: 842,
+    helpful: 96,
+  },
+  {
+    id: 'KB-188',
+    title: 'Diagnóstico de Wi-Fi en planta 3',
+    category: 'Redes',
+    excerpt: 'Checklist de APs, canales y PoE antes de escalar a redes.',
+    updatedAt: '8 ago 2026',
+    views: 410,
+    helpful: 88,
+  },
+  {
+    id: 'KB-176',
+    title: 'Imaging de laptops corporativas',
+    category: 'Estaciones',
+    excerpt: 'Perfil estándar, BitLocker y enrolamiento en MDM.',
+    updatedAt: '2 ago 2026',
+    views: 305,
+    helpful: 91,
+  },
+  {
+    id: 'KB-161',
+    title: 'Atascos en HP LaserJet 4301',
+    category: 'Hardware',
+    excerpt: 'Rodillo de recogida, bandeja 2 y firmware recomendado.',
+    updatedAt: '28 jul 2026',
+    views: 267,
+    helpful: 79,
+  },
+  {
+    id: 'KB-154',
+    title: 'Alta de usuario: checklist de onboarding',
+    category: 'Procesos',
+    excerpt: 'AD, M365, grupos, activos y ticket de entrega.',
+    updatedAt: '21 jul 2026',
+    views: 690,
+    helpful: 94,
+  },
+  {
+    id: 'KB-140',
+    title: 'VPN SSL: reconexión y logs',
+    category: 'Acceso remoto',
+    excerpt: 'Qué recoger del cliente antes de abrir un ticket a infraestructura.',
+    updatedAt: '15 jul 2026',
+    views: 512,
+    helpful: 85,
+  },
+]
