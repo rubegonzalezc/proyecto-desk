@@ -116,4 +116,5 @@ API, autenticación real, persistencia, CRUD, validaciones, WebSockets.
 Datos: `src/shared/mock/`.
 
 Diseño visual: `docs/DESIGN-README.md`  
-Especificación inicial de UI: `docs/system-design.md`
+Especificación inicial de UI: `docs/system-design.md`  
+Roadmap y historias de usuario: `docs/ROADMAP.md`

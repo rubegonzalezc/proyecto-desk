@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { tickets } from '@/shared/mock/tickets'
 import PageHeader from '@/components/ui/PageHeader'
 import TicketsBoard from '@/components/ui/TicketsBoard'
 
@@ -17,7 +16,7 @@ export default function TicketsPage() {
         actionLabel="Crear ticket"
         actionHref="/tickets/nuevo"
       />
-      <TicketsBoard tickets={tickets} />
+      <TicketsBoard />
     </>
   )
 }
