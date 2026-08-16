@@ -14,7 +14,8 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import type { Ticket, TicketStatus } from '@/shared/types/ticket'
+import type { TicketStatus } from '@/shared/types/ticket'
+import { useTicketsStore } from '@/stores/TicketsProvider'
 import AppTable from '@/components/ui/AppTable'
 import EmptyState from '@/components/ui/EmptyState'
 import TicketRow from '@/components/ui/TicketRow'
@@ -39,7 +40,8 @@ const columns = [
   { key: 'date', label: 'Creado', width: '150px' },
 ]
 
-export default function TicketsBoard({ tickets }: { tickets: Ticket[] }) {
+export default function TicketsBoard() {
+  const { tickets } = useTicketsStore()
   const [query, setQuery] = useState('')
   const [status, setStatus] = useState<(typeof statuses)[number]>('Todos')
   const [pageSize, setPageSize] = useState<(typeof pageSizes)[number]>(25)
