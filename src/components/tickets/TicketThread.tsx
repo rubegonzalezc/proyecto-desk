@@ -16,15 +16,20 @@ import type { TicketComment, TicketEvidence } from '@/shared/types/ticket'
 import { platformOperator } from '@/shared/mock/tenants'
 import AppCard from '@/components/ui/AppCard'
 import UserAvatar from '@/components/ui/UserAvatar'
+import { useTicketsStore } from '@/stores/TicketsProvider'
+import { useToast } from '@/stores/ToastProvider'
 import ImageAttachField, { filesToLocalImages, type LocalImage } from './ImageAttachField'
 
 type TicketThreadProps = {
+  ticketId: string
   comments: TicketComment[]
   evidences: TicketEvidence[]
 }
 
-export default function TicketThread({ comments, evidences }: TicketThreadProps) {
-  const [thread, setThread] = useState(comments)
+export default function TicketThread({ ticketId, comments, evidences }: TicketThreadProps) {
+  const { addComment } = useTicketsStore()
+  const { showSuccess, showError } = useToast()
+
   const [files, setFiles] = useState(evidences)
   const [draft, setDraft] = useState('')
   const [pending, setPending] = useState<LocalImage[]>([])
@@ -40,31 +45,23 @@ export default function TicketThread({ comments, evidences }: TicketThreadProps)
 
   const publish = () => {
     const message = draft.trim()
-    if (!message && pending.length === 0) return
+    if (!message && pending.length === 0) {
+      showError('Escribe un comentario o adjunta al menos una imagen')
+      return
+    }
 
-    const stamp = new Date().toLocaleString('es-CL', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+    const attachments = pending.map((item) => ({
+      id: item.id,
+      name: item.name,
+      previewUrl: item.previewUrl,
+    }))
+
+    addComment(ticketId, {
+      author: platformOperator.adminName,
+      role: 'Plataforma',
+      message: message || 'Imágenes adjuntas',
+      attachments: attachments.length > 0 ? attachments : undefined,
     })
-
-    setThread((current) => [
-      ...current,
-      {
-        id: `local-${Date.now()}`,
-        author: platformOperator.adminName,
-        role: 'Plataforma',
-        message: message || 'Imágenes adjuntas',
-        createdAt: stamp,
-        attachments: pending.map((item) => ({
-          id: item.id,
-          name: item.name,
-          previewUrl: item.previewUrl,
-        })),
-      },
-    ])
 
     if (pending.length > 0) {
       setFiles((current) => [
@@ -80,6 +77,7 @@ export default function TicketThread({ comments, evidences }: TicketThreadProps)
 
     setDraft('')
     setPending([])
+    showSuccess('Comentario publicado')
   }
 
   const imageFiles = useMemo(() => files.filter((item) => item.type === 'imagen'), [files])
@@ -91,13 +89,13 @@ export default function TicketThread({ comments, evidences }: TicketThreadProps)
         <Typography variant="h4" sx={{ mb: 2 }}>
           Comentarios
         </Typography>
-        {thread.length === 0 ? (
+        {comments.length === 0 ? (
           <Typography color="text.secondary" sx={{ mb: 2 }}>
             Aún no hay comentarios en este ticket.
           </Typography>
         ) : (
           <Stack spacing={2} divider={<Divider flexItem />} sx={{ mb: 2.5 }}>
-            {thread.map((comment) => (
+            {comments.map((comment) => (
               <Stack key={comment.id} direction="row" spacing={1.5}>
                 <UserAvatar name={comment.author} />
                 <Box sx={{ minWidth: 0, flex: 1 }}>
@@ -166,7 +164,7 @@ export default function TicketThread({ comments, evidences }: TicketThreadProps)
             setPending((current) => current.filter((item) => item.id !== id))
           }}
         />
-        <Button variant="contained" onClick={publish} sx={{ mt: 1.75 }} disabled={!draft.trim() && pending.length === 0}>
+        <Button variant="contained" onClick={publish} sx={{ mt: 1.75 }}>
           Publicar comentario
         </Button>
       </AppCard>
@@ -182,7 +180,7 @@ export default function TicketThread({ comments, evidences }: TicketThreadProps)
             {imageFiles.length > 0 ? (
               <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
                 {imageFiles.map((file) => {
-                  const live = thread
+                  const live = comments
                     .flatMap((item) => item.attachments ?? [])
                     .find((item) => item.id === file.id)
                   if (live?.previewUrl) {

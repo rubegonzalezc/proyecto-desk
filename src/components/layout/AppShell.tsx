@@ -9,6 +9,7 @@ import SystemTabs from './SystemTabs'
 import { TenantProvider } from './TenantProvider'
 import { WorkspaceProvider } from './WorkspaceProvider'
 import { TicketsProvider } from '@/stores/TicketsProvider'
+import { ToastProvider } from '@/stores/ToastProvider'
 
 const SIDEBAR_WIDTH = 276
 
@@ -19,6 +20,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
   return (
     <WorkspaceProvider>
       <TenantProvider>
+        <ToastProvider>
         <TicketsProvider>
       <Box data-theme={mode} className="ice-wash" sx={{ minHeight: '100vh', display: 'flex' }}>
         <Box
@@ -94,6 +96,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
         </Box>
       </Box>
         </TicketsProvider>
+        </ToastProvider>
       </TenantProvider>
     </WorkspaceProvider>
   )

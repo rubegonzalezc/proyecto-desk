@@ -45,7 +45,7 @@ export default function TicketDetailView({ id }: { id: string }) {
             </Typography>
           </AppCard>
 
-          <TicketThread comments={ticket.comments} evidences={ticket.evidences} />
+          <TicketThread ticketId={ticket.id} comments={ticket.comments} evidences={ticket.evidences} />
         </Grid>
 
         <Grid size={{ xs: 12, lg: 4 }}>
