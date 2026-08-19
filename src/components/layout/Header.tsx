@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 import Link from 'next/link'
 import { useState } from 'react'
-import { notifications } from '@/shared/mock/notifications'
+import { getNotificationHref, notifications } from '@/shared/mock/notifications'
 import { useThemeMode } from '@/theme/ThemeModeProvider'
 import UserAvatar from '@/components/ui/UserAvatar'
 import HeaderSearch from './HeaderSearch'
@@ -94,7 +94,13 @@ export default function Header({ onMenu }: { onMenu: () => void }) {
         }}
       >
         {notifications.map((item) => (
-          <MenuItem key={item.id} onClick={() => setAnchorEl(null)} sx={{ alignItems: 'flex-start', py: 1.25, borderRadius: 2 }}>
+          <MenuItem
+            key={item.id}
+            component={Link}
+            href={getNotificationHref(item)}
+            onClick={() => setAnchorEl(null)}
+            sx={{ alignItems: 'flex-start', py: 1.25, borderRadius: 2 }}
+          >
             <Box>
               <Typography variant="body2" sx={{ fontWeight: item.unread ? 750 : 600 }}>
                 {item.title}

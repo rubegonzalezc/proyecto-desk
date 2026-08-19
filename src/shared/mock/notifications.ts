@@ -4,6 +4,10 @@ export interface AppNotification {
   detail: string
   time: string
   unread: boolean
+  /** Navega a `/tickets/[id]` cuando está presente. */
+  ticketId?: string
+  /** Ruta de destino cuando no hay ticket asociado. */
+  href?: string
 }
 
 export const notifications: AppNotification[] = [
@@ -13,6 +17,7 @@ export const notifications: AppNotification[] = [
     detail: 'Switch de bodega con temperatura alta. Quedan 8 minutos.',
     time: 'Hace 2 min',
     unread: true,
+    ticketId: 'TCK-1011',
   },
   {
     id: 'n2',
@@ -20,6 +25,7 @@ export const notifications: AppNotification[] = [
     detail: 'VPN corporativa cae cada 20 minutos.',
     time: 'Hace 18 min',
     unread: true,
+    ticketId: 'TCK-1003',
   },
   {
     id: 'n3',
@@ -27,12 +33,19 @@ export const notifications: AppNotification[] = [
     detail: 'Carlos Soto cerró el incidente de Outlook.',
     time: 'Hace 1 h',
     unread: false,
+    ticketId: 'TCK-1005',
   },
   {
     id: 'n4',
-    title: 'Licencia Adobe',
-    detail: 'Creative Cloud expira en 5 días.',
+    title: 'Licencias por vencer',
+    detail: 'Creative Cloud y Zoom requieren renovación esta semana.',
     time: 'Hace 3 h',
     unread: false,
+    href: '/tickets',
   },
 ]
+
+export function getNotificationHref(notification: AppNotification): string {
+  if (notification.ticketId) return `/tickets/${notification.ticketId}`
+  return notification.href ?? '/dashboard'
+}
