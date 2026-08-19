@@ -14,21 +14,23 @@ import { useTicketsStore } from '@/stores/TicketsProvider'
 import { useToast } from '@/stores/ToastProvider'
 import type { TicketPriority } from '@/shared/types/ticket'
 import {
+  getTechnicianOptions,
+  TICKET_CATEGORIES,
+  TICKET_PRIORITIES,
+} from '@/shared/constants/ticket-form-options'
+import {
   hasBlockingErrors,
   validateNewTicketForm,
   type NewTicketFormErrors,
 } from '@/shared/validation/new-ticket-form'
 import { simulateApiDelay } from '@/shared/utils/simulated-delay'
 
-const categories = ['Conectividad', 'Hardware', 'Correo', 'Acceso remoto', 'Solicitud', 'Seguridad', 'Licencias']
-const priorities: TicketPriority[] = ['Baja', 'Media', 'Alta', 'Crítica']
-const technicians = ['Sin asignar', 'Carlos Soto', 'Elena Ruiz', 'Sofía Vega', 'Andrés Silva']
-
 export default function NewTicketForm() {
   const router = useRouter()
   const { tenant } = useTenant()
   const { createTicket } = useTicketsStore()
   const { showSuccess, showError } = useToast()
+  const technicians = useMemo(() => getTechnicianOptions(tenant.id), [tenant.id])
 
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -143,7 +145,7 @@ export default function NewTicketForm() {
                     onChange={(event) => setCategory(event.target.value)}
                     fullWidth
                   >
-                    {categories.map((item) => (
+                    {TICKET_CATEGORIES.map((item) => (
                       <MenuItem key={item} value={item}>
                         {item}
                       </MenuItem>
@@ -158,7 +160,7 @@ export default function NewTicketForm() {
                     onChange={(event) => setPriority(event.target.value as TicketPriority)}
                     fullWidth
                   >
-                    {priorities.map((item) => (
+                    {TICKET_PRIORITIES.map((item) => (
                       <MenuItem key={item} value={item}>
                         {item}
                       </MenuItem>

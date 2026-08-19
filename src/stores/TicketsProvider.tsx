@@ -4,11 +4,13 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
 } from 'react'
 import type { Ticket, TicketComment } from '@/shared/types/ticket'
+import { loadTicketsSession, saveTicketsSession } from '@/shared/config/tickets-session-storage'
 import {
   appendCommentToTicket,
   buildTicket,
@@ -32,6 +34,18 @@ const TicketsContext = createContext<TicketsContextValue | null>(null)
 
 export function TicketsProvider({ children }: { children: ReactNode }) {
   const [tickets, setTickets] = useState<Ticket[]>(createInitialTickets)
+  const [hydrated, setHydrated] = useState(false)
+
+  useEffect(() => {
+    const saved = loadTicketsSession()
+    if (saved?.length) setTickets(saved)
+    setHydrated(true)
+  }, [])
+
+  useEffect(() => {
+    if (!hydrated) return
+    saveTicketsSession(tickets)
+  }, [hydrated, tickets])
 
   const listTickets = useCallback(() => tickets, [tickets])
 
