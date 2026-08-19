@@ -50,7 +50,7 @@ export const appSystems: AppSystem[] = [
     shortName: 'Mesa de ayuda',
     description: 'Tickets, equipos y mesa de soporte IT',
     home: '/dashboard',
-    searchPlaceholder: 'Buscar tickets, usuarios o activos',
+    searchPlaceholder: 'Buscar tickets, usuarios o clientes',
     groups: [
       {
         id: 'ops',
@@ -90,7 +90,7 @@ export const appSystems: AppSystem[] = [
     shortName: 'Inventario',
     description: 'Artículos, almacenes, stock y movimientos',
     home: '/inventario',
-    searchPlaceholder: 'Buscar SKU, almacén o proveedor',
+    searchPlaceholder: 'Buscar rutas de inventario, clientes o artículos',
     groups: [
       {
         id: 'ops',
