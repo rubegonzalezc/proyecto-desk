@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import TenantEyebrow from '@/components/layout/TenantEyebrow'
 import PageHeader from '@/components/ui/PageHeader'
+import TableBoardSkeleton from '@/components/ui/skeletons/TableBoardSkeleton'
 import TicketsBoard from '@/components/ui/TicketsBoard'
 import { awaitDemoRouteDelay } from '@/shared/config/demo-loading'
 
@@ -20,7 +22,9 @@ export default async function TicketsPage() {
         actionLabel="Crear ticket"
         actionHref="/tickets/nuevo"
       />
-      <TicketsBoard />
+      <Suspense fallback={<TableBoardSkeleton />}>
+        <TicketsBoard />
+      </Suspense>
     </>
   )
 }

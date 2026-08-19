@@ -1,13 +1,16 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Box, Chip, Stack, useMediaQuery, useTheme } from '@mui/material'
 import type { TicketStatus } from '@/shared/types/ticket'
 import { getStatusDisplayLabel } from '@/shared/labels/ticket-display'
 import { useTenant } from '@/components/layout/TenantProvider'
 import { filterByTenant } from '@/shared/mock/tenant-scope'
+import { buildTicketSearchParams, readTicketUrlFilters } from '@/shared/utils/ticket-url-filters'
 import { useTicketsStore } from '@/stores/TicketsProvider'
 import { useTablePagination } from '@/hooks/useTablePagination'
+import type { TablePageSize } from '@/components/ui/TablePagination'
 import AppTable from '@/components/ui/AppTable'
 import EmptyState from '@/components/ui/EmptyState'
 import TablePagination from '@/components/ui/TablePagination'
@@ -35,10 +38,25 @@ const columns = [
 export default function TicketsBoard() {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
   const { tenant } = useTenant()
   const { tickets } = useTicketsStore()
-  const [query, setQuery] = useState('')
-  const [status, setStatus] = useState<(typeof statuses)[number]>('Todos')
+
+  const { q: query, estado: status, page, size: pageSize } = useMemo(
+    () => readTicketUrlFilters(searchParams),
+    [searchParams],
+  )
+
+  const replaceFilters = useCallback(
+    (patch: Parameters<typeof buildTicketSearchParams>[1]) => {
+      const next = buildTicketSearchParams(searchParams, patch)
+      const queryString = next.toString()
+      router.replace(queryString ? `${pathname}?${queryString}` : pathname, { scroll: false })
+    },
+    [pathname, router, searchParams],
+  )
 
   const tenantTickets = useMemo(
     () => filterByTenant(tickets, tenant.id),
@@ -53,17 +71,25 @@ export default function TicketsBoard() {
     })
   }, [query, status, tenantTickets])
 
-  const pagination = useTablePagination(filtered)
+  const pagination = useTablePagination(filtered, {
+    page,
+    pageSize,
+    onPageChange: (nextPage) => replaceFilters({ page: nextPage }),
+    onPageSizeChange: (nextSize) => replaceFilters({ size: nextSize, resetPage: true }),
+  })
+
   const hasActiveFilters = Boolean(query.trim()) || status !== 'Todos'
 
+  const previousTenantId = useRef(tenant.id)
+
   useEffect(() => {
-    pagination.resetPage()
-  }, [tenant.id, pagination.resetPage])
+    if (previousTenantId.current === tenant.id) return
+    previousTenantId.current = tenant.id
+    replaceFilters({ resetPage: true })
+  }, [tenant.id, replaceFilters])
 
   const clearFilters = () => {
-    setQuery('')
-    setStatus('Todos')
-    pagination.resetPage()
+    router.replace(pathname, { scroll: false })
   }
 
   return (
@@ -73,10 +99,7 @@ export default function TicketsBoard() {
         <TableToolbar stacked>
           <TableSearchField
             value={query}
-            onChange={(value) => {
-              setQuery(value)
-              pagination.resetPage()
-            }}
+            onChange={(value) => replaceFilters({ q: value, resetPage: true })}
             placeholder="Filtrar por ID, asunto o técnico"
             flex={false}
             fullWidth
@@ -88,10 +111,7 @@ export default function TicketsBoard() {
                 size="small"
                 label={getStatusDisplayLabel(item, isMobile)}
                 title={item}
-                onClick={() => {
-                  setStatus(item)
-                  pagination.resetPage()
-                }}
+                onClick={() => replaceFilters({ estado: item, resetPage: true })}
                 color={status === item ? 'primary' : 'default'}
                 variant={status === item ? 'filled' : 'outlined'}
                 sx={{
