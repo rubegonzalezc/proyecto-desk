@@ -1,9 +1,13 @@
 'use client'
 
+import { useState } from 'react'
 import { MenuItem, Stack, TextField, Typography } from '@mui/material'
 import AppCard from '@/components/ui/AppCard'
 import UserAvatar from '@/components/ui/UserAvatar'
 import { useTenant } from '@/components/layout/TenantProvider'
+import TicketStatusConfirmDialog, {
+  requiresStatusConfirmation,
+} from '@/components/tickets/TicketStatusConfirmDialog'
 import {
   getTechnicianOptions,
   TICKET_CATEGORIES,
@@ -24,6 +28,7 @@ export function TicketManagementFields({ ticketId }: TicketManagementFieldsProps
   const { getTicketById, updateTicket } = useTicketsStore()
   const { showSuccess } = useToast()
   const ticket = getTicketById(ticketId)
+  const [pendingStatus, setPendingStatus] = useState<'Resuelto' | 'Cerrado' | null>(null)
 
   if (!ticket) return null
 
@@ -34,15 +39,37 @@ export function TicketManagementFields({ ticketId }: TicketManagementFieldsProps
     if (updated) showSuccess('Cambios guardados')
   }
 
+  const handleStatusChange = (nextStatus: TicketStatus) => {
+    if (requiresStatusConfirmation(nextStatus)) {
+      setPendingStatus(nextStatus)
+      return
+    }
+    saveField({ status: nextStatus })
+  }
+
+  const handleConfirmStatus = () => {
+    if (!pendingStatus) return
+    const updated = updateTicket(ticketId, { status: pendingStatus })
+    if (updated) {
+      showSuccess(
+        pendingStatus === 'Resuelto'
+          ? 'Ticket marcado como resuelto'
+          : 'Ticket cerrado correctamente',
+      )
+    }
+    setPendingStatus(null)
+  }
+
   return (
-    <Stack spacing={2}>
-      <TextField
-        select
-        label="Estado"
-        value={ticket.status}
-        onChange={(event) => saveField({ status: event.target.value as TicketStatus })}
-        fullWidth
-      >
+    <>
+      <Stack spacing={2}>
+        <TextField
+          select
+          label="Estado"
+          value={ticket.status}
+          onChange={(event) => handleStatusChange(event.target.value as TicketStatus)}
+          fullWidth
+        >
         {TICKET_STATUSES.map((item) => (
           <MenuItem key={item} value={item}>
             {item}
@@ -88,7 +115,15 @@ export function TicketManagementFields({ ticketId }: TicketManagementFieldsProps
           </MenuItem>
         ))}
       </TextField>
-    </Stack>
+      </Stack>
+
+      <TicketStatusConfirmDialog
+        status={pendingStatus}
+        ticketId={ticket.id}
+        onCancel={() => setPendingStatus(null)}
+        onConfirm={handleConfirmStatus}
+      />
+    </>
   )
 }
 
