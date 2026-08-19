@@ -1,12 +1,15 @@
 import type { Metadata } from 'next'
 import PageHeader from '@/components/ui/PageHeader'
 import TicketsBoard from '@/components/ui/TicketsBoard'
+import { awaitDemoRouteDelay } from '@/shared/config/demo-loading'
 
 export const metadata: Metadata = {
   title: 'Tickets',
 }
 
-export default function TicketsPage() {
+export default async function TicketsPage() {
+  await awaitDemoRouteDelay()
+
   return (
     <>
       <PageHeader

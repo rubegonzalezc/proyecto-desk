@@ -13,6 +13,7 @@ import {
   recentTickets,
   ticketsByDay,
 } from '@/shared/mock/dashboard'
+import { awaitDemoRouteDelay } from '@/shared/config/demo-loading'
 import AppCard from '@/components/ui/AppCard'
 import PageHeader from '@/components/ui/PageHeader'
 import StatCard from '@/components/ui/StatCard'
@@ -34,7 +35,9 @@ const icons = {
   frt: <TimerOutlined fontSize="small" />,
 }
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  await awaitDemoRouteDelay()
+
   return (
     <Box>
       <PageHeader
