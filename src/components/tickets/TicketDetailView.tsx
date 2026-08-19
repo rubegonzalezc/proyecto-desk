@@ -25,6 +25,7 @@ import PageHeader from '@/components/ui/PageHeader'
 import PriorityBadge from '@/components/ui/PriorityBadge'
 import StatusBadge from '@/components/ui/StatusBadge'
 import TicketActivityTimeline from '@/components/tickets/TicketActivityTimeline'
+import RelatedTicketsBlock from '@/components/tickets/RelatedTicketsBlock'
 import TicketManagementPanel, { TicketManagementFields } from '@/components/tickets/TicketManagementPanel'
 import TicketThread from '@/components/tickets/TicketThread'
 
@@ -86,6 +87,8 @@ export default function TicketDetailView({ id }: { id: string }) {
           </AppCard>
 
           <TicketActivityTimeline activity={ticket.activity ?? []} />
+
+          <RelatedTicketsBlock ticket={ticket} />
 
           <TicketThread ticketId={ticket.id} comments={ticket.comments} evidences={ticket.evidences} />
         </Grid>
