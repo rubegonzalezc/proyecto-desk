@@ -24,6 +24,7 @@ export type AddCommentInput = {
   role: string
   message: string
   attachments?: TicketComment['attachments']
+  evidences?: TicketEvidence[]
 }
 
 function cloneTickets(source: Ticket[]): Ticket[] {
@@ -93,5 +94,25 @@ export function buildComment(input: AddCommentInput): TicketComment {
     message: input.message,
     createdAt: formatTicketTimestamp(),
     attachments: input.attachments?.map((file) => ({ ...file })),
+  }
+}
+
+export function appendCommentToTicket(
+  ticket: Ticket,
+  input: AddCommentInput,
+): { ticket: Ticket; comment: TicketComment } {
+  const comment = buildComment(input)
+  const existingEvidenceIds = new Set(ticket.evidences.map((item) => item.id))
+  const newEvidences =
+    input.evidences?.filter((item) => !existingEvidenceIds.has(item.id)).map((item) => ({ ...item })) ?? []
+
+  return {
+    comment,
+    ticket: {
+      ...ticket,
+      comments: [...ticket.comments, comment],
+      evidences: [...ticket.evidences, ...newEvidences],
+      updatedAt: formatTicketTimestamp(),
+    },
   }
 }

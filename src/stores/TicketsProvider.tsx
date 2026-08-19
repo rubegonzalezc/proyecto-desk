@@ -10,7 +10,7 @@ import {
 } from 'react'
 import type { Ticket, TicketComment } from '@/shared/types/ticket'
 import {
-  buildComment,
+  appendCommentToTicket,
   buildTicket,
   createInitialTickets,
   formatTicketTimestamp,
@@ -66,18 +66,14 @@ export function TicketsProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const addComment = useCallback((ticketId: string, input: AddCommentInput) => {
-    const comment = buildComment(input)
     let saved: TicketComment | undefined
 
     setTickets((current) =>
       current.map((ticket) => {
         if (ticket.id !== ticketId) return ticket
-        saved = comment
-        return {
-          ...ticket,
-          comments: [...ticket.comments, comment],
-          updatedAt: formatTicketTimestamp(),
-        }
+        const result = appendCommentToTicket(ticket, input)
+        saved = result.comment
+        return result.ticket
       }),
     )
 
