@@ -7,6 +7,7 @@ import Grid from '@mui/material/Grid2'
 import Link from 'next/link'
 import AppCard from '@/components/ui/AppCard'
 import PageHeader from '@/components/ui/PageHeader'
+import { useTenant } from '@/components/layout/TenantProvider'
 import ImageAttachField, { filesToLocalImages, type LocalImage } from '@/components/tickets/ImageAttachField'
 import { useTicketsStore } from '@/stores/TicketsProvider'
 import { useToast } from '@/stores/ToastProvider'
@@ -23,6 +24,7 @@ type FormErrors = {
 
 export default function NewTicketForm() {
   const router = useRouter()
+  const { tenant } = useTenant()
   const { createTicket } = useTicketsStore()
   const { showSuccess, showError } = useToast()
 
@@ -35,6 +37,7 @@ export default function NewTicketForm() {
   const [team, setTeam] = useState('Mesa de ayuda')
   const [images, setImages] = useState<LocalImage[]>([])
   const [errors, setErrors] = useState<FormErrors>({})
+  const [submitting, setSubmitting] = useState(false)
 
   const validate = (): FormErrors => {
     const next: FormErrors = {}
@@ -45,6 +48,8 @@ export default function NewTicketForm() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (submitting) return
+
     const nextErrors = validate()
     setErrors(nextErrors)
 
@@ -52,6 +57,8 @@ export default function NewTicketForm() {
       showError('Revisa los campos obligatorios antes de continuar')
       return
     }
+
+    setSubmitting(true)
 
     const created = createTicket({
       title: title.trim(),
@@ -61,6 +68,13 @@ export default function NewTicketForm() {
       category,
       technician,
       team: team.trim(),
+      tenantId: tenant.id,
+      evidences: images.map((item) => ({
+        id: item.id,
+        name: item.name,
+        type: 'imagen' as const,
+        size: item.sizeLabel,
+      })),
     })
 
     showSuccess(`Ticket ${created.id} creado correctamente`)
@@ -205,8 +219,8 @@ export default function NewTicketForm() {
                 setImages((current) => current.filter((item) => item.id !== id))
               }}
             />
-            <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
-              Crear ticket
+            <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }} disabled={submitting}>
+              {submitting ? 'Creando ticket…' : 'Crear ticket'}
             </Button>
           </AppCard>
         </Grid>
