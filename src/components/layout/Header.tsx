@@ -4,6 +4,7 @@ import { DarkModeOutlined, LightModeOutlined, NotificationsNoneOutlined, SearchR
 import {
   Badge,
   Box,
+  Button,
   IconButton,
   Menu,
   MenuItem,
@@ -12,7 +13,8 @@ import {
 } from '@mui/material'
 import Link from 'next/link'
 import { useState } from 'react'
-import { getNotificationHref, notifications } from '@/shared/mock/notifications'
+import { getNotificationHref } from '@/shared/mock/notifications'
+import { useNotifications } from '@/stores/NotificationsProvider'
 import { useThemeMode } from '@/theme/ThemeModeProvider'
 import UserAvatar from '@/components/ui/UserAvatar'
 import HeaderSearch from './HeaderSearch'
@@ -23,9 +25,9 @@ import { platformOperator } from '@/shared/mock/tenants'
 export default function Header({ onMenu }: { onMenu: () => void }) {
   const { mode, toggleMode } = useThemeMode()
   const { openPalette } = useCommandPalette()
+  const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [profileEl, setProfileEl] = useState<null | HTMLElement>(null)
-  const unread = notifications.filter((item) => item.unread).length
 
   return (
     <Box
@@ -59,7 +61,7 @@ export default function Header({ onMenu }: { onMenu: () => void }) {
             {mode === 'light' ? <DarkModeOutlined /> : <LightModeOutlined />}
           </IconButton>
           <IconButton onClick={(event) => setAnchorEl(event.currentTarget)} aria-label="Notificaciones">
-            <Badge color="error" badgeContent={unread} overlap="circular">
+            <Badge color="error" badgeContent={unreadCount > 0 ? unreadCount : undefined} overlap="circular">
               <NotificationsNoneOutlined />
             </Badge>
           </IconButton>
@@ -93,24 +95,72 @@ export default function Header({ onMenu }: { onMenu: () => void }) {
           },
         }}
       >
+        <Box
+          sx={{
+            px: 1.5,
+            py: 1.1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 1,
+          }}
+          onClick={(event) => event.stopPropagation()}
+        >
+          <Typography variant="subtitle2" sx={{ fontWeight: 750 }}>
+            Notificaciones
+          </Typography>
+          {unreadCount > 0 ? (
+            <Button
+              size="small"
+              onClick={() => markAllAsRead()}
+              sx={{ minWidth: 0, whiteSpace: 'nowrap', fontSize: 12 }}
+            >
+              Marcar todas como leídas
+            </Button>
+          ) : null}
+        </Box>
         {notifications.map((item) => (
           <MenuItem
             key={item.id}
             component={Link}
             href={getNotificationHref(item)}
-            onClick={() => setAnchorEl(null)}
-            sx={{ alignItems: 'flex-start', py: 1.25, borderRadius: 2 }}
+            onClick={() => {
+              markAsRead(item.id)
+              setAnchorEl(null)
+            }}
+            sx={{
+              alignItems: 'flex-start',
+              py: 1.25,
+              borderRadius: 2,
+              bgcolor: item.unread ? 'action.hover' : 'transparent',
+            }}
           >
-            <Box>
-              <Typography variant="body2" sx={{ fontWeight: item.unread ? 750 : 600 }}>
-                {item.title}
-              </Typography>
-              <Typography variant="caption" color="text.secondary" sx={{ display: 'block', whiteSpace: 'normal' }}>
-                {item.detail}
-              </Typography>
-              <Typography variant="caption" color="text.disabled">
-                {item.time}
-              </Typography>
+            <Box sx={{ width: '100%' }}>
+              <Stack direction="row" spacing={1} alignItems="flex-start">
+                {item.unread ? (
+                  <Box
+                    sx={{
+                      width: 8,
+                      height: 8,
+                      mt: 0.75,
+                      borderRadius: '50%',
+                      bgcolor: 'error.main',
+                      flexShrink: 0,
+                    }}
+                  />
+                ) : null}
+                <Box sx={{ flex: 1, minWidth: 0 }}>
+                  <Typography variant="body2" sx={{ fontWeight: item.unread ? 750 : 600 }}>
+                    {item.title}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary" sx={{ display: 'block', whiteSpace: 'normal' }}>
+                    {item.detail}
+                  </Typography>
+                  <Typography variant="caption" color="text.disabled">
+                    {item.time}
+                  </Typography>
+                </Box>
+              </Stack>
             </Box>
           </MenuItem>
         ))}

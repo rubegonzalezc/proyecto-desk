@@ -10,6 +10,7 @@ import { TenantProvider } from './TenantProvider'
 import { WorkspaceProvider } from './WorkspaceProvider'
 import { TicketsProvider } from '@/stores/TicketsProvider'
 import { ToastProvider } from '@/stores/ToastProvider'
+import { NotificationsProvider } from '@/stores/NotificationsProvider'
 import CommandPalette from './CommandPalette'
 import { CommandPaletteProvider } from './CommandPaletteProvider'
 
@@ -23,6 +24,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
     <WorkspaceProvider>
       <TenantProvider>
         <ToastProvider>
+        <NotificationsProvider>
         <TicketsProvider>
         <CommandPaletteProvider>
       <Box data-theme={mode} className="ice-wash" sx={{ minHeight: '100vh', display: 'flex' }}>
@@ -101,6 +103,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
         <CommandPalette />
         </CommandPaletteProvider>
         </TicketsProvider>
+        </NotificationsProvider>
         </ToastProvider>
       </TenantProvider>
     </WorkspaceProvider>
