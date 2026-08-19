@@ -30,10 +30,10 @@ export default function TicketThread({ ticketId, comments, evidences }: TicketTh
   const { addComment } = useTicketsStore()
   const { showSuccess, showError } = useToast()
 
-  const [files, setFiles] = useState(evidences)
   const [draft, setDraft] = useState('')
   const [pending, setPending] = useState<LocalImage[]>([])
   const [preview, setPreview] = useState<string | null>(null)
+  const [publishing, setPublishing] = useState(false)
 
   const addImages = (incoming: File[]) => {
     const next = filesToLocalImages(incoming)
@@ -49,6 +49,9 @@ export default function TicketThread({ ticketId, comments, evidences }: TicketTh
       showError('Escribe un comentario o adjunta al menos una imagen')
       return
     }
+    if (publishing) return
+
+    setPublishing(true)
 
     const attachments = pending.map((item) => ({
       id: item.id,
@@ -56,32 +59,29 @@ export default function TicketThread({ ticketId, comments, evidences }: TicketTh
       previewUrl: item.previewUrl,
     }))
 
+    const nextEvidences = pending.map((item) => ({
+      id: item.id,
+      name: item.name,
+      type: 'imagen' as const,
+      size: item.sizeLabel,
+    }))
+
     addComment(ticketId, {
       author: platformOperator.adminName,
       role: 'Plataforma',
       message: message || 'Imágenes adjuntas',
       attachments: attachments.length > 0 ? attachments : undefined,
+      evidences: nextEvidences.length > 0 ? nextEvidences : undefined,
     })
-
-    if (pending.length > 0) {
-      setFiles((current) => [
-        ...current,
-        ...pending.map((item) => ({
-          id: item.id,
-          name: item.name,
-          type: 'imagen' as const,
-          size: item.sizeLabel,
-        })),
-      ])
-    }
 
     setDraft('')
     setPending([])
+    setPublishing(false)
     showSuccess('Comentario publicado')
   }
 
-  const imageFiles = useMemo(() => files.filter((item) => item.type === 'imagen'), [files])
-  const otherFiles = useMemo(() => files.filter((item) => item.type !== 'imagen'), [files])
+  const imageFiles = useMemo(() => evidences.filter((item) => item.type === 'imagen'), [evidences])
+  const otherFiles = useMemo(() => evidences.filter((item) => item.type !== 'imagen'), [evidences])
 
   return (
     <>
@@ -164,8 +164,8 @@ export default function TicketThread({ ticketId, comments, evidences }: TicketTh
             setPending((current) => current.filter((item) => item.id !== id))
           }}
         />
-        <Button variant="contained" onClick={publish} sx={{ mt: 1.75 }}>
-          Publicar comentario
+        <Button variant="contained" onClick={publish} sx={{ mt: 1.75 }} disabled={publishing}>
+          {publishing ? 'Publicando…' : 'Publicar comentario'}
         </Button>
       </AppCard>
 
@@ -173,7 +173,7 @@ export default function TicketThread({ ticketId, comments, evidences }: TicketTh
         <Typography variant="h4" sx={{ mb: 2 }}>
           Evidencias
         </Typography>
-        {files.length === 0 ? (
+        {evidences.length === 0 ? (
           <Typography color="text.secondary">Sin archivos adjuntos.</Typography>
         ) : (
           <Stack spacing={1.5}>
