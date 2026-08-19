@@ -1,26 +1,15 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import ChevronLeftRounded from '@mui/icons-material/ChevronLeftRounded'
-import ChevronRightRounded from '@mui/icons-material/ChevronRightRounded'
-import {
-  Box,
-  Chip,
-  FormControl,
-  IconButton,
-  MenuItem,
-  Select,
-  Stack,
-  TextField,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material'
+import { Box, Chip, Stack, useMediaQuery, useTheme } from '@mui/material'
 import type { TicketStatus } from '@/shared/types/ticket'
 import { getStatusDisplayLabel } from '@/shared/labels/ticket-display'
 import { useTicketsStore } from '@/stores/TicketsProvider'
+import { useTablePagination } from '@/hooks/useTablePagination'
 import AppTable from '@/components/ui/AppTable'
 import EmptyState from '@/components/ui/EmptyState'
+import TablePagination from '@/components/ui/TablePagination'
+import { TableSearchField, TableToolbar } from '@/components/ui/TableToolbar'
 import TicketRow from '@/components/ui/TicketRow'
 
 const statuses: Array<TicketStatus | 'Todos'> = [
@@ -31,8 +20,6 @@ const statuses: Array<TicketStatus | 'Todos'> = [
   'Resuelto',
   'Cerrado',
 ]
-
-const pageSizes = [10, 25, 50] as const
 
 const columns = [
   { key: 'id', label: 'ID', width: '110px' },
@@ -49,8 +36,6 @@ export default function TicketsBoard() {
   const { tickets } = useTicketsStore()
   const [query, setQuery] = useState('')
   const [status, setStatus] = useState<(typeof statuses)[number]>('Todos')
-  const [pageSize, setPageSize] = useState<(typeof pageSizes)[number]>(25)
-  const [page, setPage] = useState(1)
 
   const filtered = useMemo(() => {
     return tickets.filter((ticket) => {
@@ -60,25 +45,20 @@ export default function TicketsBoard() {
     })
   }, [query, status, tickets])
 
-  const pageCount = Math.max(1, Math.ceil(filtered.length / pageSize))
-  const currentPage = Math.min(page, pageCount)
-  const from = filtered.length === 0 ? 0 : (currentPage - 1) * pageSize + 1
-  const to = Math.min(currentPage * pageSize, filtered.length)
-  const paged = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+  const pagination = useTablePagination(filtered)
 
   return (
     <AppTable
       columns={columns}
       toolbar={
-        <Stack direction={{ xs: 'column', md: 'row' }} spacing={1.5} alignItems={{ md: 'center' }}>
-          <TextField
-            placeholder="Filtrar por ID, asunto o técnico"
+        <TableToolbar>
+          <TableSearchField
             value={query}
-            onChange={(event) => {
-              setQuery(event.target.value)
-              setPage(1)
+            onChange={(value) => {
+              setQuery(value)
+              pagination.resetPage()
             }}
-            sx={{ flex: 1, '& .MuiOutlinedInput-root': { borderRadius: '999px', height: 42 } }}
+            placeholder="Filtrar por ID, asunto o técnico"
           />
           <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap sx={{ width: '100%' }}>
             {statuses.map((item) => (
@@ -89,7 +69,7 @@ export default function TicketsBoard() {
                 title={item}
                 onClick={() => {
                   setStatus(item)
-                  setPage(1)
+                  pagination.resetPage()
                 }}
                 color={status === item ? 'primary' : 'default'}
                 variant={status === item ? 'filled' : 'outlined'}
@@ -104,66 +84,21 @@ export default function TicketsBoard() {
               />
             ))}
           </Stack>
-        </Stack>
+        </TableToolbar>
       }
       footer={
-        filtered.length === 0 ? undefined : (
-          <Stack
-            direction={{ xs: 'column', sm: 'row' }}
-            spacing={1.5}
-            alignItems={{ xs: 'stretch', sm: 'center' }}
-            justifyContent="space-between"
-          >
-            <Stack direction="row" spacing={1.25} alignItems="center">
-              <FormControl size="small">
-                <Select
-                  value={pageSize}
-                  onChange={(event) => {
-                    setPageSize(event.target.value as (typeof pageSizes)[number])
-                    setPage(1)
-                  }}
-                  sx={{
-                    borderRadius: '999px',
-                    height: 36,
-                    minWidth: 132,
-                    fontWeight: 600,
-                    bgcolor: 'background.paper',
-                  }}
-                >
-                  {pageSizes.map((size) => (
-                    <MenuItem key={size} value={size}>
-                      Mostrar {size}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <Typography variant="body2" color="text.secondary">
-                {from}–{to} de {filtered.length}
-              </Typography>
-            </Stack>
-            <Stack direction="row" spacing={0.5} alignItems="center" justifyContent="flex-end">
-              <Typography variant="body2" color="text.secondary" sx={{ mr: 0.5 }}>
-                Página {currentPage} de {pageCount}
-              </Typography>
-              <IconButton
-                size="small"
-                aria-label="Página anterior"
-                disabled={currentPage <= 1}
-                onClick={() => setPage((value) => Math.max(1, value - 1))}
-              >
-                <ChevronLeftRounded />
-              </IconButton>
-              <IconButton
-                size="small"
-                aria-label="Página siguiente"
-                disabled={currentPage >= pageCount}
-                onClick={() => setPage((value) => Math.min(pageCount, value + 1))}
-              >
-                <ChevronRightRounded />
-              </IconButton>
-            </Stack>
-          </Stack>
-        )
+        pagination.hasItems ? (
+          <TablePagination
+            page={pagination.page}
+            pageCount={pagination.pageCount}
+            pageSize={pagination.pageSize}
+            from={pagination.from}
+            to={pagination.to}
+            total={pagination.total}
+            onPageChange={pagination.setPage}
+            onPageSizeChange={pagination.setPageSize}
+          />
+        ) : undefined
       }
     >
       {filtered.length === 0 ? (
@@ -174,7 +109,7 @@ export default function TicketsBoard() {
           />
         </Box>
       ) : (
-        paged.map((ticket) => <TicketRow key={ticket.id} ticket={ticket} />)
+        pagination.pagedItems.map((ticket) => <TicketRow key={ticket.id} ticket={ticket} />)
       )}
     </AppTable>
   )
