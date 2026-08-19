@@ -17,6 +17,7 @@ import {
   validateNewTicketForm,
   type NewTicketFormErrors,
 } from '@/shared/validation/new-ticket-form'
+import { simulateApiDelay } from '@/shared/utils/simulated-delay'
 
 const categories = ['Conectividad', 'Hardware', 'Correo', 'Acceso remoto', 'Solicitud', 'Seguridad', 'Licencias']
 const priorities: TicketPriority[] = ['Baja', 'Media', 'Alta', 'Crítica']
@@ -46,7 +47,7 @@ export default function NewTicketForm() {
   const blocking = hasBlockingErrors(fieldErrors)
   const visibleErrors: NewTicketFormErrors = showErrors ? fieldErrors : {}
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (submitting) return
 
@@ -59,25 +60,31 @@ export default function NewTicketForm() {
 
     setSubmitting(true)
 
-    const created = createTicket({
-      title: title.trim(),
-      description: description.trim(),
-      priority,
-      requester: requester.trim(),
-      category,
-      technician,
-      team: team.trim(),
-      tenantId: tenant.id,
-      evidences: images.map((item) => ({
-        id: item.id,
-        name: item.name,
-        type: 'imagen' as const,
-        size: item.sizeLabel,
-      })),
-    })
+    try {
+      await simulateApiDelay()
 
-    showSuccess(`Ticket ${created.id} creado correctamente`)
-    router.push(`/tickets/${created.id}`)
+      const created = createTicket({
+        title: title.trim(),
+        description: description.trim(),
+        priority,
+        requester: requester.trim(),
+        category,
+        technician,
+        team: team.trim(),
+        tenantId: tenant.id,
+        evidences: images.map((item) => ({
+          id: item.id,
+          name: item.name,
+          type: 'imagen' as const,
+          size: item.sizeLabel,
+        })),
+      })
+
+      showSuccess(`Ticket ${created.id} creado correctamente`)
+      router.push(`/tickets/${created.id}`)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -221,9 +228,10 @@ export default function NewTicketForm() {
               variant="contained"
               fullWidth
               sx={{ mt: 2 }}
+              loading={submitting}
               disabled={submitting || (showErrors && blocking)}
             >
-              {submitting ? 'Creando ticket…' : 'Crear ticket'}
+              Crear ticket
             </Button>
           </AppCard>
         </Grid>

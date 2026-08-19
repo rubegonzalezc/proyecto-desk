@@ -18,6 +18,7 @@ import AppCard from '@/components/ui/AppCard'
 import UserAvatar from '@/components/ui/UserAvatar'
 import { useTicketsStore } from '@/stores/TicketsProvider'
 import { useToast } from '@/stores/ToastProvider'
+import { simulateApiDelay } from '@/shared/utils/simulated-delay'
 import ImageAttachField, { filesToLocalImages, type LocalImage } from './ImageAttachField'
 
 type TicketThreadProps = {
@@ -43,7 +44,7 @@ export default function TicketThread({ ticketId, comments, evidences }: TicketTh
     })
   }
 
-  const publish = () => {
+  const publish = async () => {
     const message = draft.trim()
     if (!message && pending.length === 0) {
       showError('Escribe un comentario o adjunta al menos una imagen')
@@ -66,18 +67,23 @@ export default function TicketThread({ ticketId, comments, evidences }: TicketTh
       size: item.sizeLabel,
     }))
 
-    addComment(ticketId, {
-      author: platformOperator.adminName,
-      role: 'Plataforma',
-      message: message || 'Imágenes adjuntas',
-      attachments: attachments.length > 0 ? attachments : undefined,
-      evidences: nextEvidences.length > 0 ? nextEvidences : undefined,
-    })
+    try {
+      await simulateApiDelay()
 
-    setDraft('')
-    setPending([])
-    setPublishing(false)
-    showSuccess('Comentario publicado')
+      addComment(ticketId, {
+        author: platformOperator.adminName,
+        role: 'Plataforma',
+        message: message || 'Imágenes adjuntas',
+        attachments: attachments.length > 0 ? attachments : undefined,
+        evidences: nextEvidences.length > 0 ? nextEvidences : undefined,
+      })
+
+      setDraft('')
+      setPending([])
+      showSuccess('Comentario publicado')
+    } finally {
+      setPublishing(false)
+    }
   }
 
   const imageFiles = useMemo(() => evidences.filter((item) => item.type === 'imagen'), [evidences])
@@ -164,8 +170,8 @@ export default function TicketThread({ ticketId, comments, evidences }: TicketTh
             setPending((current) => current.filter((item) => item.id !== id))
           }}
         />
-        <Button variant="contained" onClick={publish} sx={{ mt: 1.75 }} disabled={publishing}>
-          {publishing ? 'Publicando…' : 'Publicar comentario'}
+        <Button variant="contained" onClick={publish} sx={{ mt: 1.75 }} loading={publishing}>
+          Publicar comentario
         </Button>
       </AppCard>
 
