@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, type FormEvent } from 'react'
+import { useMemo, useState, type FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import { Box, Button, MenuItem, Stack, TextField, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2'
@@ -12,15 +12,15 @@ import ImageAttachField, { filesToLocalImages, type LocalImage } from '@/compone
 import { useTicketsStore } from '@/stores/TicketsProvider'
 import { useToast } from '@/stores/ToastProvider'
 import type { TicketPriority } from '@/shared/types/ticket'
+import {
+  hasBlockingErrors,
+  validateNewTicketForm,
+  type NewTicketFormErrors,
+} from '@/shared/validation/new-ticket-form'
 
 const categories = ['Conectividad', 'Hardware', 'Correo', 'Acceso remoto', 'Solicitud', 'Seguridad', 'Licencias']
 const priorities: TicketPriority[] = ['Baja', 'Media', 'Alta', 'Crítica']
 const technicians = ['Sin asignar', 'Carlos Soto', 'Elena Ruiz', 'Sofía Vega', 'Andrés Silva']
-
-type FormErrors = {
-  title?: string
-  description?: string
-}
 
 export default function NewTicketForm() {
   const router = useRouter()
@@ -36,24 +36,23 @@ export default function NewTicketForm() {
   const [technician, setTechnician] = useState('Sin asignar')
   const [team, setTeam] = useState('Mesa de ayuda')
   const [images, setImages] = useState<LocalImage[]>([])
-  const [errors, setErrors] = useState<FormErrors>({})
+  const [showErrors, setShowErrors] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
-  const validate = (): FormErrors => {
-    const next: FormErrors = {}
-    if (!title.trim()) next.title = 'El asunto es obligatorio'
-    if (!description.trim()) next.description = 'La descripción es obligatoria'
-    return next
-  }
+  const fieldErrors = useMemo(
+    () => validateNewTicketForm(title, description),
+    [description, title],
+  )
+  const blocking = hasBlockingErrors(fieldErrors)
+  const visibleErrors: NewTicketFormErrors = showErrors ? fieldErrors : {}
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (submitting) return
 
-    const nextErrors = validate()
-    setErrors(nextErrors)
+    setShowErrors(true)
 
-    if (Object.keys(nextErrors).length > 0) {
+    if (blocking) {
       showError('Revisa los campos obligatorios antes de continuar')
       return
     }
@@ -107,12 +106,11 @@ export default function NewTicketForm() {
                 fullWidth
                 required
                 value={title}
-                onChange={(event) => {
-                  setTitle(event.target.value)
-                  if (errors.title) setErrors((current) => ({ ...current, title: undefined }))
-                }}
-                error={Boolean(errors.title)}
-                helperText={errors.title}
+                onChange={(event) => setTitle(event.target.value)}
+                onBlur={() => setShowErrors(true)}
+                error={Boolean(visibleErrors.title)}
+                helperText={visibleErrors.title}
+                inputProps={{ 'aria-invalid': Boolean(visibleErrors.title) }}
               />
               <TextField
                 label="Descripción"
@@ -122,12 +120,11 @@ export default function NewTicketForm() {
                 multiline
                 minRows={5}
                 value={description}
-                onChange={(event) => {
-                  setDescription(event.target.value)
-                  if (errors.description) setErrors((current) => ({ ...current, description: undefined }))
-                }}
-                error={Boolean(errors.description)}
-                helperText={errors.description}
+                onChange={(event) => setDescription(event.target.value)}
+                onBlur={() => setShowErrors(true)}
+                error={Boolean(visibleErrors.description)}
+                helperText={visibleErrors.description}
+                inputProps={{ 'aria-invalid': Boolean(visibleErrors.description) }}
               />
               <Grid container spacing={2}>
                 <Grid size={{ xs: 12, sm: 6 }}>
@@ -219,7 +216,13 @@ export default function NewTicketForm() {
                 setImages((current) => current.filter((item) => item.id !== id))
               }}
             />
-            <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }} disabled={submitting}>
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              sx={{ mt: 2 }}
+              disabled={submitting || (showErrors && blocking)}
+            >
               {submitting ? 'Creando ticket…' : 'Crear ticket'}
             </Button>
           </AppCard>
