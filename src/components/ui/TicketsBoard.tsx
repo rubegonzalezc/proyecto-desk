@@ -4,10 +4,17 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Box, Chip, Stack, useMediaQuery, useTheme } from '@mui/material'
 import type { TicketStatus } from '@/shared/types/ticket'
+import { getTechnicianOptions } from '@/shared/constants/ticket-form-options'
 import { getStatusDisplayLabel } from '@/shared/labels/ticket-display'
 import { useTenant } from '@/components/layout/TenantProvider'
 import { filterByTenant } from '@/shared/mock/tenant-scope'
-import { buildTicketSearchParams, readTicketUrlFilters } from '@/shared/utils/ticket-url-filters'
+import {
+  buildTicketSearchParams,
+  hasActiveTicketFilters,
+  matchesTicketDateRange,
+  readTicketUrlFilters,
+} from '@/shared/utils/ticket-url-filters'
+import TicketAdvancedFilters from '@/components/tickets/TicketAdvancedFilters'
 import { useTicketsStore } from '@/stores/TicketsProvider'
 import { useTablePagination } from '@/hooks/useTablePagination'
 import type { TablePageSize } from '@/components/ui/TablePagination'
@@ -44,18 +51,23 @@ export default function TicketsBoard() {
   const { tenant } = useTenant()
   const { tickets } = useTicketsStore()
 
-  const { q: query, estado: status, page, size: pageSize } = useMemo(
-    () => readTicketUrlFilters(searchParams),
-    [searchParams],
+  const technicians = useMemo(() => getTechnicianOptions(tenant.id), [tenant.id])
+
+  const urlFilters = useMemo(
+    () => readTicketUrlFilters(searchParams, { technicians }),
+    [searchParams, technicians],
   )
+
+  const { q: query, estado: status, prioridad, tecnico, categoria, desde, hasta, page, size: pageSize } =
+    urlFilters
 
   const replaceFilters = useCallback(
     (patch: Parameters<typeof buildTicketSearchParams>[1]) => {
-      const next = buildTicketSearchParams(searchParams, patch)
+      const next = buildTicketSearchParams(searchParams, patch, { technicians })
       const queryString = next.toString()
       router.replace(queryString ? `${pathname}?${queryString}` : pathname, { scroll: false })
     },
-    [pathname, router, searchParams],
+    [pathname, router, searchParams, technicians],
   )
 
   const tenantTickets = useMemo(
@@ -66,19 +78,30 @@ export default function TicketsBoard() {
   const filtered = useMemo(() => {
     return tenantTickets.filter((ticket) => {
       const matchesStatus = status === 'Todos' || ticket.status === status
+      const matchesPriority = prioridad === 'Todas' || ticket.priority === prioridad
+      const matchesTechnician = tecnico === 'Todos' || ticket.technician === tecnico
+      const matchesCategory = categoria === 'Todas' || ticket.category === categoria
+      const matchesDates = matchesTicketDateRange(ticket.createdAt, desde, hasta)
       const haystack = `${ticket.id} ${ticket.title} ${ticket.technician} ${ticket.requester}`.toLowerCase()
-      return matchesStatus && haystack.includes(query.toLowerCase())
+      return (
+        matchesStatus &&
+        matchesPriority &&
+        matchesTechnician &&
+        matchesCategory &&
+        matchesDates &&
+        haystack.includes(query.toLowerCase())
+      )
     })
-  }, [query, status, tenantTickets])
+  }, [categoria, desde, hasta, prioridad, query, status, tecnico, tenantTickets])
 
   const pagination = useTablePagination(filtered, {
     page,
     pageSize,
     onPageChange: (nextPage) => replaceFilters({ page: nextPage }),
-    onPageSizeChange: (nextSize) => replaceFilters({ size: nextSize, resetPage: true }),
+    onPageSizeChange: (nextSize) => replaceFilters({ size: nextSize as TablePageSize, resetPage: true }),
   })
 
-  const hasActiveFilters = Boolean(query.trim()) || status !== 'Todos'
+  const hasActiveFilters = hasActiveTicketFilters(urlFilters)
 
   const previousTenantId = useRef(tenant.id)
 
@@ -122,6 +145,13 @@ export default function TicketsBoard() {
               />
             ))}
           </Stack>
+          <TicketAdvancedFilters
+            filters={{ prioridad, tecnico, categoria, desde, hasta }}
+            technicians={technicians}
+            hasActiveFilters={hasActiveFilters}
+            onChange={replaceFilters}
+            onClear={clearFilters}
+          />
         </TableToolbar>
       }
       footer={
