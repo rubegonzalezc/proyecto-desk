@@ -5,6 +5,7 @@ import { Box, Chip, Stack, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import { useTicketsStore } from '@/stores/TicketsProvider'
 import AppCard from '@/components/ui/AppCard'
+import AppBreadcrumbs from '@/components/ui/AppBreadcrumbs'
 import LinkButton from '@/components/ui/LinkButton'
 import TenantEyebrow from '@/components/layout/TenantEyebrow'
 import PageHeader from '@/components/ui/PageHeader'
@@ -21,6 +22,13 @@ export default function TicketDetailView({ id }: { id: string }) {
 
   return (
     <Box>
+      <AppBreadcrumbs
+        showActiveTenant
+        items={[
+          { label: 'Tickets', href: '/tickets' },
+          { label: ticket.id },
+        ]}
+      />
       <PageHeader
         eyebrow={<TenantEyebrow suffix={ticket.id} />}
         title={ticket.title}

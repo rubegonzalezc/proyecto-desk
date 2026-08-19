@@ -7,6 +7,7 @@ import AppCard from '@/components/ui/AppCard'
 import LinkButton from '@/components/ui/LinkButton'
 import PageHeader from '@/components/ui/PageHeader'
 import TenantLogo from '@/components/brand/TenantLogo'
+import ClientDetailBreadcrumbs from '@/components/clientes/ClientDetailBreadcrumbs'
 
 export const metadata: Metadata = {
   title: 'Cliente',
@@ -19,6 +20,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
 
   return (
     <Box>
+      <ClientDetailBreadcrumbs clientId={tenant.id} clientName={tenant.name} />
       <PageHeader
         eyebrow={tenant.id}
         title={tenant.name}
