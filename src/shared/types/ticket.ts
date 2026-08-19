@@ -1,6 +1,26 @@
 export type TicketStatus = 'Nuevo' | 'En progreso' | 'Pendiente' | 'Resuelto' | 'Cerrado'
 export type TicketPriority = 'Baja' | 'Media' | 'Alta' | 'Crítica'
 
+export type TicketActivityKind =
+  | 'creado'
+  | 'asignado'
+  | 'cambio_estado'
+  | 'comentario'
+  | 'resuelto'
+
+export interface TicketActivity {
+  id: string
+  kind: TicketActivityKind
+  at: string
+  actor?: string
+  message: string
+  meta?: {
+    from?: string
+    to?: string
+    commentId?: string
+  }
+}
+
 export interface TicketCommentAttachment {
   id: string
   name: string
@@ -40,4 +60,5 @@ export interface Ticket {
   sla: string
   comments: TicketComment[]
   evidences: TicketEvidence[]
+  activity?: TicketActivity[]
 }

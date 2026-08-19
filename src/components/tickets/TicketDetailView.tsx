@@ -24,6 +24,7 @@ import TenantEyebrow from '@/components/layout/TenantEyebrow'
 import PageHeader from '@/components/ui/PageHeader'
 import PriorityBadge from '@/components/ui/PriorityBadge'
 import StatusBadge from '@/components/ui/StatusBadge'
+import TicketActivityTimeline from '@/components/tickets/TicketActivityTimeline'
 import TicketManagementPanel, { TicketManagementFields } from '@/components/tickets/TicketManagementPanel'
 import TicketThread from '@/components/tickets/TicketThread'
 
@@ -83,6 +84,8 @@ export default function TicketDetailView({ id }: { id: string }) {
               SLA · {ticket.sla}
             </Typography>
           </AppCard>
+
+          <TicketActivityTimeline activity={ticket.activity ?? []} />
 
           <TicketThread ticketId={ticket.id} comments={ticket.comments} evidences={ticket.evidences} />
         </Grid>

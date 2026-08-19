@@ -1,5 +1,13 @@
 import { tickets as seedTickets } from '@/shared/mock/tickets'
 import { defaultTenantId } from '@/shared/mock/tenants'
+import {
+  appendAssignmentActivity,
+  appendStatusActivities,
+  commentToActivity,
+  ensureTicketActivity,
+  sortTicketActivityDesc,
+} from '@/shared/utils/ticket-activity'
+import { formatTicketTimestamp as formatTimestamp } from '@/shared/utils/ticket-timestamps'
 import type { Ticket, TicketComment, TicketEvidence, TicketPriority, TicketStatus } from '@/shared/types/ticket'
 
 export type CreateTicketInput = {
@@ -16,7 +24,7 @@ export type CreateTicketInput = {
 }
 
 export type UpdateTicketInput = Partial<
-  Omit<Ticket, 'id' | 'comments' | 'evidences'>
+  Omit<Ticket, 'id' | 'comments' | 'evidences' | 'activity'>
 >
 
 export type AddCommentInput = {
@@ -35,6 +43,7 @@ function cloneTickets(source: Ticket[]): Ticket[] {
       attachments: comment.attachments?.map((file) => ({ ...file })),
     })),
     evidences: ticket.evidences.map((item) => ({ ...item })),
+    activity: ticket.activity?.map((item) => ({ ...item, meta: item.meta ? { ...item.meta } : undefined })),
   }))
 }
 
@@ -43,18 +52,10 @@ function withDefaultTenant(ticket: Ticket): Ticket {
 }
 
 export function createInitialTickets(): Ticket[] {
-  return cloneTickets(seedTickets).map(withDefaultTenant)
+  return cloneTickets(seedTickets).map((ticket) => ensureTicketActivity(withDefaultTenant(ticket)))
 }
 
-export function formatTicketTimestamp(date = new Date()): string {
-  return date.toLocaleString('es-CL', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
-}
+export { formatTicketTimestamp } from '@/shared/utils/ticket-timestamps'
 
 export function nextTicketId(tickets: Ticket[]): string {
   const max = tickets.reduce((current, ticket) => {
@@ -66,15 +67,16 @@ export function nextTicketId(tickets: Ticket[]): string {
 }
 
 export function buildTicket(input: CreateTicketInput, tickets: Ticket[]): Ticket {
-  const now = formatTicketTimestamp()
-  return {
+  const now = formatTimestamp()
+  const technician = input.technician ?? 'Sin asignar'
+  const ticket: Ticket = {
     id: nextTicketId(tickets),
     tenantId: input.tenantId ?? defaultTenantId,
     title: input.title,
     description: input.description,
     status: input.status ?? 'Nuevo',
     priority: input.priority,
-    technician: input.technician ?? 'Sin asignar',
+    technician,
     requester: input.requester,
     team: input.team ?? 'Mesa de ayuda',
     category: input.category,
@@ -83,7 +85,10 @@ export function buildTicket(input: CreateTicketInput, tickets: Ticket[]): Ticket
     sla: 'Por definir',
     comments: [],
     evidences: input.evidences?.map((item) => ({ ...item })) ?? [],
+    activity: [],
   }
+
+  return ensureTicketActivity(ticket)
 }
 
 export function buildComment(input: AddCommentInput): TicketComment {
@@ -92,8 +97,29 @@ export function buildComment(input: AddCommentInput): TicketComment {
     author: input.author,
     role: input.role,
     message: input.message,
-    createdAt: formatTicketTimestamp(),
+    createdAt: formatTimestamp(),
     attachments: input.attachments?.map((file) => ({ ...file })),
+  }
+}
+
+export function applyTicketPatch(ticket: Ticket, patch: UpdateTicketInput): Ticket {
+  const base = ensureTicketActivity(ticket)
+  const now = formatTimestamp()
+  let activity = base.activity ?? []
+
+  if (patch.status && patch.status !== ticket.status) {
+    activity = appendStatusActivities(activity, base.status, patch.status, patch.technician ?? base.technician)
+  }
+
+  if (patch.technician && patch.technician !== base.technician) {
+    activity = appendAssignmentActivity(activity, patch.technician, patch.technician)
+  }
+
+  return {
+    ...base,
+    ...patch,
+    activity,
+    updatedAt: now,
   }
 }
 
@@ -101,18 +127,24 @@ export function appendCommentToTicket(
   ticket: Ticket,
   input: AddCommentInput,
 ): { ticket: Ticket; comment: TicketComment } {
+  const base = ensureTicketActivity(ticket)
   const comment = buildComment(input)
-  const existingEvidenceIds = new Set(ticket.evidences.map((item) => item.id))
+  const existingEvidenceIds = new Set(base.evidences.map((item) => item.id))
   const newEvidences =
     input.evidences?.filter((item) => !existingEvidenceIds.has(item.id)).map((item) => ({ ...item })) ?? []
+  const activity = sortTicketActivityDesc([
+    ...(base.activity ?? []),
+    commentToActivity(base.id, comment),
+  ])
 
   return {
     comment,
     ticket: {
-      ...ticket,
-      comments: [...ticket.comments, comment],
-      evidences: [...ticket.evidences, ...newEvidences],
-      updatedAt: formatTicketTimestamp(),
+      ...base,
+      comments: [...base.comments, comment],
+      evidences: [...base.evidences, ...newEvidences],
+      activity,
+      updatedAt: formatTimestamp(),
     },
   }
 }

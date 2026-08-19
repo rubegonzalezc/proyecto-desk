@@ -11,11 +11,12 @@ import {
 } from 'react'
 import type { Ticket, TicketComment } from '@/shared/types/ticket'
 import { loadTicketsSession, saveTicketsSession } from '@/shared/config/tickets-session-storage'
+import { ensureTicketActivity } from '@/shared/utils/ticket-activity'
 import {
   appendCommentToTicket,
+  applyTicketPatch,
   buildTicket,
   createInitialTickets,
-  formatTicketTimestamp,
   type AddCommentInput,
   type CreateTicketInput,
   type UpdateTicketInput,
@@ -38,7 +39,7 @@ export function TicketsProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const saved = loadTicketsSession()
-    if (saved?.length) setTickets(saved)
+    if (saved?.length) setTickets(saved.map(ensureTicketActivity))
     setHydrated(true)
   }, [])
 
@@ -68,11 +69,7 @@ export function TicketsProvider({ children }: { children: ReactNode }) {
     setTickets((current) =>
       current.map((ticket) => {
         if (ticket.id !== id) return ticket
-        updated = {
-          ...ticket,
-          ...patch,
-          updatedAt: formatTicketTimestamp(),
-        }
+        updated = applyTicketPatch(ticket, patch)
         return updated
       }),
     )
