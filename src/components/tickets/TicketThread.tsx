@@ -20,6 +20,7 @@ import { useTicketsStore } from '@/stores/TicketsProvider'
 import { useToast } from '@/stores/ToastProvider'
 import { simulateApiDelay } from '@/shared/utils/simulated-delay'
 import ImageAttachField, { filesToLocalImages, type LocalImage } from './ImageAttachField'
+import CommentTemplatesPicker from './CommentTemplatesPicker'
 
 type TicketThreadProps = {
   ticketId: string
@@ -42,6 +43,10 @@ export default function TicketThread({ ticketId, comments, evidences }: TicketTh
       const ids = new Set(current.map((item) => item.id))
       return [...current, ...next.filter((item) => !ids.has(item.id))]
     })
+  }
+
+  const insertTemplate = (body: string) => {
+    setDraft((current) => (current.trim() ? `${current.trim()}\n\n${body}` : body))
   }
 
   const publish = async () => {
@@ -151,6 +156,8 @@ export default function TicketThread({ ticketId, comments, evidences }: TicketTh
             ))}
           </Stack>
         )}
+
+        <CommentTemplatesPicker onSelect={insertTemplate} />
 
         <TextField
           placeholder="Escribe un comentario…"
