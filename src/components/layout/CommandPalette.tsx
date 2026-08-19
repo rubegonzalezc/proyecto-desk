@@ -3,29 +3,14 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import SearchRounded from '@mui/icons-material/SearchRounded'
-import {
-  Box,
-  Dialog,
-  InputAdornment,
-  List,
-  ListItemButton,
-  ListItemText,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Box, Dialog, InputAdornment, TextField, Typography } from '@mui/material'
 import { useTenant } from '@/components/layout/TenantProvider'
 import { useCommandPalette } from '@/components/layout/CommandPaletteProvider'
+import SearchResultsList, { useSearchResultsFlat } from '@/components/layout/SearchResultsList'
 import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { users } from '@/shared/mock/users'
 import { tenants } from '@/shared/mock/tenants'
-import {
-  flattenSearchResults,
-  getSearchGroupLabel,
-  getSearchGroupOrder,
-  MIN_GLOBAL_SEARCH_LENGTH,
-  searchGlobal,
-  type SearchResult,
-} from '@/shared/search/global-search'
+import { searchGlobal, type SearchResult } from '@/shared/search/global-search'
 import { useTicketsStore } from '@/stores/TicketsProvider'
 
 export default function CommandPalette() {
@@ -50,10 +35,7 @@ export default function CommandPalette() {
     [debouncedQuery, tenant.id, tickets],
   )
 
-  const flatResults = useMemo(() => flattenSearchResults(groupedResults), [groupedResults])
-  const resultCount = flatResults.length
-  const showHint = query.trim().length < MIN_GLOBAL_SEARCH_LENGTH
-  const showEmpty = !showHint && resultCount === 0
+  const flatResults = useSearchResultsFlat(groupedResults)
 
   useEffect(() => {
     if (!open) {
@@ -82,16 +64,16 @@ export default function CommandPalette() {
       return
     }
 
-    if (!resultCount) return
+    if (!flatResults.length) return
 
     if (event.key === 'ArrowDown') {
       event.preventDefault()
-      setActiveIndex((current) => (current + 1) % resultCount)
+      setActiveIndex((current) => (current + 1) % flatResults.length)
     }
 
     if (event.key === 'ArrowUp') {
       event.preventDefault()
-      setActiveIndex((current) => (current - 1 + resultCount) % resultCount)
+      setActiveIndex((current) => (current - 1 + flatResults.length) % flatResults.length)
     }
 
     if (event.key === 'Enter') {
@@ -100,8 +82,6 @@ export default function CommandPalette() {
       if (selected) navigateTo(selected)
     }
   }
-
-  let runningIndex = -1
 
   return (
     <Dialog
@@ -171,71 +151,14 @@ export default function CommandPalette() {
         />
 
         <Box sx={{ maxHeight: 360, overflowY: 'auto', px: 0.75, pb: 1 }}>
-          {showHint ? (
-            <Typography variant="body2" color="text.secondary" sx={{ px: 1.5, py: 2 }}>
-              Escribe al menos {MIN_GLOBAL_SEARCH_LENGTH} caracteres. Prueba con un ticket (#TCK-1001), un
-              cliente o una ruta.
-            </Typography>
-          ) : null}
-
-          {showEmpty ? (
-            <Typography variant="body2" color="text.secondary" sx={{ px: 1.5, py: 2 }}>
-              Sin resultados para “{debouncedQuery}”.
-            </Typography>
-          ) : null}
-
-          {!showHint && !showEmpty
-            ? getSearchGroupOrder().map((group) => {
-                const items = groupedResults[group]
-                if (items.length === 0) return null
-
-                return (
-                  <Box key={group} sx={{ mt: 1 }}>
-                    <Typography
-                      variant="caption"
-                      color="text.secondary"
-                      sx={{
-                        px: 1.5,
-                        py: 0.75,
-                        display: 'block',
-                        fontWeight: 750,
-                        letterSpacing: '0.08em',
-                        textTransform: 'uppercase',
-                      }}
-                    >
-                      {getSearchGroupLabel(group)}
-                    </Typography>
-                    <List dense disablePadding>
-                      {items.map((item) => {
-                        runningIndex += 1
-                        const index = runningIndex
-                        const selected = index === activeIndex
-
-                        return (
-                          <ListItemButton
-                            key={item.id}
-                            selected={selected}
-                            onMouseEnter={() => setActiveIndex(index)}
-                            onClick={() => navigateTo(item)}
-                            sx={{
-                              borderRadius: '14px',
-                              mx: 0.5,
-                              mb: 0.25,
-                            }}
-                          >
-                            <ListItemText
-                              primary={item.label}
-                              secondary={item.description}
-                              primaryTypographyProps={{ fontWeight: selected ? 700 : 600 }}
-                            />
-                          </ListItemButton>
-                        )
-                      })}
-                    </List>
-                  </Box>
-                )
-              })
-            : null}
+          <SearchResultsList
+            groupedResults={groupedResults}
+            activeIndex={activeIndex}
+            onActiveIndexChange={setActiveIndex}
+            onSelect={navigateTo}
+            query={query}
+            debouncedQuery={debouncedQuery}
+          />
         </Box>
 
         <Box
