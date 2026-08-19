@@ -18,7 +18,7 @@ export default function AppTable({ columns, children, toolbar, footer }: AppTabl
   return (
     <Box className="fade-up">
       {toolbar ? (
-        <Box className="liquid-glass" sx={{ p: 1.5, mb: 1.5, borderRadius: '20px' }}>
+        <Box className="liquid-glass" sx={{ p: { xs: 1.75, md: 2 }, mb: 1.5, borderRadius: '20px' }}>
           <Box sx={{ position: 'relative', zIndex: 1 }}>{toolbar}</Box>
         </Box>
       ) : null}

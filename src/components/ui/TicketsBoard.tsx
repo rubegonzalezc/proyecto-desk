@@ -58,7 +58,7 @@ export default function TicketsBoard() {
     <AppTable
       columns={columns}
       toolbar={
-        <TableToolbar>
+        <TableToolbar stacked>
           <TableSearchField
             value={query}
             onChange={(value) => {
@@ -66,8 +66,10 @@ export default function TicketsBoard() {
               pagination.resetPage()
             }}
             placeholder="Filtrar por ID, asunto o técnico"
+            flex={false}
+            fullWidth
           />
-          <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap sx={{ width: '100%' }}>
+          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
             {statuses.map((item) => (
               <Chip
                 key={item}
@@ -81,11 +83,8 @@ export default function TicketsBoard() {
                 color={status === item ? 'primary' : 'default'}
                 variant={status === item ? 'filled' : 'outlined'}
                 sx={{
-                  maxWidth: '100%',
                   '& .MuiChip-label': {
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
+                    px: 1.1,
                   },
                 }}
               />
