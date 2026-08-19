@@ -18,6 +18,7 @@ import { notifications } from '@/shared/mock/notifications'
 import { getSystemById } from '@/shared/systems'
 import { useThemeMode } from '@/theme/ThemeModeProvider'
 import UserAvatar from '@/components/ui/UserAvatar'
+import { useCommandPalette } from './CommandPaletteProvider'
 import TenantSwitcher from './TenantSwitcher'
 import { useWorkspace } from './WorkspaceProvider'
 import { platformOperator } from '@/shared/mock/tenants'
@@ -25,6 +26,7 @@ import { platformOperator } from '@/shared/mock/tenants'
 export default function Header({ onMenu }: { onMenu: () => void }) {
   const { mode, toggleMode } = useThemeMode()
   const { activeId } = useWorkspace()
+  const { openPalette } = useCommandPalette()
   const system = getSystemById(activeId)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [profileEl, setProfileEl] = useState<null | HTMLElement>(null)
@@ -55,25 +57,58 @@ export default function Header({ onMenu }: { onMenu: () => void }) {
         <TextField
           placeholder={system.searchPlaceholder}
           fullWidth
+          onClick={openPalette}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault()
+              openPalette()
+            }
+          }}
+          inputProps={{ readOnly: true, 'aria-label': 'Abrir búsqueda rápida' }}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
                 <SearchRounded fontSize="small" />
               </InputAdornment>
             ),
+            endAdornment: (
+              <InputAdornment position="end">
+                <Box
+                  component="span"
+                  sx={{
+                    display: { xs: 'none', md: 'inline-flex' },
+                    px: 0.75,
+                    py: 0.25,
+                    borderRadius: '8px',
+                    fontSize: 11,
+                    fontWeight: 700,
+                    fontFamily: 'monospace',
+                    color: 'text.secondary',
+                    bgcolor: 'action.hover',
+                  }}
+                >
+                  ⌘K
+                </Box>
+              </InputAdornment>
+            ),
           }}
           sx={{
             maxWidth: 520,
             display: { xs: 'none', sm: 'block' },
+            cursor: 'pointer',
             '& .MuiOutlinedInput-root': {
               borderRadius: '999px',
               height: 44,
-              background: 'rgba(255,255,255,0.55)',
+              background: 'rgba(255, 255, 255, 0.55)',
             },
+            '& input': { cursor: 'pointer' },
           }}
         />
 
         <Box sx={{ ml: 'auto', display: 'flex', alignItems: 'center', gap: 0.5 }}>
+          <IconButton onClick={openPalette} aria-label="Abrir búsqueda rápida" sx={{ display: { sm: 'none' } }}>
+            <SearchRounded />
+          </IconButton>
           <IconButton onClick={toggleMode} aria-label="Cambiar tema">
             {mode === 'light' ? <DarkModeOutlined /> : <LightModeOutlined />}
           </IconButton>
