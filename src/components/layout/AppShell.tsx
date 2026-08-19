@@ -10,6 +10,8 @@ import { TenantProvider } from './TenantProvider'
 import { WorkspaceProvider } from './WorkspaceProvider'
 import { TicketsProvider } from '@/stores/TicketsProvider'
 import { ToastProvider } from '@/stores/ToastProvider'
+import CommandPalette from './CommandPalette'
+import { CommandPaletteProvider } from './CommandPaletteProvider'
 
 const SIDEBAR_WIDTH = 276
 
@@ -22,6 +24,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
       <TenantProvider>
         <ToastProvider>
         <TicketsProvider>
+        <CommandPaletteProvider>
       <Box data-theme={mode} className="ice-wash" sx={{ minHeight: '100vh', display: 'flex' }}>
         <Box
           sx={{
@@ -95,6 +98,8 @@ export default function AppShell({ children }: { children: ReactNode }) {
           </Box>
         </Box>
       </Box>
+        <CommandPalette />
+        </CommandPaletteProvider>
         </TicketsProvider>
         </ToastProvider>
       </TenantProvider>
