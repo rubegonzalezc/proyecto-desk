@@ -1,25 +1,78 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
+import { useRouter } from 'next/navigation'
 import { Box, Button, MenuItem, Stack, TextField, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import Link from 'next/link'
 import AppCard from '@/components/ui/AppCard'
 import PageHeader from '@/components/ui/PageHeader'
 import ImageAttachField, { filesToLocalImages, type LocalImage } from '@/components/tickets/ImageAttachField'
+import { useTicketsStore } from '@/stores/TicketsProvider'
+import { useToast } from '@/stores/ToastProvider'
+import type { TicketPriority } from '@/shared/types/ticket'
 
 const categories = ['Conectividad', 'Hardware', 'Correo', 'Acceso remoto', 'Solicitud', 'Seguridad', 'Licencias']
-const priorities = ['Baja', 'Media', 'Alta', 'Crítica']
+const priorities: TicketPriority[] = ['Baja', 'Media', 'Alta', 'Crítica']
 const technicians = ['Sin asignar', 'Carlos Soto', 'Elena Ruiz', 'Sofía Vega', 'Andrés Silva']
 
+type FormErrors = {
+  title?: string
+  description?: string
+}
+
 export default function NewTicketForm() {
+  const router = useRouter()
+  const { createTicket } = useTicketsStore()
+  const { showSuccess, showError } = useToast()
+
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
+  const [category, setCategory] = useState('Conectividad')
+  const [priority, setPriority] = useState<TicketPriority>('Media')
+  const [requester, setRequester] = useState('Elena Ruiz')
+  const [technician, setTechnician] = useState('Sin asignar')
+  const [team, setTeam] = useState('Mesa de ayuda')
   const [images, setImages] = useState<LocalImage[]>([])
+  const [errors, setErrors] = useState<FormErrors>({})
+
+  const validate = (): FormErrors => {
+    const next: FormErrors = {}
+    if (!title.trim()) next.title = 'El asunto es obligatorio'
+    if (!description.trim()) next.description = 'La descripción es obligatoria'
+    return next
+  }
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const nextErrors = validate()
+    setErrors(nextErrors)
+
+    if (Object.keys(nextErrors).length > 0) {
+      showError('Revisa los campos obligatorios antes de continuar')
+      return
+    }
+
+    const created = createTicket({
+      title: title.trim(),
+      description: description.trim(),
+      priority,
+      requester: requester.trim(),
+      category,
+      technician,
+      team: team.trim(),
+    })
+
+    showSuccess(`Ticket ${created.id} creado correctamente`)
+    router.push(`/tickets/${created.id}`)
+  }
+
   return (
-    <Box>
+    <Box component="form" onSubmit={handleSubmit} noValidate>
       <PageHeader
         eyebrow="Tickets"
         title="Crear ticket"
-        description="Formulario visual de demostración. No envía ni persiste datos."
+        description="Completa el formulario para registrar un ticket en la demo."
         extra={
           <Button component={Link} href="/tickets" variant="outlined">
             Volver a la cola
@@ -34,17 +87,43 @@ export default function NewTicketForm() {
               Detalle de la solicitud
             </Typography>
             <Stack spacing={2}>
-              <TextField label="Asunto" placeholder="Ej. No hay acceso a internet en planta 3" fullWidth />
+              <TextField
+                label="Asunto"
+                placeholder="Ej. No hay acceso a internet en planta 3"
+                fullWidth
+                required
+                value={title}
+                onChange={(event) => {
+                  setTitle(event.target.value)
+                  if (errors.title) setErrors((current) => ({ ...current, title: undefined }))
+                }}
+                error={Boolean(errors.title)}
+                helperText={errors.title}
+              />
               <TextField
                 label="Descripción"
                 placeholder="Describe el impacto, desde cuándo ocurre y qué se intentó."
                 fullWidth
+                required
                 multiline
                 minRows={5}
+                value={description}
+                onChange={(event) => {
+                  setDescription(event.target.value)
+                  if (errors.description) setErrors((current) => ({ ...current, description: undefined }))
+                }}
+                error={Boolean(errors.description)}
+                helperText={errors.description}
               />
               <Grid container spacing={2}>
                 <Grid size={{ xs: 12, sm: 6 }}>
-                  <TextField select label="Categoría" defaultValue="Conectividad" fullWidth>
+                  <TextField
+                    select
+                    label="Categoría"
+                    value={category}
+                    onChange={(event) => setCategory(event.target.value)}
+                    fullWidth
+                  >
                     {categories.map((item) => (
                       <MenuItem key={item} value={item}>
                         {item}
@@ -53,7 +132,13 @@ export default function NewTicketForm() {
                   </TextField>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
-                  <TextField select label="Prioridad" defaultValue="Media" fullWidth>
+                  <TextField
+                    select
+                    label="Prioridad"
+                    value={priority}
+                    onChange={(event) => setPriority(event.target.value as TicketPriority)}
+                    fullWidth
+                  >
                     {priorities.map((item) => (
                       <MenuItem key={item} value={item}>
                         {item}
@@ -71,15 +156,31 @@ export default function NewTicketForm() {
               Asignación
             </Typography>
             <Stack spacing={2}>
-              <TextField label="Solicitante" defaultValue="Elena Ruiz" fullWidth />
-              <TextField select label="Técnico" defaultValue="Sin asignar" fullWidth>
+              <TextField
+                label="Solicitante"
+                value={requester}
+                onChange={(event) => setRequester(event.target.value)}
+                fullWidth
+              />
+              <TextField
+                select
+                label="Técnico"
+                value={technician}
+                onChange={(event) => setTechnician(event.target.value)}
+                fullWidth
+              >
                 {technicians.map((item) => (
                   <MenuItem key={item} value={item}>
                     {item}
                   </MenuItem>
                 ))}
               </TextField>
-              <TextField label="Equipo" defaultValue="Mesa de ayuda" fullWidth />
+              <TextField
+                label="Equipo"
+                value={team}
+                onChange={(event) => setTeam(event.target.value)}
+                fullWidth
+              />
             </Stack>
           </AppCard>
           <AppCard lift={false}>
@@ -104,8 +205,8 @@ export default function NewTicketForm() {
                 setImages((current) => current.filter((item) => item.id !== id))
               }}
             />
-            <Button variant="contained" fullWidth sx={{ mt: 2 }} disabled>
-              Crear ticket (demo)
+            <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
+              Crear ticket
             </Button>
           </AppCard>
         </Grid>
