@@ -1,7 +1,20 @@
 'use client'
 
+import { useState } from 'react'
 import { notFound } from 'next/navigation'
-import { Box, Chip, Stack, Typography } from '@mui/material'
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
+import TuneRoundedIcon from '@mui/icons-material/TuneRounded'
+import {
+  Box,
+  Button,
+  Chip,
+  Drawer,
+  IconButton,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import { useTicketsStore } from '@/stores/TicketsProvider'
 import AppCard from '@/components/ui/AppCard'
@@ -11,10 +24,15 @@ import TenantEyebrow from '@/components/layout/TenantEyebrow'
 import PageHeader from '@/components/ui/PageHeader'
 import PriorityBadge from '@/components/ui/PriorityBadge'
 import StatusBadge from '@/components/ui/StatusBadge'
-import UserAvatar from '@/components/ui/UserAvatar'
+import TicketManagementPanel, { TicketManagementFields } from '@/components/tickets/TicketManagementPanel'
 import TicketThread from '@/components/tickets/TicketThread'
 
+const DRAWER_WIDTH = 360
+
 export default function TicketDetailView({ id }: { id: string }) {
+  const theme = useTheme()
+  const isDesktop = useMediaQuery(theme.breakpoints.up('lg'))
+  const [drawerOpen, setDrawerOpen] = useState(false)
   const { getTicketById } = useTicketsStore()
   const ticket = getTicketById(id)
 
@@ -34,9 +52,21 @@ export default function TicketDetailView({ id }: { id: string }) {
         title={ticket.title}
         description={ticket.description}
         extra={
-          <LinkButton href="/tickets" variant="outlined">
-            Volver
-          </LinkButton>
+          <Stack direction="row" spacing={1} alignItems="center">
+            {!isDesktop ? (
+              <Button
+                variant="contained"
+                size="small"
+                startIcon={<TuneRoundedIcon />}
+                onClick={() => setDrawerOpen(true)}
+              >
+                Gestionar
+              </Button>
+            ) : null}
+            <LinkButton href="/tickets" variant="outlined">
+              Volver
+            </LinkButton>
+          </Stack>
         }
       />
 
@@ -57,40 +87,34 @@ export default function TicketDetailView({ id }: { id: string }) {
           <TicketThread ticketId={ticket.id} comments={ticket.comments} evidences={ticket.evidences} />
         </Grid>
 
-        <Grid size={{ xs: 12, lg: 4 }}>
-          <AppCard lift={false}>
-            <Typography variant="h4" sx={{ mb: 2 }}>
-              Asignación
-            </Typography>
-            <Stack spacing={2}>
-              <Meta label="Solicitante" value={ticket.requester} />
-              <Stack direction="row" spacing={1.25} alignItems="center">
-                <UserAvatar name={ticket.technician} />
-                <Box>
-                  <Typography variant="caption" color="text.secondary">
-                    Técnico
-                  </Typography>
-                  <Typography sx={{ fontWeight: 700 }}>{ticket.technician}</Typography>
-                </Box>
-              </Stack>
-              <Meta label="Equipo" value={ticket.team} />
-              <Meta label="Creado" value={ticket.createdAt} />
-              <Meta label="Actualizado" value={ticket.updatedAt} />
-            </Stack>
-          </AppCard>
+        <Grid size={{ xs: 12, lg: 4 }} sx={{ display: { xs: 'none', lg: 'block' } }}>
+          <TicketManagementPanel ticketId={ticket.id} />
         </Grid>
       </Grid>
-    </Box>
-  )
-}
 
-function Meta({ label, value }: { label: string; value: string }) {
-  return (
-    <Box>
-      <Typography variant="caption" color="text.secondary">
-        {label}
-      </Typography>
-      <Typography sx={{ fontWeight: 650 }}>{value}</Typography>
+      <Drawer
+        anchor="right"
+        open={!isDesktop && drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        ModalProps={{ keepMounted: true }}
+        sx={{
+          display: { xs: 'block', lg: 'none' },
+          '& .MuiDrawer-paper': {
+            width: DRAWER_WIDTH,
+            maxWidth: '100vw',
+            p: 2.5,
+            boxSizing: 'border-box',
+          },
+        }}
+      >
+        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
+          <Typography variant="h4">Gestión del ticket</Typography>
+          <IconButton aria-label="Cerrar panel" onClick={() => setDrawerOpen(false)} edge="end">
+            <CloseRoundedIcon />
+          </IconButton>
+        </Stack>
+        <TicketManagementFields ticketId={ticket.id} />
+      </Drawer>
     </Box>
   )
 }
