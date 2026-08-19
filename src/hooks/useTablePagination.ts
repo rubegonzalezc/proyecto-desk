@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { TABLE_PAGE_SIZES, type TablePageSize } from '@/components/ui/TablePagination'
 
 export type UseTablePaginationOptions = {
@@ -6,6 +6,12 @@ export type UseTablePaginationOptions = {
   initialPageSize?: TablePageSize
   /** Página inicial. Por defecto: 1. */
   initialPage?: number
+  /** Modo controlado: página actual desde fuera (p. ej. URL). */
+  page?: number
+  /** Modo controlado: tamaño de página desde fuera. */
+  pageSize?: TablePageSize
+  onPageChange?: (page: number) => void
+  onPageSizeChange?: (size: TablePageSize) => void
 }
 
 export type UseTablePaginationResult<T> = {
@@ -53,9 +59,29 @@ export function useTablePagination<T>(
   items: T[],
   options: UseTablePaginationOptions = {},
 ): UseTablePaginationResult<T> {
-  const { initialPageSize = 25, initialPage = 1 } = options
-  const [page, setPage] = useState(initialPage)
-  const [pageSize, setPageSize] = useState<TablePageSize>(initialPageSize)
+  const {
+    initialPageSize = 25,
+    initialPage = 1,
+    page: controlledPage,
+    pageSize: controlledPageSize,
+    onPageChange,
+    onPageSizeChange,
+  } = options
+  const [internalPage, setInternalPage] = useState(initialPage)
+  const [internalPageSize, setInternalPageSize] = useState<TablePageSize>(initialPageSize)
+
+  const page = controlledPage ?? internalPage
+  const pageSize = controlledPageSize ?? internalPageSize
+
+  useEffect(() => {
+    if (controlledPage !== undefined) return
+    setInternalPage(initialPage)
+  }, [controlledPage, initialPage])
+
+  useEffect(() => {
+    if (controlledPageSize !== undefined) return
+    setInternalPageSize(initialPageSize)
+  }, [controlledPageSize, initialPageSize])
 
   const total = items.length
   const pageCount = Math.max(1, Math.ceil(total / pageSize))
@@ -64,14 +90,26 @@ export function useTablePagination<T>(
   const to = Math.min(currentPage * pageSize, total)
   const pagedItems = items.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
+  const setPage = useCallback(
+    (nextPage: number) => {
+      if (onPageChange) onPageChange(nextPage)
+      else setInternalPage(nextPage)
+    },
+    [onPageChange],
+  )
+
   const resetPage = useCallback(() => {
     setPage(1)
-  }, [])
+  }, [setPage])
 
-  const handlePageSizeChange = useCallback((size: TablePageSize) => {
-    setPageSize(size)
-    setPage(1)
-  }, [])
+  const handlePageSizeChange = useCallback(
+    (size: TablePageSize) => {
+      if (onPageSizeChange) onPageSizeChange(size)
+      else setInternalPageSize(size)
+      setPage(1)
+    },
+    [onPageSizeChange, setPage],
+  )
 
   return {
     page: currentPage,
