@@ -15,11 +15,16 @@ export type NavIconName =
   | 'suppliers'
   | 'tenants'
 
+export type NavBadgeKey = 'ticketsOpen'
+
 export interface SystemNavItem {
   href: string
   label: string
   icon: NavIconName
+  /** Badge estático (p. ej. inventario sin tenantId aún). */
   badge?: string
+  /** Badge derivado del tenant activo en el sidebar. */
+  badgeKey?: NavBadgeKey
 }
 
 export interface SystemNavGroup {
@@ -52,7 +57,7 @@ export const appSystems: AppSystem[] = [
         label: 'Operación',
         items: [
           { href: '/dashboard', label: 'Dashboard', icon: 'dashboard' },
-          { href: '/tickets', label: 'Tickets', icon: 'tickets', badge: '28' },
+          { href: '/tickets', label: 'Tickets', icon: 'tickets', badgeKey: 'ticketsOpen' },
         ],
       },
       {
@@ -122,4 +127,12 @@ export function getSystemByPath(pathname: string) {
 export function isNavItemActive(pathname: string, href: string, home: string) {
   if (href === home) return pathname === href
   return pathname === href || pathname.startsWith(`${href}/`)
+}
+
+export function resolveNavBadge(
+  item: SystemNavItem,
+  tenant: { ticketsOpen: number },
+): string | undefined {
+  if (item.badgeKey === 'ticketsOpen') return String(tenant.ticketsOpen)
+  return item.badge
 }

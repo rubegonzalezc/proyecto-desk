@@ -204,6 +204,15 @@ export const tenants: Tenant[] = [
 
 export const defaultTenantId = 'TEN-GOOGLE'
 
+/** Tenants con datos mock diferenciados para demos multi-tenant (Sprint 3). */
+export const demoTenantIds = {
+  google: 'TEN-GOOGLE',
+  andes: 'TEN-ANDES',
+  nexus: 'TEN-NEXUS',
+} as const
+
+export const demoTenantIdList: string[] = Object.values(demoTenantIds)
+
 export const initialRecentTenantIds = [
   'TEN-GOOGLE',
   'TEN-ANDES',

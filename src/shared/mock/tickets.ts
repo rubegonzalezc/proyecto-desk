@@ -1,8 +1,13 @@
 import type { Ticket } from '@/shared/types/ticket'
+import { demoTenantIds } from './tenants'
+
+const { google: TEN_GOOGLE, andes: TEN_ANDES, nexus: TEN_NEXUS } = demoTenantIds
+const demoTenantRotation = [TEN_GOOGLE, TEN_ANDES, TEN_NEXUS] as const
 
 const authored: Ticket[] = [
   {
     id: 'TCK-1001',
+    tenantId: TEN_GOOGLE,
     title: 'No hay acceso a internet en planta 3',
     description:
       'Varios usuarios de planta 3 reportan pérdida intermitente de conectividad Wi-Fi desde las 08:40. El switch de acceso no responde a ping.',
@@ -39,6 +44,7 @@ const authored: Ticket[] = [
   },
   {
     id: 'TCK-1002',
+    tenantId: TEN_GOOGLE,
     title: 'Impresora de recepción no imprime',
     description: 'HP LaserJet de recepción muestra error de atasco aunque no hay papel visible.',
     status: 'Nuevo',
@@ -55,6 +61,7 @@ const authored: Ticket[] = [
   },
   {
     id: 'TCK-1003',
+    tenantId: TEN_GOOGLE,
     title: 'VPN corporativa cae cada 20 minutos',
     description: 'Usuarios remotos de terreno pierden el túnel SSL. Requieren reconectar de forma manual.',
     status: 'Pendiente',
@@ -79,6 +86,7 @@ const authored: Ticket[] = [
   },
   {
     id: 'TCK-1004',
+    tenantId: TEN_GOOGLE,
     title: 'Solicitud de laptop para nuevo ingreso',
     description: 'Onboarding de Daniela Mora. Requiere MacBook Pro 14", mouse y acceso a Slack + Jira.',
     status: 'En progreso',
@@ -103,6 +111,7 @@ const authored: Ticket[] = [
   },
   {
     id: 'TCK-1005',
+    tenantId: TEN_ANDES,
     title: 'Correo no sincroniza en Outlook',
     description: 'Buzón de 14 GB. Outlook se queda en “Actualizando esta carpeta”.',
     status: 'Resuelto',
@@ -127,6 +136,7 @@ const authored: Ticket[] = [
   },
   {
     id: 'TCK-1006',
+    tenantId: TEN_ANDES,
     title: 'Firewall bloquea acceso a ERP',
     description: 'Tras el cambio de reglas de anoche, el ERP no carga desde la red de invitados corporativa.',
     status: 'En progreso',
@@ -143,6 +153,7 @@ const authored: Ticket[] = [
   },
   {
     id: 'TCK-1007',
+    tenantId: TEN_ANDES,
     title: 'Licencia de Adobe expira en 5 días',
     description: 'Creative Cloud del equipo de marketing caduca el 19 de agosto.',
     status: 'Pendiente',
@@ -159,6 +170,7 @@ const authored: Ticket[] = [
   },
   {
     id: 'TCK-1008',
+    tenantId: TEN_ANDES,
     title: 'Cámara de acceso no registra eventos',
     description: 'NVR de recepción dejó de grabar a las 02:11. Disco al 98%.',
     status: 'Cerrado',
@@ -183,6 +195,7 @@ const authored: Ticket[] = [
   },
   {
     id: 'TCK-1009',
+    tenantId: TEN_NEXUS,
     title: 'Pantalla azul al abrir SAP',
     description: 'Laptop Dell Latitude 5540 de logística. Dump: IRQL_NOT_LESS_OR_EQUAL.',
     status: 'Nuevo',
@@ -199,6 +212,7 @@ const authored: Ticket[] = [
   },
   {
     id: 'TCK-1010',
+    tenantId: TEN_NEXUS,
     title: 'Alta de usuario en Active Directory',
     description: 'Crear cuenta, grupos de ventas y buzón para Ignacio Paredes.',
     status: 'Resuelto',
@@ -215,6 +229,7 @@ const authored: Ticket[] = [
   },
   {
     id: 'TCK-1011',
+    tenantId: TEN_NEXUS,
     title: 'Switch de bodega con temperatura alta',
     description: 'SNMP alerta 72 °C en SW-BOD-01. Ventiladores al 100%.',
     status: 'En progreso',
@@ -239,6 +254,7 @@ const authored: Ticket[] = [
   },
   {
     id: 'TCK-1012',
+    tenantId: TEN_NEXUS,
     title: 'Portal de conocimiento lento',
     description: 'La búsqueda tarda más de 8 segundos. Posible índice desactualizado.',
     status: 'Pendiente',
@@ -321,6 +337,7 @@ export const tickets: Ticket[] = [
     return {
       ...item,
       id: `TCK-${n}`,
+      tenantId: demoTenantRotation[index % demoTenantRotation.length],
       description: `${item.title}. Registro de demostración para paginación de la cola.`,
       createdAt: `2026-08-${String(10 + (index % 5)).padStart(2, '0')} ${String(8 + (index % 10)).padStart(2, '0')}:${String((index * 7) % 60).padStart(2, '0')}`,
       updatedAt: `2026-08-${String(11 + (index % 4)).padStart(2, '0')} ${String(9 + (index % 9)).padStart(2, '0')}:15`,

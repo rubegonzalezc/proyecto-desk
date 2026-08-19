@@ -29,6 +29,7 @@ import {
   appSystems,
   getSystemById,
   isNavItemActive,
+  resolveNavBadge,
   type NavIconName,
   type SystemId,
 } from '@/shared/systems'
@@ -133,7 +134,7 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
                   href={item.href}
                   label={item.label}
                   icon={Icon}
-                  badge={item.badge}
+                  badge={resolveNavBadge(item, tenant)}
                   active={active}
                   onClick={onNavigate}
                 />
