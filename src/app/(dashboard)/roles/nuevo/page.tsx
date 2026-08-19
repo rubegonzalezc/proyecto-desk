@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Box, Button, Stack, TextField, Typography } from '@mui/material'
+import TenantEyebrow from '@/components/layout/TenantEyebrow'
 import AppCard from '@/components/ui/AppCard'
 import LinkButton from '@/components/ui/LinkButton'
 import PageHeader from '@/components/ui/PageHeader'
@@ -13,7 +14,7 @@ export default function NewRolePage() {
   return (
     <Box>
       <PageHeader
-        eyebrow="Roles"
+        eyebrow={<TenantEyebrow suffix="roles" />}
         title="Crear rol"
         description="Define el nombre y marca permisos por sistema. Los checkboxes solo cambian el estado visual."
         extra={

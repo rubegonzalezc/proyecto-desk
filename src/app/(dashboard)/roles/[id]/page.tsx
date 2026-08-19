@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { Box, Button, Stack, TextField, Typography } from '@mui/material'
 import { roles } from '@/shared/mock/roles'
+import TenantEyebrow from '@/components/layout/TenantEyebrow'
 import AppCard from '@/components/ui/AppCard'
 import LinkButton from '@/components/ui/LinkButton'
 import PageHeader from '@/components/ui/PageHeader'
@@ -19,7 +20,7 @@ export default async function EditRolePage({ params }: { params: Promise<{ id: s
   return (
     <Box>
       <PageHeader
-        eyebrow={role.id}
+        eyebrow={<TenantEyebrow suffix={role.id} />}
         title={role.name}
         description={role.description}
         extra={
