@@ -13,8 +13,11 @@ import {
   Stack,
   TextField,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material'
 import type { TicketStatus } from '@/shared/types/ticket'
+import { getStatusDisplayLabel } from '@/shared/labels/ticket-display'
 import { useTicketsStore } from '@/stores/TicketsProvider'
 import AppTable from '@/components/ui/AppTable'
 import EmptyState from '@/components/ui/EmptyState'
@@ -41,6 +44,8 @@ const columns = [
 ]
 
 export default function TicketsBoard() {
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const { tickets } = useTicketsStore()
   const [query, setQuery] = useState('')
   const [status, setStatus] = useState<(typeof statuses)[number]>('Todos')
@@ -75,17 +80,27 @@ export default function TicketsBoard() {
             }}
             sx={{ flex: 1, '& .MuiOutlinedInput-root': { borderRadius: '999px', height: 42 } }}
           />
-          <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap>
+          <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap sx={{ width: '100%' }}>
             {statuses.map((item) => (
               <Chip
                 key={item}
-                label={item}
+                size="small"
+                label={getStatusDisplayLabel(item, isMobile)}
+                title={item}
                 onClick={() => {
                   setStatus(item)
                   setPage(1)
                 }}
                 color={status === item ? 'primary' : 'default'}
                 variant={status === item ? 'filled' : 'outlined'}
+                sx={{
+                  maxWidth: '100%',
+                  '& .MuiChip-label': {
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  },
+                }}
               />
             ))}
           </Stack>
