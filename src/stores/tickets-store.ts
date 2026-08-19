@@ -1,6 +1,6 @@
 import { tickets as seedTickets } from '@/shared/mock/tickets'
 import { defaultTenantId } from '@/shared/mock/tenants'
-import type { Ticket, TicketComment, TicketPriority, TicketStatus } from '@/shared/types/ticket'
+import type { Ticket, TicketComment, TicketEvidence, TicketPriority, TicketStatus } from '@/shared/types/ticket'
 
 export type CreateTicketInput = {
   title: string
@@ -12,6 +12,7 @@ export type CreateTicketInput = {
   technician?: string
   team?: string
   tenantId?: string
+  evidences?: TicketEvidence[]
 }
 
 export type UpdateTicketInput = Partial<
@@ -80,7 +81,7 @@ export function buildTicket(input: CreateTicketInput, tickets: Ticket[]): Ticket
     updatedAt: now,
     sla: 'Por definir',
     comments: [],
-    evidences: [],
+    evidences: input.evidences?.map((item) => ({ ...item })) ?? [],
   }
 }
 
