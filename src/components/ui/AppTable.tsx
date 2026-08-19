@@ -29,11 +29,11 @@ export default function AppTable({ columns, children, toolbar, footer }: AppTabl
           borderRadius: '24px',
         }}
       >
-        <Box sx={{ overflowX: 'auto' }} className="sd-scrollbar">
-          <Box sx={{ minWidth: 860 }}>
+        <Box sx={{ overflowX: { xs: 'visible', md: 'auto' } }} className="sd-scrollbar">
+          <Box sx={{ minWidth: { xs: 0, md: 860 } }}>
             <Box
               sx={{
-                display: 'grid',
+                display: { xs: 'none', md: 'grid' },
                 gridTemplateColumns: columns.map((column) => column.width ?? '1fr').join(' '),
                 px: 2.25,
                 py: 1.4,
