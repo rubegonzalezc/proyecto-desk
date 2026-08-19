@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Chip, Stack, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import { knowledgeArticles } from '@/shared/mock/knowledge'
+import TenantEyebrow from '@/components/layout/TenantEyebrow'
 import AppCard from '@/components/ui/AppCard'
 import PageHeader from '@/components/ui/PageHeader'
 
@@ -13,7 +14,7 @@ export default function KnowledgePage() {
   return (
     <>
       <PageHeader
-        eyebrow="Self-service"
+        eyebrow={<TenantEyebrow suffix="self-service" />}
         title="Base de conocimiento"
         description="Artículos para agentes y solicitantes. Contenido estático de demostración."
       />

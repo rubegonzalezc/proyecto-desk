@@ -7,6 +7,7 @@ import Grid from '@mui/material/Grid2'
 import Link from 'next/link'
 import AppCard from '@/components/ui/AppCard'
 import PageHeader from '@/components/ui/PageHeader'
+import TenantEyebrow from '@/components/layout/TenantEyebrow'
 import { useTenant } from '@/components/layout/TenantProvider'
 import ImageAttachField, { filesToLocalImages, type LocalImage } from '@/components/tickets/ImageAttachField'
 import { useTicketsStore } from '@/stores/TicketsProvider'
@@ -90,7 +91,7 @@ export default function NewTicketForm() {
   return (
     <Box component="form" onSubmit={handleSubmit} noValidate>
       <PageHeader
-        eyebrow="Tickets"
+        eyebrow={<TenantEyebrow suffix="tickets" />}
         title="Crear ticket"
         description="Completa el formulario para registrar un ticket en la demo."
         extra={

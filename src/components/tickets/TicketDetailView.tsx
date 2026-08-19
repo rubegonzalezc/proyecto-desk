@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid2'
 import { useTicketsStore } from '@/stores/TicketsProvider'
 import AppCard from '@/components/ui/AppCard'
 import LinkButton from '@/components/ui/LinkButton'
+import TenantEyebrow from '@/components/layout/TenantEyebrow'
 import PageHeader from '@/components/ui/PageHeader'
 import PriorityBadge from '@/components/ui/PriorityBadge'
 import StatusBadge from '@/components/ui/StatusBadge'
@@ -21,7 +22,7 @@ export default function TicketDetailView({ id }: { id: string }) {
   return (
     <Box>
       <PageHeader
-        eyebrow={ticket.id}
+        eyebrow={<TenantEyebrow suffix={ticket.id} />}
         title={ticket.title}
         description={ticket.description}
         extra={

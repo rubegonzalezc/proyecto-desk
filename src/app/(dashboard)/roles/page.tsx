@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Box, Chip, Stack, Typography } from '@mui/material'
 import { roles, countGranted, systemsWithAccess } from '@/shared/mock/roles'
+import TenantEyebrow from '@/components/layout/TenantEyebrow'
 import AppTable from '@/components/ui/AppTable'
 import PageHeader from '@/components/ui/PageHeader'
 
@@ -20,7 +21,7 @@ export default function RolesPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Gobierno"
+        eyebrow={<TenantEyebrow suffix="gobierno" />}
         title="Roles y permisos"
         description="Permisos por sistema y módulo. Edición visual, sin persistencia."
         actionLabel="Crear rol"

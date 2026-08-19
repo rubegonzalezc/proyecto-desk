@@ -6,6 +6,7 @@ import WarehouseOutlined from '@mui/icons-material/WarehouseOutlined'
 import { Box, Chip, Stack, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import { inventoryItems, inventoryKpis, inventoryMovements } from '@/shared/mock/inventory'
+import TenantEyebrow from '@/components/layout/TenantEyebrow'
 import AppCard from '@/components/ui/AppCard'
 import PageHeader from '@/components/ui/PageHeader'
 import StatCard from '@/components/ui/StatCard'
@@ -27,7 +28,7 @@ export default function InventoryDashboardPage() {
   return (
     <Box>
       <PageHeader
-        eyebrow="Sistema de inventario"
+        eyebrow={<TenantEyebrow suffix="inventario" />}
         title="Stock y abastecimiento"
         description="Vista operativa de artículos, alertas de reposición y movimientos del día."
       />

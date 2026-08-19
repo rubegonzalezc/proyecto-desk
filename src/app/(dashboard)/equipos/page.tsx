@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Box, Stack, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import { teams } from '@/shared/mock/teams'
+import TenantEyebrow from '@/components/layout/TenantEyebrow'
 import AppCard from '@/components/ui/AppCard'
 import PageHeader from '@/components/ui/PageHeader'
 
@@ -13,7 +14,7 @@ export default function TeamsPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Organización"
+        eyebrow={<TenantEyebrow suffix="organización" />}
         title="Equipos"
         description="Células de soporte: mesa, terreno, infraestructura, redes y desarrollo."
       />

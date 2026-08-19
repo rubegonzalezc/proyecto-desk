@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Chip, Stack, Typography } from '@mui/material'
 import { suppliers } from '@/shared/mock/inventory'
+import TenantEyebrow from '@/components/layout/TenantEyebrow'
 import AppTable from '@/components/ui/AppTable'
 import PageHeader from '@/components/ui/PageHeader'
 import UserAvatar from '@/components/ui/UserAvatar'
@@ -20,7 +21,7 @@ export default function SuppliersPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Catálogo"
+        eyebrow={<TenantEyebrow suffix="catálogo" />}
         title="Proveedores"
         description="Abastecimiento de hardware, consumibles y recambios."
       />

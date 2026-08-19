@@ -7,6 +7,7 @@ import HubOutlined from '@mui/icons-material/HubOutlined'
 import VpnKeyOutlined from '@mui/icons-material/VpnKeyOutlined'
 import type { AssetType } from '@/shared/types/asset'
 import { assets } from '@/shared/mock/assets'
+import TenantEyebrow from '@/components/layout/TenantEyebrow'
 import AppTable from '@/components/ui/AppTable'
 import PageHeader from '@/components/ui/PageHeader'
 
@@ -41,7 +42,7 @@ export default function AssetsPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Inventario"
+        eyebrow={<TenantEyebrow suffix="activos TI" />}
         title="Activos TI"
         description="Equipos, impresoras, red y licencias. Vista de catálogo para demos."
       />

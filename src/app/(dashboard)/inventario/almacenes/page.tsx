@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Chip, Stack, Typography } from '@mui/material'
 import Grid2 from '@mui/material/Grid2'
 import { warehouses } from '@/shared/mock/inventory'
+import TenantEyebrow from '@/components/layout/TenantEyebrow'
 import AppCard from '@/components/ui/AppCard'
 import PageHeader from '@/components/ui/PageHeader'
 
@@ -13,7 +14,7 @@ export default function WarehousesPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Catálogo"
+        eyebrow={<TenantEyebrow suffix="catálogo" />}
         title="Almacenes"
         description="Ubicaciones físicas y kits de terreno."
       />
