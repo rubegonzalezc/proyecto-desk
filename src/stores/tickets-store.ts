@@ -39,7 +39,7 @@ function cloneTickets(source: Ticket[]): Ticket[] {
 }
 
 function withDefaultTenant(ticket: Ticket): Ticket {
-  return ticket.tenantId ? ticket : { ...ticket, tenantId: defaultTenantId }
+  return { ...ticket, tenantId: ticket.tenantId ?? defaultTenantId }
 }
 
 export function createInitialTickets(): Ticket[] {

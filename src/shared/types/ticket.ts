@@ -25,8 +25,8 @@ export interface TicketEvidence {
 
 export interface Ticket {
   id: string
-  /** Preparado para multi-tenant / RLS en Supabase */
-  tenantId?: string
+  /** FK a `tenants.id` — base para RLS en Supabase */
+  tenantId: string
   title: string
   description: string
   status: TicketStatus
