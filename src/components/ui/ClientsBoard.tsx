@@ -32,6 +32,7 @@ export default function ClientsBoard() {
   }, [query])
 
   const pagination = useTablePagination(filtered)
+  const hasActiveFilters = Boolean(query.trim())
 
   return (
     <AppTable
@@ -67,7 +68,12 @@ export default function ClientsBoard() {
         <Box sx={{ p: 2 }}>
           <EmptyState
             title="Sin resultados"
-            description="No hay clientes que coincidan con esa búsqueda en la demo."
+            description="No hay clientes que coincidan con esa búsqueda. Prueba otro término o limpia el filtro."
+            actionLabel={hasActiveFilters ? 'Limpiar búsqueda' : 'Ver todos los clientes'}
+            onAction={() => {
+              setQuery('')
+              pagination.resetPage()
+            }}
           />
         </Box>
       ) : (

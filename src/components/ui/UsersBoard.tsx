@@ -67,7 +67,12 @@ export default function UsersBoard() {
         <Box sx={{ p: 2 }}>
           <EmptyState
             title="Sin resultados"
-            description="No hay usuarios que coincidan con esa búsqueda en la demo."
+            description="No hay usuarios que coincidan con esa búsqueda. Revisa el texto o limpia el filtro."
+            actionLabel="Limpiar búsqueda"
+            onAction={() => {
+              setQuery('')
+              pagination.resetPage()
+            }}
           />
         </Box>
       ) : (

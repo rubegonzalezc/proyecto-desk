@@ -46,6 +46,13 @@ export default function TicketsBoard() {
   }, [query, status, tickets])
 
   const pagination = useTablePagination(filtered)
+  const hasActiveFilters = Boolean(query.trim()) || status !== 'Todos'
+
+  const clearFilters = () => {
+    setQuery('')
+    setStatus('Todos')
+    pagination.resetPage()
+  }
 
   return (
     <AppTable
@@ -104,8 +111,16 @@ export default function TicketsBoard() {
       {filtered.length === 0 ? (
         <Box sx={{ p: 2 }}>
           <EmptyState
-            title="Sin resultados"
-            description="No hay tickets con ese criterio en la demo."
+            title={hasActiveFilters ? 'Sin resultados' : 'Cola vacía'}
+            description={
+              hasActiveFilters
+                ? 'No hay tickets con ese criterio. Prueba con otros filtros o limpia la búsqueda.'
+                : 'Aún no hay tickets en la cola. Crea el primero para iniciar el flujo de la demo.'
+            }
+            actionLabel={hasActiveFilters ? 'Limpiar filtros' : 'Crear ticket'}
+            {...(hasActiveFilters
+              ? { onAction: clearFilters }
+              : { actionHref: '/tickets/nuevo' })}
           />
         </Box>
       ) : (
