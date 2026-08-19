@@ -1,8 +1,9 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { Box, Chip, Stack } from '@mui/material'
+import { Box, Chip, Stack, useMediaQuery, useTheme } from '@mui/material'
 import type { TicketStatus } from '@/shared/types/ticket'
+import { getStatusDisplayLabel } from '@/shared/labels/ticket-display'
 import { useTicketsStore } from '@/stores/TicketsProvider'
 import { useTablePagination } from '@/hooks/useTablePagination'
 import AppTable from '@/components/ui/AppTable'
@@ -30,6 +31,8 @@ const columns = [
 ]
 
 export default function TicketsBoard() {
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const { tickets } = useTicketsStore()
   const [query, setQuery] = useState('')
   const [status, setStatus] = useState<(typeof statuses)[number]>('Todos')
@@ -57,17 +60,27 @@ export default function TicketsBoard() {
             }}
             placeholder="Filtrar por ID, asunto o técnico"
           />
-          <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap>
+          <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap sx={{ width: '100%' }}>
             {statuses.map((item) => (
               <Chip
                 key={item}
-                label={item}
+                size="small"
+                label={getStatusDisplayLabel(item, isMobile)}
+                title={item}
                 onClick={() => {
                   setStatus(item)
                   pagination.resetPage()
                 }}
                 color={status === item ? 'primary' : 'default'}
                 variant={status === item ? 'filled' : 'outlined'}
+                sx={{
+                  maxWidth: '100%',
+                  '& .MuiChip-label': {
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  },
+                }}
               />
             ))}
           </Stack>
