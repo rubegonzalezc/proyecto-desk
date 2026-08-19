@@ -1,9 +1,11 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Box, Chip, Stack, useMediaQuery, useTheme } from '@mui/material'
 import type { TicketStatus } from '@/shared/types/ticket'
 import { getStatusDisplayLabel } from '@/shared/labels/ticket-display'
+import { useTenant } from '@/components/layout/TenantProvider'
+import { filterByTenant } from '@/shared/mock/tenant-scope'
 import { useTicketsStore } from '@/stores/TicketsProvider'
 import { useTablePagination } from '@/hooks/useTablePagination'
 import AppTable from '@/components/ui/AppTable'
@@ -33,20 +35,30 @@ const columns = [
 export default function TicketsBoard() {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const { tenant } = useTenant()
   const { tickets } = useTicketsStore()
   const [query, setQuery] = useState('')
   const [status, setStatus] = useState<(typeof statuses)[number]>('Todos')
 
+  const tenantTickets = useMemo(
+    () => filterByTenant(tickets, tenant.id),
+    [tickets, tenant.id],
+  )
+
   const filtered = useMemo(() => {
-    return tickets.filter((ticket) => {
+    return tenantTickets.filter((ticket) => {
       const matchesStatus = status === 'Todos' || ticket.status === status
       const haystack = `${ticket.id} ${ticket.title} ${ticket.technician} ${ticket.requester}`.toLowerCase()
       return matchesStatus && haystack.includes(query.toLowerCase())
     })
-  }, [query, status, tickets])
+  }, [query, status, tenantTickets])
 
   const pagination = useTablePagination(filtered)
   const hasActiveFilters = Boolean(query.trim()) || status !== 'Todos'
+
+  useEffect(() => {
+    pagination.resetPage()
+  }, [tenant.id, pagination.resetPage])
 
   const clearFilters = () => {
     setQuery('')
@@ -114,7 +126,7 @@ export default function TicketsBoard() {
             description={
               hasActiveFilters
                 ? 'No hay tickets con ese criterio. Prueba con otros filtros o limpia la búsqueda.'
-                : 'Aún no hay tickets en la cola. Crea el primero para iniciar el flujo de la demo.'
+                : `Aún no hay tickets para ${tenant.name}. Crea el primero para iniciar el flujo de la demo.`
             }
             actionLabel={hasActiveFilters ? 'Limpiar filtros' : 'Crear ticket'}
             {...(hasActiveFilters

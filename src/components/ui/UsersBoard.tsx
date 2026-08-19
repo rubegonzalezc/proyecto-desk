@@ -1,8 +1,10 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Box } from '@mui/material'
+import { useTenant } from '@/components/layout/TenantProvider'
 import { users } from '@/shared/mock/users'
+import { filterByTenant } from '@/shared/mock/tenant-scope'
 import { useTablePagination } from '@/hooks/useTablePagination'
 import AppTable from '@/components/ui/AppTable'
 import EmptyState from '@/components/ui/EmptyState'
@@ -19,19 +21,30 @@ const columns = [
 ]
 
 export default function UsersBoard() {
+  const { tenant } = useTenant()
   const [query, setQuery] = useState('')
+
+  const tenantUsers = useMemo(
+    () => filterByTenant(users, tenant.id),
+    [tenant.id],
+  )
 
   const filtered = useMemo(() => {
     const normalized = query.trim().toLowerCase()
-    if (!normalized) return users
+    if (!normalized) return tenantUsers
 
-    return users.filter((user) => {
+    return tenantUsers.filter((user) => {
       const haystack = `${user.name} ${user.email} ${user.role}`.toLowerCase()
       return haystack.includes(normalized)
     })
-  }, [query])
+  }, [query, tenantUsers])
 
   const pagination = useTablePagination(filtered)
+  const hasActiveSearch = Boolean(query.trim())
+
+  useEffect(() => {
+    pagination.resetPage()
+  }, [tenant.id, pagination.resetPage])
 
   return (
     <AppTable
@@ -66,13 +79,21 @@ export default function UsersBoard() {
       {filtered.length === 0 ? (
         <Box sx={{ p: 2 }}>
           <EmptyState
-            title="Sin resultados"
-            description="No hay usuarios que coincidan con esa búsqueda. Revisa el texto o limpia el filtro."
-            actionLabel="Limpiar búsqueda"
-            onAction={() => {
-              setQuery('')
-              pagination.resetPage()
-            }}
+            title={hasActiveSearch ? 'Sin resultados' : 'Sin usuarios'}
+            description={
+              hasActiveSearch
+                ? 'No hay usuarios que coincidan con esa búsqueda. Revisa el texto o limpia el filtro.'
+                : `No hay usuarios registrados para ${tenant.name} en la demo.`
+            }
+            actionLabel={hasActiveSearch ? 'Limpiar búsqueda' : undefined}
+            onAction={
+              hasActiveSearch
+                ? () => {
+                    setQuery('')
+                    pagination.resetPage()
+                  }
+                : undefined
+            }
           />
         </Box>
       ) : (
