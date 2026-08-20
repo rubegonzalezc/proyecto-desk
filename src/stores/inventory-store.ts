@@ -1,4 +1,7 @@
-import { inventoryItems, inventoryMovements } from '@/shared/mock/inventory'
+import {
+  getInventoryItemsSeedSync,
+  getInventoryMovementsSeedSync,
+} from '@/lib/api/inventory'
 import { deriveStockStatus } from '@/shared/utils/inventory-status'
 import { formatTicketTimestamp } from '@/shared/utils/ticket-timestamps'
 import type { InventoryItem, InventoryMovement, MovementType } from '@/shared/types/inventory'
@@ -32,11 +35,11 @@ function cloneMovements(source: InventoryMovement[]): InventoryMovement[] {
 }
 
 export function createInitialItems(): InventoryItem[] {
-  return cloneItems(inventoryItems)
+  return cloneItems(getInventoryItemsSeedSync())
 }
 
 export function createInitialMovements(): InventoryMovement[] {
-  return cloneMovements(inventoryMovements)
+  return cloneMovements(getInventoryMovementsSeedSync())
 }
 
 export function nextMovementId(movements: InventoryMovement[]): string {

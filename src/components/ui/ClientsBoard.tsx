@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { Box } from '@mui/material'
-import { tenants } from '@/shared/mock/tenants'
+import { getTenantsSeedSync } from '@/lib/api/tenants'
 import {
   loadTenantAdminStore,
   mergeTenantsWithAdminOverrides,
@@ -33,7 +33,7 @@ export default function ClientsBoard() {
   }, [pathname])
 
   const tenantsWithOverrides = useMemo(
-    () => mergeTenantsWithAdminOverrides(tenants, adminStore),
+    () => mergeTenantsWithAdminOverrides(getTenantsSeedSync(), adminStore),
     [adminStore],
   )
 

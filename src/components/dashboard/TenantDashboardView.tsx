@@ -11,7 +11,7 @@ import HeadsetMicOutlined from '@mui/icons-material/HeadsetMicOutlined'
 import TimerOutlined from '@mui/icons-material/TimerOutlined'
 import { useTenant } from '@/components/layout/TenantProvider'
 import { getDashboardForTenant } from '@/shared/mock/dashboard'
-import { filterByTenant } from '@/shared/mock/tenant-scope'
+import { filterTickets } from '@/lib/api/tickets'
 import { useTicketsStore } from '@/stores/TicketsProvider'
 import AppCard from '@/components/ui/AppCard'
 import EmptyState from '@/components/ui/EmptyState'
@@ -37,7 +37,7 @@ export default function TenantDashboardView() {
 
   const dashboard = useMemo(() => getDashboardForTenant(tenant.id), [tenant.id])
   const recentTickets = useMemo(
-    () => filterByTenant(tickets, tenant.id).slice(0, 6),
+    () => filterTickets(tickets, { tenantId: tenant.id }).slice(0, 6),
     [tickets, tenant.id],
   )
 

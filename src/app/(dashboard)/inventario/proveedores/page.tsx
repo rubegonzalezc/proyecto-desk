@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Chip, Stack, Typography } from '@mui/material'
-import { suppliers } from '@/shared/mock/inventory'
+import { listSuppliers } from '@/lib/api/inventory'
 import TenantEyebrow from '@/components/layout/TenantEyebrow'
 import AppTable from '@/components/ui/AppTable'
 import PageHeader from '@/components/ui/PageHeader'
@@ -17,7 +17,9 @@ const columns = [
   { key: 'status', label: 'Estado', width: '150px' },
 ]
 
-export default function SuppliersPage() {
+export default async function SuppliersPage() {
+  const suppliers = await listSuppliers()
+
   return (
     <>
       <PageHeader

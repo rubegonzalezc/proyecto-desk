@@ -6,9 +6,8 @@ import { Box, Chip, Stack, useMediaQuery, useTheme } from '@mui/material'
 import type { TicketStatus } from '@/shared/types/ticket'
 import { getTechnicianOptions } from '@/shared/constants/ticket-form-options'
 import { getStatusDisplayLabel } from '@/shared/labels/ticket-display'
-import { filterTenantTickets } from '@/shared/utils/ticket-list-filters'
+import { filterTickets } from '@/lib/api/tickets'
 import { useTenant } from '@/components/layout/TenantProvider'
-import { filterByTenant } from '@/shared/mock/tenant-scope'
 import {
   buildTicketSearchParams,
   hasActiveTicketFilters,
@@ -85,14 +84,19 @@ export default function TicketsBoard() {
     [pathname, router, searchParams, technicians],
   )
 
-  const tenantTickets = useMemo(
-    () => filterByTenant(tickets, tenant.id),
-    [tickets, tenant.id],
-  )
-
   const filtered = useMemo(
-    () => filterTenantTickets(tenantTickets, urlFilters),
-    [tenantTickets, urlFilters],
+    () =>
+      filterTickets(tickets, {
+        tenantId: tenant.id,
+        q: query,
+        estado: status,
+        prioridad,
+        tecnico,
+        categoria,
+        desde,
+        hasta,
+      }),
+    [tickets, tenant.id, query, status, prioridad, tecnico, categoria, desde, hasta],
   )
 
   const pagination = useTablePagination(filtered, {

@@ -1,5 +1,5 @@
-import { tickets as seedTickets } from '@/shared/mock/tickets'
-import { defaultTenantId } from '@/shared/mock/tenants'
+import { getDefaultTenantId } from '@/lib/api/tenants'
+import { getTicketsSeedSync } from '@/lib/api/tickets'
 import {
   appendAssignmentActivity,
   appendStatusActivities,
@@ -48,11 +48,11 @@ function cloneTickets(source: Ticket[]): Ticket[] {
 }
 
 function withDefaultTenant(ticket: Ticket): Ticket {
-  return { ...ticket, tenantId: ticket.tenantId ?? defaultTenantId }
+  return { ...ticket, tenantId: ticket.tenantId ?? getDefaultTenantId() }
 }
 
 export function createInitialTickets(): Ticket[] {
-  return cloneTickets(seedTickets).map((ticket) => ensureTicketActivity(withDefaultTenant(ticket)))
+  return cloneTickets(getTicketsSeedSync()).map((ticket) => ensureTicketActivity(withDefaultTenant(ticket)))
 }
 
 export { formatTicketTimestamp } from '@/shared/utils/ticket-timestamps'
@@ -71,7 +71,7 @@ export function buildTicket(input: CreateTicketInput, tickets: Ticket[]): Ticket
   const technician = input.technician ?? 'Sin asignar'
   const ticket: Ticket = {
     id: nextTicketId(tickets),
-    tenantId: input.tenantId ?? defaultTenantId,
+    tenantId: input.tenantId ?? getDefaultTenantId(),
     title: input.title,
     description: input.description,
     status: input.status ?? 'Nuevo',

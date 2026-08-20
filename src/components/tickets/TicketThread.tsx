@@ -13,7 +13,9 @@ import {
   Typography,
 } from '@mui/material'
 import type { TicketComment, TicketEvidence } from '@/shared/types/ticket'
-import { platformOperator } from '@/shared/mock/tenants'
+import { getPlatformOperator } from '@/lib/api/tenants'
+
+const platformOperator = getPlatformOperator()
 import AppCard from '@/components/ui/AppCard'
 import UserAvatar from '@/components/ui/UserAvatar'
 import { useTicketsStore } from '@/stores/TicketsProvider'

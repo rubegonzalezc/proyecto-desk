@@ -1,7 +1,12 @@
 'use client'
 
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react'
-import { defaultTenantId, getTenantById, initialRecentTenantIds, tenants } from '@/shared/mock/tenants'
+import {
+  getDefaultTenantId,
+  getInitialRecentTenantIds,
+  getTenantByIdSync,
+  getTenantsSeedSync,
+} from '@/lib/api/tenants'
 import type { Tenant } from '@/shared/types/tenant'
 
 const RECENT_LIMIT = 5
@@ -16,9 +21,10 @@ type TenantContextValue = {
 const TenantContext = createContext<TenantContextValue | null>(null)
 
 export function TenantProvider({ children }: { children: ReactNode }) {
-  const [tenantId, setTenantId] = useState(defaultTenantId)
-  const [recentIds, setRecentIds] = useState<string[]>(initialRecentTenantIds)
-  const tenant = getTenantById(tenantId)
+  const [tenantId, setTenantId] = useState(getDefaultTenantId())
+  const [recentIds, setRecentIds] = useState<string[]>(getInitialRecentTenantIds())
+  const tenants = useMemo(() => getTenantsSeedSync(), [])
+  const tenant = getTenantByIdSync(tenantId)
 
   const select = useCallback((id: string) => {
     setTenantId(id)
@@ -26,7 +32,7 @@ export function TenantProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const recentTenants = useMemo(
-    () => recentIds.map(getTenantById).filter(Boolean),
+    () => recentIds.map(getTenantByIdSync).filter(Boolean),
     [recentIds],
   )
 
