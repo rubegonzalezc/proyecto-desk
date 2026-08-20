@@ -1,8 +1,6 @@
 import type { Metadata } from 'next'
-import Grid from '@mui/material/Grid2'
-import { knowledgeArticles } from '@/shared/mock/knowledge'
 import TenantEyebrow from '@/components/layout/TenantEyebrow'
-import KnowledgeArticleCard from '@/components/conocimiento/KnowledgeArticleCard'
+import KnowledgeBoard from '@/components/conocimiento/KnowledgeBoard'
 import PageHeader from '@/components/ui/PageHeader'
 
 export const metadata: Metadata = {
@@ -15,15 +13,9 @@ export default function KnowledgePage() {
       <PageHeader
         eyebrow={<TenantEyebrow suffix="self-service" />}
         title="Base de conocimiento"
-        description="Artículos para agentes y solicitantes. Contenido estático de demostración."
+        description="Artículos para agentes y solicitantes. Busca por título o filtra por categoría."
       />
-      <Grid container spacing={2.25} className="stagger">
-        {knowledgeArticles.map((article) => (
-          <Grid key={article.id} size={{ xs: 12, md: 6, xl: 4 }}>
-            <KnowledgeArticleCard article={article} />
-          </Grid>
-        ))}
-      </Grid>
+      <KnowledgeBoard />
     </>
   )
 }
