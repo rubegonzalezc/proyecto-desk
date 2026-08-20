@@ -2,8 +2,8 @@
 
 import { useMemo, useState } from 'react'
 import { Box, Chip, Stack } from '@mui/material'
-import { inventoryItems } from '@/shared/mock/inventory'
 import type { StockStatus } from '@/shared/types/inventory'
+import { useInventoryStore } from '@/stores/InventoryProvider'
 import { useTablePagination } from '@/hooks/useTablePagination'
 import AppTable from '@/components/ui/AppTable'
 import EmptyState from '@/components/ui/EmptyState'
@@ -22,26 +22,27 @@ const columns = [
 const statuses: Array<StockStatus | 'Todos'> = ['Todos', 'Disponible', 'Stock bajo', 'Agotado']
 
 export default function InventoryItemsBoard() {
+  const { items } = useInventoryStore()
   const [query, setQuery] = useState('')
   const [status, setStatus] = useState<(typeof statuses)[number]>('Todos')
   const [category, setCategory] = useState<string>('Todos')
 
   const categories = useMemo(
-    () => ['Todos', ...Array.from(new Set(inventoryItems.map((item) => item.category))).sort()],
-    [],
+    () => ['Todos', ...Array.from(new Set(items.map((item) => item.category))).sort()],
+    [items],
   )
 
   const filtered = useMemo(() => {
     const normalized = query.trim().toLowerCase()
 
-    return inventoryItems.filter((item) => {
+    return items.filter((item) => {
       const matchesStatus = status === 'Todos' || item.status === status
       const matchesCategory = category === 'Todos' || item.category === category
       const haystack = `${item.sku} ${item.name} ${item.category} ${item.warehouse}`.toLowerCase()
       const matchesQuery = !normalized || haystack.includes(normalized)
       return matchesStatus && matchesCategory && matchesQuery
     })
-  }, [category, query, status])
+  }, [category, items, query, status])
 
   const pagination = useTablePagination(filtered)
 
