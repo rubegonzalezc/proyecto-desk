@@ -1,8 +1,10 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { Box } from '@mui/material'
+import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined'
+import { Box, Button, Stack } from '@mui/material'
 import { useTenant } from '@/components/layout/TenantProvider'
+import InviteUserModal from '@/components/usuarios/InviteUserModal'
 import { users } from '@/shared/mock/users'
 import { filterByTenant } from '@/shared/mock/tenant-scope'
 import { useTablePagination } from '@/hooks/useTablePagination'
@@ -23,6 +25,7 @@ const columns = [
 export default function UsersBoard() {
   const { tenant } = useTenant()
   const [query, setQuery] = useState('')
+  const [inviteOpen, setInviteOpen] = useState(false)
 
   const tenantUsers = useMemo(
     () => filterByTenant(users, tenant.id),
@@ -47,7 +50,18 @@ export default function UsersBoard() {
   }, [tenant.id, pagination.resetPage])
 
   return (
-    <AppTable
+    <>
+      <Stack direction="row" justifyContent="flex-end" sx={{ mb: 2 }}>
+        <Button
+          variant="contained"
+          startIcon={<PersonAddOutlinedIcon />}
+          onClick={() => setInviteOpen(true)}
+        >
+          Invitar usuario
+        </Button>
+      </Stack>
+
+      <AppTable
       columns={columns}
       toolbar={
         <TableToolbar>
@@ -100,5 +114,8 @@ export default function UsersBoard() {
         pagination.pagedItems.map((user) => <UserRow key={user.id} user={user} />)
       )}
     </AppTable>
+
+      <InviteUserModal open={inviteOpen} onClose={() => setInviteOpen(false)} />
+    </>
   )
 }
