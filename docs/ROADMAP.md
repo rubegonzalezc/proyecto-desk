@@ -989,17 +989,19 @@ Plan de trabajo por sprints para la fase de **prototipo UI**. Solo frontend; los
 ## Sprint 7 — Pulido y preparación para Supabase
 
 **Objetivo:** Capa API mock, calidad y contratos listos para Supabase.  
-**DoD del sprint:** Pantallas consumen `lib/api`; tipos documentados para schema PostgreSQL.
+**DoD del sprint:** Pantallas consumen `lib/api`; tipos documentados para schema PostgreSQL; E2E básicos verdes.
 
-| HU | Título | Dirigido a | Complejidad | Notas |
-|----|--------|------------|-------------|-------|
-| HU-1 | Capa `lib/api` | **Rubén** | 9/10 | Bloqueante |
-| HU-2 | Páginas de error / 403 | **Rubén** | 4/10 | |
-| HU-3 | Accesibilidad de teclado | **José** | 6/10 | |
-| HU-4 | Reduced motion | **José** | 2/10 | |
-| HU-5 | Preferencias sessionStorage | **Rubén** | 4/10 | |
-| HU-6 | Contratos Supabase | **Rubén** | 7/10 | Tras HU-1 |
-| HU-7 | Pruebas E2E | **Rubén + Sebastián** | 6/10 | Rubén configura CI; Sebastián escribe specs |
+**Estado del sprint:** Hecho — ver [`sprint-pre-supabase.md`](./sprint-pre-supabase.md).
+
+| HU | Título | Dirigido a | Complejidad | Estado |
+|----|--------|------------|-------------|--------|
+| HU-1 | Capa `lib/api` | **Rubén** | 9/10 | Hecho (#39) |
+| HU-2 | Páginas de error / 403 | **Rubén** | 4/10 | Hecho (#40) |
+| HU-3 | Accesibilidad de teclado | **José** | 6/10 | Hecho (#41) |
+| HU-4 | Reduced motion | **José** | 2/10 | Hecho (#42) |
+| HU-5 | Preferencias sessionStorage | **Rubén** | 4/10 | Hecho (#43) |
+| HU-6 | Contratos Supabase | **Rubén** | 7/10 | Hecho (#44) |
+| HU-7 | Pruebas E2E | **Rubén + Sebastián** | 6/10 | Hecho |
 
 ---
 
@@ -1124,9 +1126,47 @@ Plan de trabajo por sprints para la fase de **prototipo UI**. Solo frontend; los
 
 ---
 
-## Backlog — Fase Supabase (post-prototipo)
+## Sprint 8 — Consolidación multi-tenant y `lib/api`
+
+**Objetivo:** `tenant_id` en toda entidad de negocio; cero imports directos a mocks; mutaciones en `lib/api`.  
+**DoD del sprint:** Cambiar de tenant altera inventario, conocimiento y notificaciones.
+
+| HU | Título | Dirigido a | Complejidad |
+|----|--------|------------|-------------|
+| HU-1 | `tenantId` en tipos y mocks | **Rubén** | 7/10 |
+| HU-2 | Scoping runtime por tenant | **Rubén** | 8/10 |
+| HU-3 | Ampliar `lib/api` (6 módulos) | **Rubén** | 7/10 |
+| HU-4 | Mutaciones mock en `lib/api` | **Rubén** | 8/10 |
+| HU-5 | Búsqueda global ampliada | **José** | 4/10 |
+| HU-6 | Tenant reciente en sessionStorage | **Sebastián** | 3/10 |
+
+**Detalle:** [`sprints-8-9-pre-supabase.md`](./sprints-8-9-pre-supabase.md) · **Depende de:** S7 completo
+
+---
+
+## Sprint 9 — Robustez, auth preparatoria e infraestructura
+
+**Objetivo:** Middleware + sesión mock, errores unificados, E2E multi-tenant, scaffold Supabase.  
+**DoD del sprint:** Gate final listo para crear proyecto Supabase.
+
+| HU | Título | Dirigido a | Complejidad |
+|----|--------|------------|-------------|
+| HU-1 | Auth skeleton (middleware + sesión mock) | **Rubén** | 8/10 |
+| HU-2 | Patrón loading / error / retry | **José** | 6/10 |
+| HU-3 | E2E ampliados (multi-tenant) | **Rubén + Sebastián** | 5/10 |
+| HU-4 | Scaffold cliente Supabase | **Rubén** | 5/10 |
+| HU-5 | Completar stubs de demo | **Sebastián** | 5/10 |
+| HU-6 | Auditoría a11y en formularios | **José** | 4/10 |
+
+**Detalle:** [`sprints-8-9-pre-supabase.md`](./sprints-8-9-pre-supabase.md) · **Depende de:** S8 completo
+
+---
+
+## Backlog — Fase Supabase (Sprint 10, post-prototipo)
 
 Historias fuera del alcance frontend actual. Requieren proyecto Supabase real.
+
+> **No iniciar esta fase** hasta cerrar los Sprints 8 y 9 (recomendado) o, como mínimo, el Sprint 7. Gate: [`sprint-pre-supabase.md`](./sprint-pre-supabase.md) · Mejoras previas: [`sprints-8-9-pre-supabase.md`](./sprints-8-9-pre-supabase.md).
 
 | HU | Título | Dirigido a | Complejidad |
 |----|--------|------------|-------------|
@@ -1210,7 +1250,9 @@ flowchart LR
     S4 --> S5[Sprint 5 HU-1…7]
     S5 --> S6[Sprint 6 HU-1…7]
     S6 --> S7[Sprint 7 HU-1…7]
-    S7 --> SB[Backlog Supabase HU-1…5]
+    S7 --> S8[Sprint 8 HU-1…6]
+    S8 --> S9[Sprint 9 HU-1…6]
+    S9 --> SB[Backlog Supabase HU-1…5]
 ```
 
 ---
@@ -1226,8 +1268,10 @@ flowchart LR
 | 4 — Navegación | HU-1 … HU-6 (6) | Rubén | Pendiente |
 | 5 — Tickets | HU-1 … HU-7 (7) | Rubén | Pendiente |
 | 6 — Módulos extra | HU-1 … HU-7 (7) | Rubén | Pendiente |
-| 7 — Supabase-ready | HU-1 … HU-7 (7) | Rubén | Pendiente |
-| Backlog Supabase | HU-1 … HU-5 (5) | Rubén | Futuro |
+| 7 — Supabase-ready | HU-1 … HU-7 (7) | Rubén | Hecho |
+| 8 — Multi-tenant + API | HU-1 … HU-6 (6) | Rubén | Pendiente — ver [`sprints-8-9-pre-supabase.md`](./sprints-8-9-pre-supabase.md) |
+| 9 — Robustez y auth | HU-1 … HU-6 (6) | Rubén | Pendiente — gate recomendado antes de Supabase |
+| 10 — Fase Supabase | HU-1 … HU-5 (5) | Rubén | Futuro — tras Sprints 8–9 |
 
 ### Carga por desarrollador (HUs pendientes)
 
@@ -1257,6 +1301,9 @@ Día 5     José → HU-6             │  Rubén → code review + demo sprint
 - Diseño: [`DESIGN-README.md`](./DESIGN-README.md)
 - Especificación UI: [`system-design.md`](./system-design.md)
 - Auth (migrar a Supabase): [`auth.md`](./auth.md)
+- Sprint previo a Supabase: [`sprint-pre-supabase.md`](./sprint-pre-supabase.md)
+- Sprints 8–9 (mejoras pre-Supabase): [`sprints-8-9-pre-supabase.md`](./sprints-8-9-pre-supabase.md)
+- Contrato de datos: [`supabase.md`](./supabase.md)
 - README: [`../README.md`](../README.md)
 
 ---
