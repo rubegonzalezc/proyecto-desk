@@ -5,8 +5,8 @@ import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined'
 import { Box, Button, Stack } from '@mui/material'
 import { useTenant } from '@/components/layout/TenantProvider'
 import InviteUserModal from '@/components/usuarios/InviteUserModal'
-import { users } from '@/shared/mock/users'
-import { filterByTenant } from '@/shared/mock/tenant-scope'
+import { listUsers } from '@/lib/api/users'
+import type { User } from '@/shared/types/user'
 import { useTablePagination } from '@/hooks/useTablePagination'
 import AppTable from '@/components/ui/AppTable'
 import EmptyState from '@/components/ui/EmptyState'
@@ -27,20 +27,25 @@ export default function UsersBoard() {
   const [query, setQuery] = useState('')
   const [inviteOpen, setInviteOpen] = useState(false)
 
-  const tenantUsers = useMemo(
-    () => filterByTenant(users, tenant.id),
-    [tenant.id],
-  )
+  const [tenantUsers, setTenantUsers] = useState<User[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const filtered = useMemo(() => {
-    const normalized = query.trim().toLowerCase()
-    if (!normalized) return tenantUsers
+  useEffect(() => {
+    let cancelled = false
+    setLoading(true)
+    listUsers({ tenantId: tenant.id, q: query })
+      .then((result) => {
+        if (!cancelled) setTenantUsers(result.items)
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [tenant.id, query])
 
-    return tenantUsers.filter((user) => {
-      const haystack = `${user.name} ${user.email} ${user.role}`.toLowerCase()
-      return haystack.includes(normalized)
-    })
-  }, [query, tenantUsers])
+  const filtered = tenantUsers
 
   const pagination = useTablePagination(filtered)
   const hasActiveSearch = Boolean(query.trim())
@@ -90,7 +95,11 @@ export default function UsersBoard() {
         ) : undefined
       }
     >
-      {filtered.length === 0 ? (
+      {loading ? (
+        <Box sx={{ p: 2 }}>
+          <EmptyState title="Cargando usuarios" description="Obteniendo datos de la demo…" />
+        </Box>
+      ) : filtered.length === 0 ? (
         <Box sx={{ p: 2 }}>
           <EmptyState
             title={hasActiveSearch ? 'Sin resultados' : 'Sin usuarios'}

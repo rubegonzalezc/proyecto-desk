@@ -24,7 +24,9 @@ import TenantLogo from '@/components/brand/TenantLogo'
 import UserAvatar from '@/components/ui/UserAvatar'
 import { useTenant } from './TenantProvider'
 import { useWorkspace } from './WorkspaceProvider'
-import { platformOperator } from '@/shared/mock/tenants'
+import { getPlatformOperator } from '@/lib/api/tenants'
+
+const platformOperator = getPlatformOperator()
 import {
   appSystems,
   getSystemById,

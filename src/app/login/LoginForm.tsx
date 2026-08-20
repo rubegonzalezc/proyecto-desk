@@ -3,8 +3,10 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Box, Button, Divider, Stack, TextField, Typography } from '@mui/material'
-import { platformOperator } from '@/shared/mock/tenants'
+import { getPlatformOperator } from '@/lib/api/tenants'
 import PrototypeBadge from '@/components/layout/PrototypeBadge'
+
+const platformOperator = getPlatformOperator()
 
 export default function LoginForm() {
   const router = useRouter()

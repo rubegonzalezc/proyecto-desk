@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import { Box, Chip, Stack } from '@mui/material'
 import type { MovementType } from '@/shared/types/inventory'
+import { filterInventoryMovements } from '@/lib/api/inventory'
 import { useInventoryStore } from '@/stores/InventoryProvider'
 import { useTablePagination } from '@/hooks/useTablePagination'
 import AppTable from '@/components/ui/AppTable'
@@ -27,17 +28,10 @@ export default function InventoryMovementsBoard() {
   const [query, setQuery] = useState('')
   const [type, setType] = useState<(typeof movementTypes)[number]>('Todos')
 
-  const filtered = useMemo(() => {
-    const normalized = query.trim().toLowerCase()
-
-    return movements.filter((movement) => {
-      const matchesType = type === 'Todos' || movement.type === type
-      const haystack =
-        `${movement.id} ${movement.item} ${movement.sku} ${movement.user} ${movement.from} ${movement.to}`.toLowerCase()
-      const matchesQuery = !normalized || haystack.includes(normalized)
-      return matchesType && matchesQuery
-    })
-  }, [movements, query, type])
+  const filtered = useMemo(
+    () => filterInventoryMovements(movements, { q: query, type }),
+    [movements, query, type],
+  )
 
   const pagination = useTablePagination(filtered)
 

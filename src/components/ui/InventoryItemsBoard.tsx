@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import { Box, Chip, Stack } from '@mui/material'
 import type { StockStatus } from '@/shared/types/inventory'
+import { filterInventoryItems } from '@/lib/api/inventory'
 import { useInventoryStore } from '@/stores/InventoryProvider'
 import { useTablePagination } from '@/hooks/useTablePagination'
 import AppTable from '@/components/ui/AppTable'
@@ -32,17 +33,10 @@ export default function InventoryItemsBoard() {
     [items],
   )
 
-  const filtered = useMemo(() => {
-    const normalized = query.trim().toLowerCase()
-
-    return items.filter((item) => {
-      const matchesStatus = status === 'Todos' || item.status === status
-      const matchesCategory = category === 'Todos' || item.category === category
-      const haystack = `${item.sku} ${item.name} ${item.category} ${item.warehouse}`.toLowerCase()
-      const matchesQuery = !normalized || haystack.includes(normalized)
-      return matchesStatus && matchesCategory && matchesQuery
-    })
-  }, [category, items, query, status])
+  const filtered = useMemo(
+    () => filterInventoryItems(items, { q: query, status, category }),
+    [category, items, query, status],
+  )
 
   const pagination = useTablePagination(filtered)
 

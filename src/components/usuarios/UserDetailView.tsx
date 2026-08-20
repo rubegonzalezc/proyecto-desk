@@ -3,7 +3,7 @@
 import { notFound } from 'next/navigation'
 import { Box, Chip, Stack, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2'
-import { getUserById } from '@/shared/mock/users'
+import { getUserByIdSync } from '@/lib/api/users'
 import { useTenant } from '@/components/layout/TenantProvider'
 import AppBreadcrumbs from '@/components/ui/AppBreadcrumbs'
 import AppCard from '@/components/ui/AppCard'
@@ -24,7 +24,7 @@ type UserDetailViewProps = {
 
 export default function UserDetailView({ id }: UserDetailViewProps) {
   const { tenant } = useTenant()
-  const user = getUserById(id)
+  const user = getUserByIdSync(id, tenant.id)
 
   if (!user || user.tenantId !== tenant.id) notFound()
 

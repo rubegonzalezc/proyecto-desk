@@ -5,7 +5,11 @@ import WarningAmberOutlined from '@mui/icons-material/WarningAmberOutlined'
 import WarehouseOutlined from '@mui/icons-material/WarehouseOutlined'
 import { Box, Chip, Stack, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2'
-import { inventoryItems, inventoryKpis, inventoryMovements } from '@/shared/mock/inventory'
+import {
+  getInventoryKpis,
+  listInventoryItems,
+  listInventoryMovements,
+} from '@/lib/api/inventory'
 import TenantEyebrow from '@/components/layout/TenantEyebrow'
 import AppCard from '@/components/ui/AppCard'
 import PageHeader from '@/components/ui/PageHeader'
@@ -22,7 +26,15 @@ const icons = {
   moves: <SwapHorizOutlined fontSize="small" />,
 }
 
-export default function InventoryDashboardPage() {
+export default async function InventoryDashboardPage() {
+  const [itemsResult, movementsResult, inventoryKpis] = await Promise.all([
+    listInventoryItems(),
+    listInventoryMovements(),
+    getInventoryKpis(),
+  ])
+
+  const inventoryItems = itemsResult.items
+  const inventoryMovements = movementsResult.items
   const lowStock = inventoryItems.filter((item) => item.status !== 'Disponible')
 
   return (

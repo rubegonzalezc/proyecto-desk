@@ -8,8 +8,7 @@ import { useTenant } from '@/components/layout/TenantProvider'
 import { useCommandPalette } from '@/components/layout/CommandPaletteProvider'
 import SearchResultsList, { useSearchResultsFlat } from '@/components/layout/SearchResultsList'
 import { useDebouncedValue } from '@/hooks/useDebouncedValue'
-import { users } from '@/shared/mock/users'
-import { tenants } from '@/shared/mock/tenants'
+import { getUsersSeedSync, getTenantsSeedSync } from '@/lib/api'
 import { searchGlobal, type SearchResult } from '@/shared/search/global-search'
 import { getSystemById } from '@/shared/systems'
 import { useTicketsStore } from '@/stores/TicketsProvider'
@@ -29,6 +28,9 @@ export default function HeaderSearch() {
   const [activeIndex, setActiveIndex] = useState(0)
   const debouncedQuery = useDebouncedValue(query, 300)
 
+  const users = useMemo(() => getUsersSeedSync(), [])
+  const tenants = useMemo(() => getTenantsSeedSync(), [])
+
   const groupedResults = useMemo(
     () =>
       searchGlobal({
@@ -38,7 +40,7 @@ export default function HeaderSearch() {
         tenants,
         tenantId: tenant.id,
       }),
-    [debouncedQuery, tenant.id, tickets],
+    [debouncedQuery, tenant.id, tickets, users, tenants],
   )
 
   const flatResults = useSearchResultsFlat(groupedResults)

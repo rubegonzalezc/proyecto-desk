@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Chip, Stack, Typography } from '@mui/material'
 import Grid2 from '@mui/material/Grid2'
-import { warehouses } from '@/shared/mock/inventory'
+import { listWarehouses } from '@/lib/api/inventory'
 import TenantEyebrow from '@/components/layout/TenantEyebrow'
 import AppCard from '@/components/ui/AppCard'
 import PageHeader from '@/components/ui/PageHeader'
@@ -10,7 +10,9 @@ export const metadata: Metadata = {
   title: 'Almacenes',
 }
 
-export default function WarehousesPage() {
+export default async function WarehousesPage() {
+  const warehouses = await listWarehouses()
+
   return (
     <>
       <PageHeader

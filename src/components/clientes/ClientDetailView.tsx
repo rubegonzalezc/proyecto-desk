@@ -17,7 +17,7 @@ import {
   Typography,
 } from '@mui/material'
 import Grid from '@mui/material/Grid2'
-import { platformOperator, tenants } from '@/shared/mock/tenants'
+import { getPlatformOperator, getTenantsSeedSync } from '@/lib/api/tenants'
 import type { Tenant } from '@/shared/types/tenant'
 import {
   loadTenantAdminStore,
@@ -46,7 +46,8 @@ const statusColor: Record<Tenant['status'], 'success' | 'warning' | 'default'> =
 }
 
 export default function ClientDetailView({ id }: ClientDetailViewProps) {
-  const baseTenant = tenants.find((item) => item.id === id)
+  const baseTenant = getTenantsSeedSync().find((item) => item.id === id)
+  const platformOperator = getPlatformOperator()
   const { showSuccess } = useToast()
   const [adminStore, setAdminStore] = useState(loadTenantAdminStore)
   const [pendingAction, setPendingAction] = useState<PendingAction>(null)

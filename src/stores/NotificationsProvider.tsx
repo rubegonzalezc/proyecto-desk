@@ -10,10 +10,9 @@ import {
   type ReactNode,
 } from 'react'
 import { loadReadNotificationIds, saveReadNotificationIds } from '@/shared/config/notifications-storage'
-import {
-  notifications as notificationSeed,
-  type AppNotification,
-} from '@/shared/mock/notifications'
+import { getNotificationsSeedSync, type AppNotification } from '@/lib/api/notifications'
+
+const notificationSeed = getNotificationsSeedSync()
 
 type NotificationsContextValue = {
   notifications: AppNotification[]

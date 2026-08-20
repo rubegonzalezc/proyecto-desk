@@ -13,14 +13,16 @@ import {
 } from '@mui/material'
 import Link from 'next/link'
 import { useState } from 'react'
-import { getNotificationHref } from '@/shared/mock/notifications'
+import { getNotificationHref } from '@/lib/api/notifications'
 import { useNotifications } from '@/stores/NotificationsProvider'
 import { useThemeMode } from '@/theme/ThemeModeProvider'
 import UserAvatar from '@/components/ui/UserAvatar'
 import HeaderSearch from './HeaderSearch'
 import { useCommandPalette } from './CommandPaletteProvider'
 import TenantSwitcher from './TenantSwitcher'
-import { platformOperator } from '@/shared/mock/tenants'
+import { getPlatformOperator } from '@/lib/api/tenants'
+
+const platformOperator = getPlatformOperator()
 
 export default function Header({ onMenu }: { onMenu: () => void }) {
   const { mode, toggleMode } = useThemeMode()

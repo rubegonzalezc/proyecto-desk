@@ -1,10 +1,10 @@
-import { users } from '@/shared/mock/users'
+import { getUsersSeedSync } from '@/lib/api/users'
 
-export const USER_ROLES = [...new Set(users.map((user) => user.role))].sort((left, right) =>
+export const USER_ROLES = [...new Set(getUsersSeedSync().map((user) => user.role))].sort((left, right) =>
   left.localeCompare(right, 'es'),
 )
 
-export const USER_TEAMS = [...new Set(users.map((user) => user.team))].sort((left, right) =>
+export const USER_TEAMS = [...new Set(getUsersSeedSync().map((user) => user.team))].sort((left, right) =>
   left.localeCompare(right, 'es'),
 )
 
