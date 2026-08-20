@@ -29,6 +29,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
         <CommandPaletteProvider>
       <Box data-theme={mode} className="ice-wash" sx={{ minHeight: '100vh', display: 'flex' }}>
         <Box
+          className="app-shell-sidebar"
           sx={{
             width: SIDEBAR_WIDTH,
             flexShrink: 0,
@@ -81,12 +82,13 @@ export default function AppShell({ children }: { children: ReactNode }) {
         </Drawer>
 
         <Box sx={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
-          <Box sx={{ position: 'sticky', top: 0, zIndex: 20, p: { xs: 1.25, md: 1.75 }, pb: 0 }}>
+          <Box className="app-shell-header" sx={{ position: 'sticky', top: 0, zIndex: 20, p: { xs: 1.25, md: 1.75 }, pb: 0 }}>
             <Header onMenu={() => setOpen(true)} />
             <SystemTabs />
           </Box>
           <Box
             component="main"
+            className="app-shell-main"
             sx={{
               flex: 1,
               px: { xs: 1.75, md: 3.5 },
