@@ -1,5 +1,6 @@
 @import '../styles/design-system.css';
 @import '../styles/a11y.css';
+@import '../styles/reduced-motion.css';
 @import '../styles/ticket-print.css';
 
 * {

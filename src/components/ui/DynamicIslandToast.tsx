@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 import CheckCircleOutlineRounded from '@mui/icons-material/CheckCircleOutlineRounded'
 import ErrorOutlineRounded from '@mui/icons-material/ErrorOutlineRounded'
 import InfoOutlined from '@mui/icons-material/InfoOutlined'
-import { Box, Fade, Slide, Typography, useTheme } from '@mui/material'
+import { Box, Fade, Slide, Typography, useMediaQuery, useTheme } from '@mui/material'
 
 export type ToastVariant = 'success' | 'error' | 'info'
 
@@ -45,6 +45,7 @@ export default function DynamicIslandToast({
   onClose,
 }: DynamicIslandToastProps) {
   const theme = useTheme()
+  const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const { icon: Icon, accent, glow } = variantConfig[variant]
   const isDark = theme.palette.mode === 'dark'
@@ -74,9 +75,10 @@ export default function DynamicIslandToast({
         width: 'min(92vw, 420px)',
       }}
     >
-      <Slide direction="down" in={open} mountOnEnter unmountOnExit>
-        <Fade in={open} timeout={{ enter: 280, exit: 220 }}>
+      <Slide direction="down" in={open} mountOnEnter unmountOnExit timeout={reduceMotion ? 0 : undefined}>
+        <Fade in={open} timeout={reduceMotion ? { enter: 0, exit: 0 } : { enter: 280, exit: 220 }}>
           <Box
+            data-reduced-motion-inner
             sx={{
               display: 'flex',
               alignItems: 'center',
@@ -91,8 +93,8 @@ export default function DynamicIslandToast({
               WebkitBackdropFilter: 'blur(20px) saturate(160%)',
               boxShadow: `0 12px 40px rgba(2, 6, 23, 0.45), 0 0 0 1px rgba(255,255,255,0.04), 0 0 24px ${glow}`,
               minHeight: 44,
-              transition: 'box-shadow 0.3s ease, transform 0.3s ease',
-              animation: open ? 'islandPulse 0.45s ease' : 'none',
+              transition: reduceMotion ? 'none' : 'box-shadow 0.3s ease, transform 0.3s ease',
+              animation: !reduceMotion && open ? 'islandPulse 0.45s ease' : 'none',
               '@keyframes islandPulse': {
                 '0%': { transform: 'scale(0.92)', opacity: 0 },
                 '60%': { transform: 'scale(1.02)', opacity: 1 },
