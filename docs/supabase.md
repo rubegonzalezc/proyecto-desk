@@ -2,7 +2,7 @@
 
 Documento de referencia para alinear al equipo **antes** de crear el proyecto en Supabase. Describe tablas, columnas, políticas RLS, Storage y Realtime que sustituirán los mocks actuales (`src/shared/mock/`) y la capa `src/lib/api/`.
 
-> **Prerequisito:** completar el [**Sprint 7 — Pulido y preparación para Supabase**](./sprint-pre-supabase.md) antes de crear el proyecto. En concreto, cerrar S7·HU-7 (E2E) y revisar este documento con el equipo.
+> **Prerequisitos:** Sprint 7 cerrado. Recomendado completar [**Sprints 8 y 9**](./sprints-8-9-pre-supabase.md) antes de crear el proyecto.
 
 ## Principios
 
@@ -549,6 +549,8 @@ Helpers actuales que desaparecerán: `filterByTenant` → `.eq('tenant_id', id)`
 ---
 
 ## Próximos pasos
+
+> Completar [**Sprints 8 y 9**](./sprints-8-9-pre-supabase.md) (recomendado) o, como mínimo, el [Sprint 7](./sprint-pre-supabase.md).
 
 1. Crear proyecto Supabase y aplicar migración inicial (`tenants`, `users`, `tickets`, hijas).
 2. Configurar Auth + claim `tenant_id` en `app_metadata`.

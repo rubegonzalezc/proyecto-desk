@@ -1,6 +1,6 @@
 # Sprint previo a Supabase — Sprint 7
 
-Antes de crear el proyecto en Supabase y ejecutar la **Fase Supabase** (auth, RLS, Storage, Realtime), el equipo debe cerrar el **Sprint 7 — Pulido y preparación para Supabase**.
+Antes de crear el proyecto en Supabase y ejecutar la **Fase Supabase** (auth, RLS, Storage, Realtime), el equipo debe cerrar el **Sprint 7 — Pulido y preparación para Supabase** y, recomendado, los **Sprints 8 y 9** de consolidación.
 
 Los sprints 0–6 construyen el prototipo UI (mesa de ayuda, listados, multi-tenant, navegación, tickets, módulos secundarios). El Sprint 7 consolida esa base en una capa lista para sustituir mocks por PostgreSQL sin reescribir pantallas.
 
@@ -10,22 +10,24 @@ Los sprints 0–6 construyen el prototipo UI (mesa de ayuda, listados, multi-ten
 
 | Pregunta | Respuesta |
 |----------|-----------|
-| ¿Qué sprint hacer antes de Supabase? | **Sprint 7** |
+| ¿Qué sprint hacer antes de Supabase? | **Sprint 7** (obligatorio) + **Sprints 8 y 9** (recomendados) |
 | ¿Qué sprints son prerequisito? | **Sprints 0–6** (features que consume `lib/api`) |
 | ¿Qué documento define el schema? | [`supabase.md`](./supabase.md) |
-| ¿Qué viene después? | **Fase Supabase** — ver [`ROADMAP.md` § Backlog](./ROADMAP.md#backlog--fase-supabase-post-prototipo) |
+| ¿Mejoras adicionales propuestas? | [`sprints-8-9-pre-supabase.md`](./sprints-8-9-pre-supabase.md) |
+| ¿Qué viene después? | **Sprint 10 / Fase Supabase** — ver [`ROADMAP.md` § Backlog](./ROADMAP.md#backlog--fase-supabase-post-prototipo) |
 
 ```mermaid
 flowchart LR
-    S0[Sprints 0–6\nPrototipo UI] --> S7[Sprint 7\nSupabase-ready]
-    S7 --> G{Gate OK?}
-    G -->|Sí| SB[Fase Supabase\nAuth · RLS · Storage · Realtime]
-    G -->|No| S7
+    S0[Sprints 0–6\nPrototipo UI] --> S7[Sprint 7\nSupabase-ready ✅]
+    S7 --> S8[Sprint 8\nMulti-tenant + lib/api]
+    S8 --> S9[Sprint 9\nAuth + robustez]
+    S9 --> G{Gate final}
+    G -->|Sí| SB[Sprint 10\nFase Supabase]
 ```
 
 ---
 
-## Sprint 7 — Historias de usuario
+## Sprint 7 — Historias de usuario ✅ Cerrado
 
 **Objetivo:** Capa API mock, calidad y contratos listos para Supabase.
 
@@ -39,7 +41,7 @@ flowchart LR
 | S7·HU-4 | Reduced motion | José | ✅ Hecho | #42 |
 | S7·HU-5 | Preferencias en sessionStorage | Rubén | ✅ Hecho | #43 |
 | S7·HU-6 | Contratos de datos Supabase | Rubén | ✅ Hecho | #44 — [`supabase.md`](./supabase.md) |
-| S7·HU-7 | Pruebas E2E básicas | Rubén + Sebastián | ⏳ Pendiente | Playwright no configurado aún |
+| S7·HU-7 | Pruebas E2E básicas | Rubén + Sebastián | ✅ Hecho | Playwright — 3 specs |
 
 ### S7·HU-1 — Capa `lib/api` con mocks
 
@@ -52,118 +54,79 @@ flowchart LR
 - Comentarios `// TODO: supabase.from('...')` en cada función
 - Stores y pantallas críticas migrados a `lib/api`
 
-**Migración parcial aceptable en demo:** conocimiento, roles, equipos y activos siguen importando mocks directamente; se migrarán en la Fase Supabase o en una HU de limpieza opcional.
-
-### S7·HU-2 — Páginas de error y acceso denegado
-
-- `not-found.tsx` en dashboard
-- Guard 403 para inventario sin permiso (`InventoryAccessGuard`)
-- Botón volver al dashboard
-
-### S7·HU-3 — Accesibilidad de teclado
-
-- Focus ring visible (sidebar, chips, tablas, command palette)
-- Tab order lógico en formularios
-- `aria-label` en icon buttons del header
-
-### S7·HU-4 — Reduced motion
-
-- `prefers-reduced-motion` desactiva o reduce `fade-up`, `stagger` y hovers
-
-### S7·HU-5 — Preferencias en sessionStorage
-
-- Tema claro/oscuro y tamaño de página por listado persisten en la sesión
+**Deuda heredada (Sprints 8–9):** conocimiento, roles, equipos y activos siguen importando mocks directamente; inventario sin `tenant_id` en runtime.
 
 ### S7·HU-6 — Contratos de datos para Supabase
 
 - Schema propuesto, matriz `tenant_id`, mapeo TS → PG, RLS, Storage y Realtime
 - Ver [`supabase.md`](./supabase.md)
 
-### S7·HU-7 — Pruebas E2E básicas *(bloqueante para abrir Supabase)*
+### S7·HU-7 — Pruebas E2E básicas
 
-**Criterios de aceptación:**
-
-- Playwright instalado y script `npm run test:e2e`
-- Flujos mínimos:
-  1. Login mock → dashboard
-  2. Listado tickets → detalle
-  3. Crear ticket
-- CI local documentado en README o en este doc
+- Playwright + `npm run test:e2e`
+- Flujos: login → dashboard; listado tickets → detalle; crear ticket
 - Mínimo 3 specs verdes
 
-**Por qué antes de Supabase:** al sustituir mocks por Supabase, los E2E validan que la firma de `lib/api` y los flujos críticos no regresan.
+---
+
+## Sprints 8 y 9 — Recomendados antes de Supabase
+
+El Sprint 7 cierra la funcionalidad de demo, pero el análisis del código revela huecos que conviene resolver **antes** de conectar Postgres:
+
+| Área | Problema actual | Sprint |
+|------|----------------|--------|
+| Multi-tenant | Inventario, conocimiento y notificaciones sin `tenant_id` en runtime | S8 |
+| `lib/api` | 12 archivos importan mocks directamente; sin mutaciones async | S8 |
+| Auth | Sin middleware ni sesión; dashboard accesible sin login | S9 |
+| Errores | Sin `error.tsx` ni patrón de reintento | S9 |
+| Infra | Sin `.env.example` ni cliente Supabase stub | S9 |
+
+**Detalle completo:** [`sprints-8-9-pre-supabase.md`](./sprints-8-9-pre-supabase.md)
 
 ---
 
 ## Gate — checklist antes de crear el proyecto Supabase
 
-Marcar **todas** las casillas antes de ejecutar la Fase Supabase:
-
-### Prerequisitos de producto (Sprints 0–6)
-
-- [x] Store y flujos de tickets operativos (crear, comentar, filtros, Kanban)
-- [x] Multi-tenant con `tenantId` en tickets y usuarios
-- [x] Listados con paginación, búsqueda y estados vacíos
-- [x] Navegación global (Cmd+K, breadcrumbs, notificaciones enlazadas)
-- [x] Módulos secundarios: conocimiento, usuarios, clientes, inventario
-
-### Sprint 7 — Supabase-ready
+### Sprint 7 ✅
 
 - [x] `src/lib/api/` con módulos principales y TODOs Supabase
 - [x] Pantallas críticas consumen `lib/api` (tickets, usuarios, tenants, inventario, notificaciones)
-- [x] [`docs/supabase.md`](./supabase.md) revisado y aprobado por el equipo
-- [ ] **S7·HU-7** — E2E con Playwright (3 specs verdes)
+- [x] [`docs/supabase.md`](./supabase.md) documentado
+- [x] S7·HU-7 — E2E con Playwright (3 specs verdes)
 
-### Deuda técnica conocida (no bloquea el gate, pero planificar en Fase Supabase)
+### Sprint 8 (recomendado)
 
-| Ítem | Estado | Cuándo resolver |
-|------|--------|-----------------|
-| `tenant_id` en tipos/mocks de inventario | Pendiente en TS | Migración SQL + seeds |
-| Conocimiento, roles, equipos, activos sin `lib/api` | Mock directo | Al migrar cada módulo |
-| Auth real (Better Auth / Supabase Auth) | Solo UI en `/login` | Fase Supabase · HU-1 |
-| Adjuntos como blob URL local | Modelo listo en UI | Fase Supabase · Storage |
+- [ ] `tenantId` en todos los tipos de negocio
+- [ ] Scoping runtime por tenant (inventario, notificaciones, conocimiento)
+- [ ] Cero imports de `@/shared/mock` en UI
+- [ ] Mutaciones en `lib/api` usadas por stores
 
----
+### Sprint 9 (recomendado)
 
-## Orden de trabajo recomendado
+- [ ] Middleware + sesión mock
+- [ ] `error.tsx` y patrón retry
+- [ ] E2E multi-tenant (≥6 specs)
+- [ ] `.env.example` + `src/lib/supabase/` + SQL borrador
 
-### 1. Cerrar Sprint 7
+### Revisión de equipo
 
-```
-Prioridad 1 → S7·HU-7 (E2E con Playwright)
-Revisión    → Demo del equipo sobre docs/supabase.md
-```
-
-### 2. Iniciar Fase Supabase (post-gate)
-
-Orden sugerido alineado con [`supabase.md` § Próximos pasos](./supabase.md#próximos-pasos) y el backlog del roadmap:
-
-| Orden | Historia | Entregable |
-|-------|----------|------------|
-| 1 | Crear proyecto Supabase + migración inicial | Tablas `tenants`, `users`, `tickets` e hijas |
-| 2 | Auth + claim `tenant_id` en JWT | Sesión real; ver [`auth.md`](./auth.md) |
-| 3 | RLS por `tenant_id` | Políticas del borrador en `supabase.md` |
-| 4 | Sustituir mocks en `lib/api` | Módulo a módulo sin cambiar pantallas |
-| 5 | Storage | Buckets `ticket-attachments`, `ticket-evidences` |
-| 6 | Realtime | Canal `notifications` en header |
-
-Detalle de historias: [`ROADMAP.md` § Backlog — Fase Supabase](./ROADMAP.md#backlog--fase-supabase-post-prototipo).
+- [ ] Demo interna tras S8–S9
+- [ ] [`supabase.md`](./supabase.md) aprobado por el equipo
 
 ---
 
-## Criterios para dar por cerrado el Sprint 7
+## Orden de trabajo
 
-1. **S7·HU-7** completada (única HU pendiente).
-2. Equipo alineado con [`supabase.md`](./supabase.md) (revisión en reunión o async).
-3. `npm run build` sin errores.
-4. Demo interna: flujos ticket + multi-tenant + inventario funcionando sobre `lib/api`.
-
-Tras eso, se puede crear el proyecto en Supabase y abrir el **Sprint 8 / Fase Supabase**.
+1. ~~Cerrar Sprint 7~~ ✅
+2. Ejecutar **Sprint 8** — consolidación multi-tenant y `lib/api` completo
+3. Ejecutar **Sprint 9** — auth skeleton, errores, E2E ampliados, scaffold Supabase
+4. Iniciar **Sprint 10 / Fase Supabase** — ver [`supabase.md` § Próximos pasos](./supabase.md#próximos-pasos)
 
 ---
 
 ## Referencias
 
+- Mejoras propuestas S8–S9: [`sprints-8-9-pre-supabase.md`](./sprints-8-9-pre-supabase.md)
 - Roadmap completo: [`ROADMAP.md`](./ROADMAP.md)
 - Contrato de datos: [`supabase.md`](./supabase.md)
 - Auth (migración futura): [`auth.md`](./auth.md)
