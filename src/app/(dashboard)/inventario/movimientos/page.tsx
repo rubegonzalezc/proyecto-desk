@@ -13,7 +13,9 @@ export default function InventoryMovesPage() {
       <PageHeader
         eyebrow={<TenantEyebrow suffix="operación" />}
         title="Movimientos"
-        description="Entradas, salidas, traslados y ajustes. Solo visualización."
+        description="Entradas, salidas, traslados y ajustes. Los registros de la sesión persisten en demo."
+        actionLabel="Nuevo movimiento"
+        actionHref="/inventario/movimientos/nuevo"
       />
       <InventoryMovementsBoard />
     </>

@@ -13,7 +13,9 @@ export default function InventoryItemsPage() {
       <PageHeader
         eyebrow={<TenantEyebrow suffix="catálogo" />}
         title="Artículos"
-        description="Stock por SKU. Datos de demostración, sin persistencia."
+        description="Stock por SKU. Los altas de la sesión se conservan hasta cerrar el navegador."
+        actionLabel="Nuevo artículo"
+        actionHref="/inventario/articulos/nuevo"
       />
       <InventoryItemsBoard />
     </>

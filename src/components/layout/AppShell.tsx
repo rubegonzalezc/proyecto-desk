@@ -9,6 +9,7 @@ import SystemTabs from './SystemTabs'
 import { TenantProvider } from './TenantProvider'
 import { WorkspaceProvider } from './WorkspaceProvider'
 import { TicketsProvider } from '@/stores/TicketsProvider'
+import { InventoryProvider } from '@/stores/InventoryProvider'
 import { ToastProvider } from '@/stores/ToastProvider'
 import { NotificationsProvider } from '@/stores/NotificationsProvider'
 import CommandPalette from './CommandPalette'
@@ -26,6 +27,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
         <ToastProvider>
         <NotificationsProvider>
         <TicketsProvider>
+        <InventoryProvider>
         <CommandPaletteProvider>
       <Box data-theme={mode} className="ice-wash" sx={{ minHeight: '100vh', display: 'flex' }}>
         <Box
@@ -104,6 +106,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
       </Box>
         <CommandPalette />
         </CommandPaletteProvider>
+        </InventoryProvider>
         </TicketsProvider>
         </NotificationsProvider>
         </ToastProvider>
