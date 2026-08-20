@@ -47,7 +47,7 @@ export default function ClientsBoard() {
     })
   }, [query, tenantsWithOverrides])
 
-  const pagination = useTablePagination(filtered)
+  const pagination = useTablePagination(filtered, { listingId: 'clients' })
   const hasActiveFilters = Boolean(query.trim())
 
   return (

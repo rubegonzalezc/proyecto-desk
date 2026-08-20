@@ -33,7 +33,7 @@ export default function InventoryMovementsBoard() {
     [movements, query, type],
   )
 
-  const pagination = useTablePagination(filtered)
+  const pagination = useTablePagination(filtered, { listingId: 'inventory-movements' })
 
   return (
     <AppTable

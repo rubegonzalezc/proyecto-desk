@@ -2,6 +2,7 @@ import type { TicketPriority, TicketStatus } from '@/shared/types/ticket'
 import { TICKET_CATEGORIES, TICKET_PRIORITIES } from '@/shared/constants/ticket-form-options'
 import { parseTicketTimestamp } from '@/shared/utils/ticket-timestamps'
 import { TABLE_PAGE_SIZES, type TablePageSize } from '@/components/ui/TablePagination'
+import { loadTablePageSize } from '@/shared/config/ui-preferences-storage'
 
 export type TicketStatusFilter = TicketStatus | 'Todos'
 export type TicketPriorityFilter = TicketPriority | 'Todas'
@@ -108,8 +109,11 @@ export function parsePageParam(value: string | null): number {
 }
 
 export function parseSizeParam(value: string | null): TablePageSize {
-  const parsed = Number.parseInt(value ?? '', 10)
-  return TABLE_PAGE_SIZES.includes(parsed as TablePageSize) ? (parsed as TablePageSize) : 25
+  if (value) {
+    const parsed = Number.parseInt(value, 10)
+    if (TABLE_PAGE_SIZES.includes(parsed as TablePageSize)) return parsed as TablePageSize
+  }
+  return loadTablePageSize('tickets')
 }
 
 export function readTicketUrlFilters(
