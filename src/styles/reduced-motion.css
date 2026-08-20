@@ -1,0 +1,59 @@
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .fade-up {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .stagger > * {
+    animation-delay: 0ms !important;
+  }
+
+  .hover-lift {
+    transition: none;
+  }
+
+  .hover-lift:hover,
+  .hover-lift:active {
+    transform: none;
+  }
+
+  .press-feedback:active,
+  .nav-pill:active {
+    transform: none;
+  }
+
+  .nav-pill {
+    transition: none;
+  }
+
+  .app-table-row {
+    transition: none;
+  }
+
+  .sd-system-tab {
+    transition: none !important;
+  }
+
+  .dynamic-island-toast .MuiSlide-root,
+  .dynamic-island-toast .MuiFade-root {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .dynamic-island-toast [data-reduced-motion-inner] {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  .MuiButton-root:active,
+  .MuiIconButton-root:active {
+    transform: none !important;
+  }
+}
