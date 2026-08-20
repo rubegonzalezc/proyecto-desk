@@ -59,7 +59,10 @@ export default function SystemTabs() {
               <Box
                 component="button"
                 type="button"
+                className="sd-system-tab"
                 onClick={() => openSystem(id)}
+                aria-label={`Cambiar a ${system.name}`}
+                aria-current={active ? 'true' : undefined}
                 sx={{
                   display: 'flex',
                   alignItems: 'center',

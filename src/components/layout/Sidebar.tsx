@@ -246,6 +246,8 @@ function NavRow({
       type={href ? undefined : 'button'}
       onClick={onClick}
       className="nav-pill"
+      aria-current={active && href ? 'page' : undefined}
+      aria-label={!href ? label : undefined}
       sx={{
         display: 'flex',
         alignItems: 'center',

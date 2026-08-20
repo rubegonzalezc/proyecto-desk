@@ -74,6 +74,10 @@ export function createAppTheme(mode: PaletteMode): Theme {
           body: {
             backgroundColor: isDark ? palette.surfaces.navyDark : palette.surfaces.background,
           },
+          'a:focus-visible, button:focus-visible, [role="button"]:focus-visible': {
+            outline: `2px solid ${palette.brand.primary}`,
+            outlineOffset: 2,
+          },
         },
       },
       MuiButton: {
@@ -85,6 +89,11 @@ export function createAppTheme(mode: PaletteMode): Theme {
             paddingBlock: 8,
             transition: `transform 180ms ${designTokens.motion.ease}, background 420ms ${designTokens.motion.ease}`,
             '&:active': { transform: 'scale(0.992)' },
+            '&.Mui-focusVisible': {
+              outline: `2px solid ${palette.brand.primary}`,
+              outlineOffset: 2,
+              boxShadow: `0 0 0 4px rgba(37, 99, 235, 0.24)`,
+            },
           },
           contained: {
             boxShadow: '0 8px 24px rgba(37, 99, 235, 0.22)',
@@ -97,6 +106,11 @@ export function createAppTheme(mode: PaletteMode): Theme {
             borderRadius: 14,
             transition: `transform 180ms ${designTokens.motion.ease}`,
             '&:active': { transform: 'scale(0.992)' },
+            '&.Mui-focusVisible': {
+              outline: `2px solid ${palette.brand.primary}`,
+              outlineOffset: 2,
+              boxShadow: `0 0 0 4px rgba(37, 99, 235, 0.24)`,
+            },
           },
         },
       },
@@ -113,6 +127,23 @@ export function createAppTheme(mode: PaletteMode): Theme {
             borderRadius: designTokens.radius.pill,
             fontWeight: 600,
             letterSpacing: '-0.01em',
+          },
+          clickable: {
+            '&.Mui-focusVisible': {
+              outline: `2px solid ${palette.brand.primary}`,
+              outlineOffset: 2,
+              boxShadow: `0 0 0 3px rgba(37, 99, 235, 0.24)`,
+            },
+          },
+        },
+      },
+      MuiListItemButton: {
+        styleOverrides: {
+          root: {
+            '&.Mui-focusVisible': {
+              outline: `2px solid ${palette.brand.primary}`,
+              outlineOffset: -2,
+            },
           },
         },
       },

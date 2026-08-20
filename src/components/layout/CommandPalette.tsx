@@ -136,6 +136,11 @@ export default function CommandPalette() {
           placeholder="Buscar tickets, clientes, usuarios o rutas…"
           fullWidth
           autoComplete="off"
+          inputProps={{
+            'aria-label': 'Buscar en la paleta de comandos',
+            'aria-autocomplete': 'list',
+            'aria-controls': 'command-palette-results',
+          }}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -152,7 +157,7 @@ export default function CommandPalette() {
           }}
         />
 
-        <Box sx={{ maxHeight: 360, overflowY: 'auto', px: 0.75, pb: 1 }}>
+        <Box id="command-palette-results" sx={{ maxHeight: 360, overflowY: 'auto', px: 0.75, pb: 1 }}>
           <SearchResultsList
             groupedResults={groupedResults}
             activeIndex={activeIndex}

@@ -59,6 +59,7 @@ export default function InventoryItemsBoard() {
             {statuses.map((item) => (
               <Chip
                 key={item}
+                className="sd-filter-chip"
                 size="small"
                 label={item}
                 onClick={() => {
@@ -74,6 +75,7 @@ export default function InventoryItemsBoard() {
             {categories.map((item) => (
               <Chip
                 key={item}
+                className="sd-filter-chip"
                 size="small"
                 label={item}
                 onClick={() => {

@@ -109,12 +109,16 @@ export default function NewTicketForm() {
             <Typography variant="h4" sx={{ mb: 2.5 }}>
               Detalle de la solicitud
             </Typography>
-            <Stack spacing={2}>
+            <Stack component="fieldset" spacing={2} sx={{ border: 0, p: 0, m: 0, minWidth: 0 }}>
+              <Box component="legend" className="sd-sr-only">
+                Detalle de la solicitud
+              </Box>
               <TextField
                 label="Asunto"
                 placeholder="Ej. No hay acceso a internet en planta 3"
                 fullWidth
                 required
+                autoFocus
                 value={title}
                 onChange={(event) => setTitle(event.target.value)}
                 onBlur={() => setShowErrors(true)}
@@ -176,7 +180,10 @@ export default function NewTicketForm() {
             <Typography variant="h4" sx={{ mb: 2 }}>
               Asignación
             </Typography>
-            <Stack spacing={2}>
+            <Stack component="fieldset" spacing={2} sx={{ border: 0, p: 0, m: 0, minWidth: 0 }}>
+              <Box component="legend" className="sd-sr-only">
+                Asignación del ticket
+              </Box>
               <TextField
                 label="Solicitante"
                 value={requester}

@@ -56,23 +56,56 @@ export default function Header({ onMenu }: { onMenu: () => void }) {
         <HeaderSearch />
 
         <Box sx={{ ml: 'auto', display: 'flex', alignItems: 'center', gap: 0.5 }}>
-          <IconButton onClick={openPalette} aria-label="Abrir búsqueda rápida" sx={{ display: { sm: 'none' } }}>
+          <IconButton
+            onClick={openPalette}
+            aria-label="Abrir búsqueda rápida (Cmd+K)"
+            sx={{ display: { sm: 'none' } }}
+          >
             <SearchRounded />
           </IconButton>
-          <IconButton onClick={toggleMode} aria-label="Cambiar tema">
+          <IconButton
+            onClick={toggleMode}
+            aria-label={mode === 'light' ? 'Activar modo oscuro' : 'Activar modo claro'}
+          >
             {mode === 'light' ? <DarkModeOutlined /> : <LightModeOutlined />}
           </IconButton>
-          <IconButton onClick={(event) => setAnchorEl(event.currentTarget)} aria-label="Notificaciones">
+          <IconButton
+            onClick={(event) => setAnchorEl(event.currentTarget)}
+            aria-label={
+              unreadCount > 0
+                ? `Notificaciones, ${unreadCount} sin leer`
+                : 'Notificaciones'
+            }
+          >
             <Badge color="error" badgeContent={unreadCount > 0 ? unreadCount : undefined} overlap="circular">
               <NotificationsNoneOutlined />
             </Badge>
           </IconButton>
-          <Stack
-            direction="row"
-            spacing={1.1}
-            alignItems="center"
+          <Box
+            component="button"
+            type="button"
             onClick={(event) => setProfileEl(event.currentTarget)}
-            sx={{ ml: 0.75, display: { xs: 'none', sm: 'flex' }, cursor: 'pointer' }}
+            aria-label="Abrir menú de perfil de usuario"
+            aria-haspopup="menu"
+            sx={{
+              ml: 0.75,
+              display: { xs: 'none', sm: 'flex' },
+              alignItems: 'center',
+              gap: 1.1,
+              border: 0,
+              p: 0.5,
+              borderRadius: '16px',
+              cursor: 'pointer',
+              bgcolor: 'transparent',
+              color: 'inherit',
+              font: 'inherit',
+              textAlign: 'left',
+              '&:focus-visible': {
+                outline: '2px solid',
+                outlineColor: 'primary.main',
+                outlineOffset: 2,
+              },
+            }}
           >
             <UserAvatar name="Elena Ruiz" initials="ER" size={34} />
             <Box sx={{ lineHeight: 1.15 }}>
@@ -83,7 +116,7 @@ export default function Header({ onMenu }: { onMenu: () => void }) {
                 {platformOperator.adminRole}
               </Typography>
             </Box>
-          </Stack>
+          </Box>
         </Box>
       </Box>
 

@@ -18,6 +18,7 @@ export default function TenantRow({ tenant }: { tenant: Tenant }) {
       component={Link}
       href={`/clientes/${tenant.id}`}
       className="app-table-row"
+      aria-label={`Ver cliente ${tenant.name}`}
       sx={{
         display: 'block',
         textDecoration: 'none',
