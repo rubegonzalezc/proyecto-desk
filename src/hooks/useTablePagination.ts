@@ -1,11 +1,18 @@
 import { useCallback, useEffect, useState } from 'react'
 import { TABLE_PAGE_SIZES, type TablePageSize } from '@/components/ui/TablePagination'
+import {
+  loadTablePageSize,
+  saveTablePageSize,
+  type TableListingId,
+} from '@/shared/config/ui-preferences-storage'
 
 export type UseTablePaginationOptions = {
   /** Tamaño de página inicial. Por defecto: 25. */
   initialPageSize?: TablePageSize
   /** Página inicial. Por defecto: 1. */
   initialPage?: number
+  /** Identificador del listado para persistir el tamaño en sessionStorage. */
+  listingId?: TableListingId
   /** Modo controlado: página actual desde fuera (p. ej. URL). */
   page?: number
   /** Modo controlado: tamaño de página desde fuera. */
@@ -62,13 +69,17 @@ export function useTablePagination<T>(
   const {
     initialPageSize = 25,
     initialPage = 1,
+    listingId,
     page: controlledPage,
     pageSize: controlledPageSize,
     onPageChange,
     onPageSizeChange,
   } = options
   const [internalPage, setInternalPage] = useState(initialPage)
-  const [internalPageSize, setInternalPageSize] = useState<TablePageSize>(initialPageSize)
+  const [internalPageSize, setInternalPageSize] = useState<TablePageSize>(() => {
+    if (listingId) return loadTablePageSize(listingId, initialPageSize)
+    return initialPageSize
+  })
 
   const page = controlledPage ?? internalPage
   const pageSize = controlledPageSize ?? internalPageSize
@@ -104,11 +115,12 @@ export function useTablePagination<T>(
 
   const handlePageSizeChange = useCallback(
     (size: TablePageSize) => {
+      if (listingId) saveTablePageSize(listingId, size)
       if (onPageSizeChange) onPageSizeChange(size)
       else setInternalPageSize(size)
       setPage(1)
     },
-    [onPageSizeChange, setPage],
+    [listingId, onPageSizeChange, setPage],
   )
 
   return {

@@ -7,6 +7,7 @@ import type { TicketStatus } from '@/shared/types/ticket'
 import { getTechnicianOptions } from '@/shared/constants/ticket-form-options'
 import { getStatusDisplayLabel } from '@/shared/labels/ticket-display'
 import { filterTickets } from '@/lib/api/tickets'
+import { saveTablePageSize } from '@/shared/config/ui-preferences-storage'
 import { useTenant } from '@/components/layout/TenantProvider'
 import {
   buildTicketSearchParams,
@@ -103,7 +104,10 @@ export default function TicketsBoard() {
     page,
     pageSize,
     onPageChange: (nextPage) => replaceFilters({ page: nextPage }),
-    onPageSizeChange: (nextSize) => replaceFilters({ size: nextSize as TablePageSize, resetPage: true }),
+    onPageSizeChange: (nextSize) => {
+      saveTablePageSize('tickets', nextSize)
+      replaceFilters({ size: nextSize as TablePageSize, resetPage: true })
+    },
   })
 
   const hasActiveFilters = hasActiveTicketFilters(urlFilters)

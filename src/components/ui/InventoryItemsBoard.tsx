@@ -38,7 +38,7 @@ export default function InventoryItemsBoard() {
     [category, items, query, status],
   )
 
-  const pagination = useTablePagination(filtered)
+  const pagination = useTablePagination(filtered, { listingId: 'inventory-items' })
 
   const resetFilters = () => pagination.resetPage()
 

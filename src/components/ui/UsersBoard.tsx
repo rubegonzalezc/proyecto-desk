@@ -47,7 +47,7 @@ export default function UsersBoard() {
 
   const filtered = tenantUsers
 
-  const pagination = useTablePagination(filtered)
+  const pagination = useTablePagination(filtered, { listingId: 'users' })
   const hasActiveSearch = Boolean(query.trim())
 
   useEffect(() => {
