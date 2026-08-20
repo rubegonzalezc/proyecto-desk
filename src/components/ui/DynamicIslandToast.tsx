@@ -63,6 +63,7 @@ export default function DynamicIslandToast({
       role="status"
       aria-live="polite"
       aria-atomic="true"
+      className="dynamic-island-toast"
       sx={{
         position: 'fixed',
         top: { xs: 16, sm: 20 },

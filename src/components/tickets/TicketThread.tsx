@@ -157,32 +157,34 @@ export default function TicketThread({ ticketId, comments, evidences }: TicketTh
           </Stack>
         )}
 
-        <CommentTemplatesPicker onSelect={insertTemplate} />
+        <Box className="print-hide">
+          <CommentTemplatesPicker onSelect={insertTemplate} />
 
-        <TextField
-          placeholder="Escribe un comentario…"
-          value={draft}
-          onChange={(event) => setDraft(event.target.value)}
-          fullWidth
-          multiline
-          minRows={3}
-          sx={{ mb: 1.5 }}
-        />
-        <ImageAttachField
-          images={pending}
-          onAdd={addImages}
-          onRemove={(id) => {
-            const target = pending.find((item) => item.id === id)
-            if (target) URL.revokeObjectURL(target.previewUrl)
-            setPending((current) => current.filter((item) => item.id !== id))
-          }}
-        />
-        <Button variant="contained" onClick={publish} sx={{ mt: 1.75 }} loading={publishing}>
-          Publicar comentario
-        </Button>
+          <TextField
+            placeholder="Escribe un comentario…"
+            value={draft}
+            onChange={(event) => setDraft(event.target.value)}
+            fullWidth
+            multiline
+            minRows={3}
+            sx={{ mb: 1.5 }}
+          />
+          <ImageAttachField
+            images={pending}
+            onAdd={addImages}
+            onRemove={(id) => {
+              const target = pending.find((item) => item.id === id)
+              if (target) URL.revokeObjectURL(target.previewUrl)
+              setPending((current) => current.filter((item) => item.id !== id))
+            }}
+          />
+          <Button variant="contained" onClick={publish} sx={{ mt: 1.75 }} loading={publishing}>
+            Publicar comentario
+          </Button>
+        </Box>
       </AppCard>
 
-      <AppCard lift={false}>
+      <AppCard lift={false} className="print-hide">
         <Typography variant="h4" sx={{ mb: 2 }}>
           Evidencias
         </Typography>

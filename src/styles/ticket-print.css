@@ -1,0 +1,57 @@
+.print-only {
+  display: none;
+}
+
+@media print {
+  @page {
+    margin: 16mm;
+  }
+
+  body {
+    background: #fff !important;
+    color: #111827 !important;
+  }
+
+  .print-hide {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .app-shell-sidebar,
+  .app-shell-header,
+  .MuiDrawer-root,
+  .MuiModal-root,
+  .dynamic-island-toast {
+    display: none !important;
+  }
+
+  .app-shell-main {
+    padding: 0 !important;
+    max-width: none !important;
+  }
+
+  .ice-wash {
+    background: #fff !important;
+    min-height: auto !important;
+  }
+
+  .ticket-print-view .liquid-glass,
+  .ticket-print-view .liquid-glass-solid {
+    background: #fff !important;
+    box-shadow: none !important;
+    border: 1px solid #d0d5dd !important;
+    backdrop-filter: none !important;
+  }
+
+  .ticket-print-view .hover-lift {
+    transform: none !important;
+  }
+
+  .ticket-print-view a {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+}
