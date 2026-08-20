@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from 'react'
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -76,7 +77,10 @@ export default function InviteUserModal({ open, onClose }: InviteUserModalProps)
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
             Simula el alta de un usuario sin Supabase Auth. La invitación no se guarda en el listado de la demo.
           </Typography>
-          <Stack spacing={2} sx={{ pt: 0.5 }}>
+          <Stack component="fieldset" spacing={2} sx={{ border: 0, p: 0, m: 0, minWidth: 0, pt: 0.5 }}>
+            <Box component="legend" className="sd-sr-only">
+              Datos de la invitación
+            </Box>
             <TextField
               label="Correo"
               type="email"

@@ -13,6 +13,7 @@ export default function TicketRow({ ticket }: { ticket: Ticket }) {
       component={Link}
       href={`/tickets/${ticket.id}`}
       className="app-table-row"
+      aria-label={`Ver ticket ${ticket.id}: ${ticket.title}`}
       sx={{
         display: 'block',
         px: 2.25,

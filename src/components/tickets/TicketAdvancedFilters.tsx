@@ -36,6 +36,7 @@ export default function TicketAdvancedFilters({
         {priorityOptions.map((item) => (
           <Chip
             key={item}
+            className="sd-filter-chip"
             size="small"
             label={item}
             onClick={() => onChange({ prioridad: item, resetPage: true })}

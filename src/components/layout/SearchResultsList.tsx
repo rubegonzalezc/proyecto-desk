@@ -74,7 +74,7 @@ export default function SearchResultsList({
             >
               {getSearchGroupLabel(group)}
             </Typography>
-            <List dense disablePadding>
+            <List dense disablePadding role="listbox" aria-label="Resultados de búsqueda">
               {items.map((item) => {
                 runningIndex += 1
                 const index = runningIndex
@@ -83,8 +83,12 @@ export default function SearchResultsList({
                 return (
                   <ListItemButton
                     key={item.id}
+                    className="sd-command-result"
                     selected={selected}
+                    role="option"
+                    aria-selected={selected}
                     onMouseEnter={() => onActiveIndexChange(index)}
+                    onFocus={() => onActiveIndexChange(index)}
                     onClick={() => onSelect(item)}
                     sx={{
                       borderRadius: compact ? '12px' : '14px',

@@ -141,6 +141,7 @@ export default function TicketsBoard() {
               {statuses.map((item) => (
                 <Chip
                   key={item}
+                  className="sd-filter-chip"
                   size="small"
                   label={getStatusDisplayLabel(item, isMobile)}
                   title={item}

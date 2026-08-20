@@ -52,6 +52,7 @@ export default function InventoryMovementsBoard() {
             {movementTypes.map((item) => (
               <Chip
                 key={item}
+                className="sd-filter-chip"
                 size="small"
                 label={item}
                 onClick={() => {

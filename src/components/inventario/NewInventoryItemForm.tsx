@@ -106,12 +106,16 @@ export default function NewInventoryItemForm() {
             <Typography variant="h4" sx={{ mb: 2.5 }}>
               Datos del artículo
             </Typography>
-            <Stack spacing={2}>
+            <Stack component="fieldset" spacing={2} sx={{ border: 0, p: 0, m: 0, minWidth: 0 }}>
+              <Box component="legend" className="sd-sr-only">
+                Datos del artículo
+              </Box>
               <TextField
                 label="SKU"
                 placeholder="Ej. SKU-9901"
                 fullWidth
                 required
+                autoFocus
                 value={sku}
                 onChange={(event) => setSku(event.target.value.toUpperCase())}
                 onBlur={() => setShowErrors(true)}
@@ -171,7 +175,10 @@ export default function NewInventoryItemForm() {
             <Typography variant="h4" sx={{ mb: 2 }}>
               Stock
             </Typography>
-            <Stack spacing={2}>
+            <Stack component="fieldset" spacing={2} sx={{ border: 0, p: 0, m: 0, minWidth: 0 }}>
+              <Box component="legend" className="sd-sr-only">
+                Niveles de stock
+              </Box>
               <TextField
                 label="Stock actual"
                 type="number"

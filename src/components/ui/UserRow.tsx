@@ -26,6 +26,7 @@ export default function UserRow({ user }: { user: User }) {
         component={Link}
         href={`/usuarios/${user.id}`}
         className="app-table-row"
+        aria-label={`Ver usuario ${user.name}`}
         sx={{
           ...rowLinkSx,
           display: { xs: 'block', md: 'none' },
@@ -68,6 +69,7 @@ export default function UserRow({ user }: { user: User }) {
         component={Link}
         href={`/usuarios/${user.id}`}
         className="app-table-row"
+        aria-label={`Ver usuario ${user.name}`}
         sx={{
           ...rowLinkSx,
           display: { xs: 'none', md: 'grid' },
