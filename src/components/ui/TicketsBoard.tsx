@@ -6,18 +6,21 @@ import { Box, Chip, Stack, useMediaQuery, useTheme } from '@mui/material'
 import type { TicketStatus } from '@/shared/types/ticket'
 import { getTechnicianOptions } from '@/shared/constants/ticket-form-options'
 import { getStatusDisplayLabel } from '@/shared/labels/ticket-display'
+import { filterTenantTickets } from '@/shared/utils/ticket-list-filters'
 import { useTenant } from '@/components/layout/TenantProvider'
 import { filterByTenant } from '@/shared/mock/tenant-scope'
 import {
   buildTicketSearchParams,
   hasActiveTicketFilters,
-  matchesTicketDateRange,
   readTicketUrlFilters,
 } from '@/shared/utils/ticket-url-filters'
 import TicketAdvancedFilters from '@/components/tickets/TicketAdvancedFilters'
+import TicketsKanbanBoard from '@/components/tickets/TicketsKanbanBoard'
+import TicketsViewToggle from '@/components/tickets/TicketsViewToggle'
 import { useTicketsStore } from '@/stores/TicketsProvider'
 import { useTablePagination } from '@/hooks/useTablePagination'
 import type { TablePageSize } from '@/components/ui/TablePagination'
+import AppCard from '@/components/ui/AppCard'
 import AppTable from '@/components/ui/AppTable'
 import EmptyState from '@/components/ui/EmptyState'
 import TablePagination from '@/components/ui/TablePagination'
@@ -58,14 +61,26 @@ export default function TicketsBoard() {
     [searchParams, technicians],
   )
 
-  const { q: query, estado: status, prioridad, tecnico, categoria, desde, hasta, page, size: pageSize } =
-    urlFilters
+  const {
+    q: query,
+    estado: status,
+    prioridad,
+    tecnico,
+    categoria,
+    desde,
+    hasta,
+    vista,
+    page,
+    size: pageSize,
+  } = urlFilters
+
+  const queryString = searchParams.toString()
 
   const replaceFilters = useCallback(
     (patch: Parameters<typeof buildTicketSearchParams>[1]) => {
       const next = buildTicketSearchParams(searchParams, patch, { technicians })
-      const queryString = next.toString()
-      router.replace(queryString ? `${pathname}?${queryString}` : pathname, { scroll: false })
+      const nextQueryString = next.toString()
+      router.replace(nextQueryString ? `${pathname}?${nextQueryString}` : pathname, { scroll: false })
     },
     [pathname, router, searchParams, technicians],
   )
@@ -75,24 +90,10 @@ export default function TicketsBoard() {
     [tickets, tenant.id],
   )
 
-  const filtered = useMemo(() => {
-    return tenantTickets.filter((ticket) => {
-      const matchesStatus = status === 'Todos' || ticket.status === status
-      const matchesPriority = prioridad === 'Todas' || ticket.priority === prioridad
-      const matchesTechnician = tecnico === 'Todos' || ticket.technician === tecnico
-      const matchesCategory = categoria === 'Todas' || ticket.category === categoria
-      const matchesDates = matchesTicketDateRange(ticket.createdAt, desde, hasta)
-      const haystack = `${ticket.id} ${ticket.title} ${ticket.technician} ${ticket.requester}`.toLowerCase()
-      return (
-        matchesStatus &&
-        matchesPriority &&
-        matchesTechnician &&
-        matchesCategory &&
-        matchesDates &&
-        haystack.includes(query.toLowerCase())
-      )
-    })
-  }, [categoria, desde, hasta, prioridad, query, status, tecnico, tenantTickets])
+  const filtered = useMemo(
+    () => filterTenantTickets(tenantTickets, urlFilters),
+    [tenantTickets, urlFilters],
+  )
 
   const pagination = useTablePagination(filtered, {
     page,
@@ -115,62 +116,63 @@ export default function TicketsBoard() {
     router.replace(pathname, { scroll: false })
   }
 
-  return (
-    <AppTable
-      columns={columns}
-      toolbar={
-        <TableToolbar stacked>
-          <TableSearchField
-            value={query}
-            onChange={(value) => replaceFilters({ q: value, resetPage: true })}
-            placeholder="Filtrar por ID, asunto o técnico"
-            flex={false}
-            fullWidth
-          />
-          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-            {statuses.map((item) => (
-              <Chip
-                key={item}
-                size="small"
-                label={getStatusDisplayLabel(item, isMobile)}
-                title={item}
-                onClick={() => replaceFilters({ estado: item, resetPage: true })}
-                color={status === item ? 'primary' : 'default'}
-                variant={status === item ? 'filled' : 'outlined'}
-                sx={{
-                  '& .MuiChip-label': {
-                    px: 1.1,
-                  },
-                }}
-              />
-            ))}
-          </Stack>
-          <TicketAdvancedFilters
-            filters={{ prioridad, tecnico, categoria, desde, hasta }}
-            technicians={technicians}
-            hasActiveFilters={hasActiveFilters}
-            onChange={replaceFilters}
-            onClear={clearFilters}
-          />
-        </TableToolbar>
-      }
-      footer={
-        pagination.hasItems ? (
-          <TablePagination
-            page={pagination.page}
-            pageCount={pagination.pageCount}
-            pageSize={pagination.pageSize}
-            from={pagination.from}
-            to={pagination.to}
-            total={pagination.total}
-            onPageChange={pagination.setPage}
-            onPageSizeChange={pagination.setPageSize}
-          />
-        ) : undefined
-      }
-    >
-      {filtered.length === 0 ? (
-        <Box sx={{ p: 2 }}>
+  const toolbar = (
+    <AppCard lift={false} sx={{ mb: 2.5 }}>
+      <Stack
+        direction={{ xs: 'column', md: 'row' }}
+        spacing={2}
+        justifyContent="space-between"
+        alignItems={{ md: 'flex-start' }}
+      >
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          <TableToolbar stacked>
+            <TableSearchField
+              value={query}
+              onChange={(value) => replaceFilters({ q: value, resetPage: true })}
+              placeholder="Filtrar por ID, asunto o técnico"
+              flex={false}
+              fullWidth
+            />
+            <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+              {statuses.map((item) => (
+                <Chip
+                  key={item}
+                  size="small"
+                  label={getStatusDisplayLabel(item, isMobile)}
+                  title={item}
+                  onClick={() => replaceFilters({ estado: item, resetPage: true })}
+                  color={status === item ? 'primary' : 'default'}
+                  variant={status === item ? 'filled' : 'outlined'}
+                  sx={{
+                    '& .MuiChip-label': {
+                      px: 1.1,
+                    },
+                  }}
+                />
+              ))}
+            </Stack>
+            <TicketAdvancedFilters
+              filters={{ prioridad, tecnico, categoria, desde, hasta }}
+              technicians={technicians}
+              hasActiveFilters={hasActiveFilters}
+              onChange={replaceFilters}
+              onClear={clearFilters}
+            />
+          </TableToolbar>
+        </Box>
+        <TicketsViewToggle
+          value={vista}
+          onChange={(nextView) => replaceFilters({ vista: nextView, resetPage: true })}
+        />
+      </Stack>
+    </AppCard>
+  )
+
+  if (filtered.length === 0) {
+    return (
+      <>
+        {toolbar}
+        <AppCard lift={false}>
           <EmptyState
             title={hasActiveFilters ? 'Sin resultados' : 'Cola vacía'}
             description={
@@ -183,10 +185,44 @@ export default function TicketsBoard() {
               ? { onAction: clearFilters }
               : { actionHref: '/tickets/nuevo' })}
           />
-        </Box>
-      ) : (
-        pagination.pagedItems.map((ticket) => <TicketRow key={ticket.id} ticket={ticket} />)
-      )}
-    </AppTable>
+        </AppCard>
+      </>
+    )
+  }
+
+  if (vista === 'kanban') {
+    return (
+      <>
+        {toolbar}
+        <TicketsKanbanBoard tickets={filtered} queryString={queryString} />
+      </>
+    )
+  }
+
+  return (
+    <>
+      {toolbar}
+      <AppTable
+        columns={columns}
+        footer={
+          pagination.hasItems ? (
+            <TablePagination
+              page={pagination.page}
+              pageCount={pagination.pageCount}
+              pageSize={pagination.pageSize}
+              from={pagination.from}
+              to={pagination.to}
+              total={pagination.total}
+              onPageChange={pagination.setPage}
+              onPageSizeChange={pagination.setPageSize}
+            />
+          ) : undefined
+        }
+      >
+        {pagination.pagedItems.map((ticket) => (
+          <TicketRow key={ticket.id} ticket={ticket} />
+        ))}
+      </AppTable>
+    </>
   )
 }

@@ -7,6 +7,7 @@ export type TicketStatusFilter = TicketStatus | 'Todos'
 export type TicketPriorityFilter = TicketPriority | 'Todas'
 export type TicketTechnicianFilter = 'Todos' | string
 export type TicketCategoryFilter = 'Todas' | string
+export type TicketViewMode = 'tabla' | 'kanban'
 
 export type TicketUrlFilters = {
   q: string
@@ -16,6 +17,7 @@ export type TicketUrlFilters = {
   categoria: TicketCategoryFilter
   desde: string
   hasta: string
+  vista: TicketViewMode
   page: number
   size: TablePageSize
 }
@@ -96,6 +98,10 @@ export function parseTecnicoParam(value: string | null, options: string[]): Tick
   return match ?? 'Todos'
 }
 
+export function parseViewParam(value: string | null): TicketViewMode {
+  return value === 'kanban' ? 'kanban' : 'tabla'
+}
+
 export function parsePageParam(value: string | null): number {
   const parsed = Number.parseInt(value ?? '', 10)
   return Number.isFinite(parsed) && parsed > 0 ? parsed : 1
@@ -118,6 +124,7 @@ export function readTicketUrlFilters(
     categoria: parseCategoriaParam(searchParams.get('categoria')),
     desde: parseIsoDateParam(searchParams.get('desde')),
     hasta: parseIsoDateParam(searchParams.get('hasta')),
+    vista: parseViewParam(searchParams.get('vista')),
     page: parsePageParam(searchParams.get('page')),
     size: parseSizeParam(searchParams.get('size')),
   }
@@ -161,6 +168,9 @@ export function buildTicketSearchParams(
 
   if (merged.hasta) next.set('hasta', merged.hasta)
   else next.delete('hasta')
+
+  if (merged.vista === 'kanban') next.set('vista', 'kanban')
+  else next.delete('vista')
 
   if (merged.page > 1) next.set('page', String(merged.page))
   else next.delete('page')
