@@ -1,8 +1,13 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { Box } from '@mui/material'
 import { tenants } from '@/shared/mock/tenants'
+import {
+  loadTenantAdminStore,
+  mergeTenantsWithAdminOverrides,
+} from '@/shared/config/tenant-admin-storage'
 import { useTablePagination } from '@/hooks/useTablePagination'
 import AppTable from '@/components/ui/AppTable'
 import EmptyState from '@/components/ui/EmptyState'
@@ -19,17 +24,28 @@ const columns = [
 ]
 
 export default function ClientsBoard() {
+  const pathname = usePathname()
   const [query, setQuery] = useState('')
+  const [adminStore, setAdminStore] = useState(loadTenantAdminStore)
+
+  useEffect(() => {
+    setAdminStore(loadTenantAdminStore())
+  }, [pathname])
+
+  const tenantsWithOverrides = useMemo(
+    () => mergeTenantsWithAdminOverrides(tenants, adminStore),
+    [adminStore],
+  )
 
   const filtered = useMemo(() => {
     const normalized = query.trim().toLowerCase()
-    if (!normalized) return tenants
+    if (!normalized) return tenantsWithOverrides
 
-    return tenants.filter((tenant) => {
+    return tenantsWithOverrides.filter((tenant) => {
       const haystack = `${tenant.name} ${tenant.domain} ${tenant.plan} ${tenant.region}`.toLowerCase()
       return haystack.includes(normalized)
     })
-  }, [query])
+  }, [query, tenantsWithOverrides])
 
   const pagination = useTablePagination(filtered)
   const hasActiveFilters = Boolean(query.trim())
