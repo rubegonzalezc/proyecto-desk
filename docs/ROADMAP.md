@@ -989,17 +989,19 @@ Plan de trabajo por sprints para la fase de **prototipo UI**. Solo frontend; los
 ## Sprint 7 — Pulido y preparación para Supabase
 
 **Objetivo:** Capa API mock, calidad y contratos listos para Supabase.  
-**DoD del sprint:** Pantallas consumen `lib/api`; tipos documentados para schema PostgreSQL.
+**DoD del sprint:** Pantallas consumen `lib/api`; tipos documentados para schema PostgreSQL; E2E básicos verdes.
 
-| HU | Título | Dirigido a | Complejidad | Notas |
-|----|--------|------------|-------------|-------|
-| HU-1 | Capa `lib/api` | **Rubén** | 9/10 | Bloqueante |
-| HU-2 | Páginas de error / 403 | **Rubén** | 4/10 | |
-| HU-3 | Accesibilidad de teclado | **José** | 6/10 | |
-| HU-4 | Reduced motion | **José** | 2/10 | |
-| HU-5 | Preferencias sessionStorage | **Rubén** | 4/10 | |
-| HU-6 | Contratos Supabase | **Rubén** | 7/10 | Tras HU-1 |
-| HU-7 | Pruebas E2E | **Rubén + Sebastián** | 6/10 | Rubén configura CI; Sebastián escribe specs |
+**Estado del sprint:** En curso — ver checklist en [`sprint-pre-supabase.md`](./sprint-pre-supabase.md).
+
+| HU | Título | Dirigido a | Complejidad | Estado |
+|----|--------|------------|-------------|--------|
+| HU-1 | Capa `lib/api` | **Rubén** | 9/10 | Hecho (#39) |
+| HU-2 | Páginas de error / 403 | **Rubén** | 4/10 | Hecho (#40) |
+| HU-3 | Accesibilidad de teclado | **José** | 6/10 | Hecho (#41) |
+| HU-4 | Reduced motion | **José** | 2/10 | Hecho (#42) |
+| HU-5 | Preferencias sessionStorage | **Rubén** | 4/10 | Hecho (#43) |
+| HU-6 | Contratos Supabase | **Rubén** | 7/10 | Hecho (#44) |
+| HU-7 | Pruebas E2E | **Rubén + Sebastián** | 6/10 | **Pendiente** — gate antes de Supabase |
 
 ---
 
@@ -1128,6 +1130,8 @@ Plan de trabajo por sprints para la fase de **prototipo UI**. Solo frontend; los
 
 Historias fuera del alcance frontend actual. Requieren proyecto Supabase real.
 
+> **No iniciar esta fase** hasta cerrar el Sprint 7. Checklist y gate: [`sprint-pre-supabase.md`](./sprint-pre-supabase.md).
+
 | HU | Título | Dirigido a | Complejidad |
 |----|--------|------------|-------------|
 | HU-1 | Autenticación Supabase Auth | **Rubén** | 9/10 |
@@ -1226,8 +1230,8 @@ flowchart LR
 | 4 — Navegación | HU-1 … HU-6 (6) | Rubén | Pendiente |
 | 5 — Tickets | HU-1 … HU-7 (7) | Rubén | Pendiente |
 | 6 — Módulos extra | HU-1 … HU-7 (7) | Rubén | Pendiente |
-| 7 — Supabase-ready | HU-1 … HU-7 (7) | Rubén | Pendiente |
-| Backlog Supabase | HU-1 … HU-5 (5) | Rubén | Futuro |
+| 7 — Supabase-ready | HU-1 … HU-7 (7) | Rubén | En curso (falta HU-7) |
+| Backlog Supabase | HU-1 … HU-5 (5) | Rubén | Futuro — tras Sprint 7 |
 
 ### Carga por desarrollador (HUs pendientes)
 
@@ -1257,6 +1261,8 @@ Día 5     José → HU-6             │  Rubén → code review + demo sprint
 - Diseño: [`DESIGN-README.md`](./DESIGN-README.md)
 - Especificación UI: [`system-design.md`](./system-design.md)
 - Auth (migrar a Supabase): [`auth.md`](./auth.md)
+- Sprint previo a Supabase: [`sprint-pre-supabase.md`](./sprint-pre-supabase.md)
+- Contrato de datos: [`supabase.md`](./supabase.md)
 - README: [`../README.md`](../README.md)
 
 ---
