@@ -56,6 +56,8 @@ Nexus Salud (y otros tenants sin el sistema contratado) **no** tienen inventario
 
 El repositorio es un **prototipo de interfaz premium**. Se ve y se navega como un SaaS real; no hay API, base de datos ni autenticación verdadera.
 
+Inventario detallado de pantallas y acciones: [`FEATURES.md`](./FEATURES.md).
+
 ### Lo que sí hace hoy
 
 - Maqueta completa de mesa de ayuda, inventario y consola de clientes
@@ -437,6 +439,7 @@ flowchart LR
 |-----------|-----------|
 | [README](../README.md) | Arranque rápido y mapa del producto |
 | [PROJECT.md](./PROJECT.md) | Este documento: producto + arquitectura + estado |
+| [FEATURES.md](./FEATURES.md) | Funcionalidades mock actuales del front (qué hace / qué no persiste) |
 | [STYLES.md](./STYLES.md) | Tokens CSS, clases, tema MUI, motion, foco e impresión |
 | [DESIGN-README.md](./DESIGN-README.md) | Identidad visual y shell (guía corta) |
 | [system-design.md](./system-design.md) | Especificación inicial de la maqueta |

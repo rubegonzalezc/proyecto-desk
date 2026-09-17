@@ -5,6 +5,7 @@
 | Documento | Para qué sirve |
 |-----------|----------------|
 | **[PROJECT.md](./PROJECT.md)** | Visión del producto, arquitectura real, estado del prototipo y convenciones |
+| [FEATURES.md](./FEATURES.md) | Funcionalidades mock del front: qué se puede hacer hoy y qué persiste en la pestaña |
 | [STYLES.md](./STYLES.md) | Sistema de estilos: tokens, clases CSS, tema MUI, motion, a11y, print |
 | [DESIGN-README.md](./DESIGN-README.md) | Guía de diseño: tokens, shell, componentes, motion |
 | [system-design.md](./system-design.md) | Brief original de la maqueta (Apple Liquid Enterprise) |

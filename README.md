@@ -5,7 +5,8 @@ Plataforma SaaS multi-tenant de **SynchroDev**: mesa de ayuda IT, inventario y c
 **Stack:** Next.js 16.3 · React 19 · TypeScript · MUI v6 · Turbopack  
 **Fase actual:** prototipo UI navegable. Datos mock. Acciones de demo en sesión (`sessionStorage`). Sin backend.
 
-Documentación completa del producto y la arquitectura: **[`docs/PROJECT.md`](./docs/PROJECT.md)**.
+Documentación completa del producto y la arquitectura: **[`docs/PROJECT.md`](./docs/PROJECT.md)**.  
+Qué se puede hacer hoy en el front (todo mock): **[`docs/FEATURES.md`](./docs/FEATURES.md)**.
 
 ```bash
 npm install
@@ -116,6 +117,7 @@ No instalar Better Auth ni el cliente Supabase hasta cerrar los Sprints 8 y 9.
 | Documento | Contenido |
 |-----------|-----------|
 | [`docs/PROJECT.md`](./docs/PROJECT.md) | Producto, arquitectura, estado del código y convenciones |
+| [`docs/FEATURES.md`](./docs/FEATURES.md) | Funcionalidades mock actuales (front, sin backend) |
 | [`docs/STYLES.md`](./docs/STYLES.md) | Tokens, clases CSS, tema MUI, motion, foco e impresión |
 | [`docs/DESIGN-README.md`](./docs/DESIGN-README.md) | Identidad visual y tokens |
 | [`docs/system-design.md`](./docs/system-design.md) | Especificación inicial de UI |
