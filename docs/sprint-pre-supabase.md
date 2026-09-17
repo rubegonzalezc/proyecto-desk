@@ -1,5 +1,7 @@
 # Sprint previo a Supabase — Sprint 7
 
+> **Archivo.** El plan vigente es [`ROADMAP.md`](./ROADMAP.md) (Iniciativa 1). Este texto describe el ciclo de sprints hacia Supabase.
+
 Antes de crear el proyecto en Supabase y ejecutar la **Fase Supabase** (auth, RLS, Storage, Realtime), el equipo debe cerrar el **Sprint 7 — Pulido y preparación para Supabase** y, recomendado, los **Sprints 8 y 9** de consolidación.
 
 Los sprints 0–6 construyen el prototipo UI (mesa de ayuda, listados, multi-tenant, navegación, tickets, módulos secundarios). El Sprint 7 consolida esa base en una capa lista para sustituir mocks por PostgreSQL sin reescribir pantallas.

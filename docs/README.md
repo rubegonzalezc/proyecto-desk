@@ -9,10 +9,11 @@
 | [STYLES.md](./STYLES.md) | Sistema de estilos: tokens, clases CSS, tema MUI, motion, a11y, print |
 | [DESIGN-README.md](./DESIGN-README.md) | Guía de diseño: tokens, shell, componentes, motion |
 | [system-design.md](./system-design.md) | Brief original de la maqueta (Apple Liquid Enterprise) |
-| [ROADMAP.md](./ROADMAP.md) | Plan por sprints e historias de usuario |
+| **[ROADMAP.md](./ROADMAP.md)** | Plan vigente: Iniciativa 1 (historias de usuario, front mock) |
+| [ROADMAP-historico.md](./ROADMAP-historico.md) | Archivo del roadmap por sprints 0–10 |
 | [auth.md](./auth.md) | Login de demo y plan de autenticación |
-| [supabase.md](./supabase.md) | Schema PostgreSQL, RLS, Storage y Realtime previstos |
-| [sprint-pre-supabase.md](./sprint-pre-supabase.md) | Sprint 7 cerrado y gate de entrada a Supabase |
-| [sprints-8-9-pre-supabase.md](./sprints-8-9-pre-supabase.md) | Consolidación multi-tenant, `lib/api` y auth skeleton |
+| [supabase.md](./supabase.md) | Schema PostgreSQL (ciclo anterior) |
+| [sprint-pre-supabase.md](./sprint-pre-supabase.md) | Notas Sprint 7 (archivo) |
+| [sprints-8-9-pre-supabase.md](./sprints-8-9-pre-supabase.md) | Notas pre-Supabase (archivo) |
 
 El README de la raíz (`../README.md`) es el arranque rápido.
