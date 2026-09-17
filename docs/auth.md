@@ -2,6 +2,8 @@
 
 Estado: **solo UI**. No hay sesión real.
 
+Contexto del producto: [`PROJECT.md`](./PROJECT.md#11-autenticación-y-permisos).
+
 ## Hoy (prototipo)
 
 `/login` es una maqueta. Correo, Google y Microsoft navegan a `/dashboard` sin validar credenciales ni crear cookie.

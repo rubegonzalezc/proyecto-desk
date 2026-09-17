@@ -2,6 +2,8 @@
 
 Documento de referencia para alinear al equipo **antes** de crear el proyecto en Supabase. Describe tablas, columnas, políticas RLS, Storage y Realtime que sustituirán los mocks actuales (`src/shared/mock/`) y la capa `src/lib/api/`.
 
+Arquitectura actual del prototipo: [`PROJECT.md`](./PROJECT.md).
+
 > **Prerequisitos:** Sprint 7 cerrado. Recomendado completar [**Sprints 8 y 9**](./sprints-8-9-pre-supabase.md) antes de crear el proyecto.
 
 ## Principios

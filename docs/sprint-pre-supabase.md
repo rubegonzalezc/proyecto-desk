@@ -126,6 +126,7 @@ El Sprint 7 cierra la funcionalidad de demo, pero el análisis del código revel
 
 ## Referencias
 
+- Proyecto (arquitectura y estado): [`PROJECT.md`](./PROJECT.md)
 - Mejoras propuestas S8–S9: [`sprints-8-9-pre-supabase.md`](./sprints-8-9-pre-supabase.md)
 - Roadmap completo: [`ROADMAP.md`](./ROADMAP.md)
 - Contrato de datos: [`supabase.md`](./supabase.md)

@@ -353,6 +353,7 @@ Invertir S8–S9 evita rehacer pantallas durante la migración: Supabase solo ca
 
 ## Referencias
 
+- Proyecto (arquitectura y estado): [`PROJECT.md`](./PROJECT.md)
 - Sprint 7 (cerrado): [`sprint-pre-supabase.md`](./sprint-pre-supabase.md)
 - Schema: [`supabase.md`](./supabase.md)
 - Roadmap: [`ROADMAP.md`](./ROADMAP.md)
