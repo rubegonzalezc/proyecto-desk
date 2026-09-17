@@ -263,7 +263,7 @@ Catálogos mock. Sin alta ni edición.
 - Adjuntos reales (hoy son blob URLs locales)
 - Playwright en el repo (`package.json` no tiene `test:e2e`)
 
-Próximo trabajo de producto: Sprints 8 y 9, luego Fase Supabase. Ver [`PROJECT.md`](./PROJECT.md) y [`sprints-8-9-pre-supabase.md`](./sprints-8-9-pre-supabase.md).
+Próximo trabajo: **Iniciativa 1** — [`ROADMAP.md`](./ROADMAP.md) (demo coherente en sesión, sin backend). El plan por sprints quedó en [`ROADMAP-historico.md`](./ROADMAP-historico.md).
 
 ---
 

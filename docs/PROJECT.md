@@ -74,24 +74,19 @@ Inventario detallado de pantallas y acciones: [`FEATURES.md`](./FEATURES.md).
 - Persistencia entre pestañas, dispositivos o recargas de navegador distintas
 - CRUD real ni validaciones de servidor
 - Playwright en el árbol de código (el Sprint 7 lo da por hecho; `package.json` no incluye el script)
-- `tenantId` en inventario, conocimiento, roles, equipos, activos y notificaciones (deuda del Sprint 8)
+- `tenantId` en inventario, conocimiento, roles, equipos, activos y notificaciones (Iniciativa 1)
 
 ### Cómo leer el resto de `docs/`
 
-[`ROADMAP.md`](./ROADMAP.md) sigue marcando los Sprints 1–6 como *Pendiente*, pero **el código ya cubre esas historias**. Usar este documento y el árbol `src/` como fuente de verdad del estado; el roadmap y los sprints 8–9 describen el plan hacia Supabase.
+Plan de trabajo vigente: [`ROADMAP.md`](./ROADMAP.md) (Iniciativa 1 — demo coherente en sesión).  
+El ciclo anterior por sprints está archivado en [`ROADMAP-historico.md`](./ROADMAP-historico.md). Este documento y `src/` describen el estado del código.
 
-| Sprint | En el código | En el roadmap |
-|--------|--------------|---------------|
-| 0 Fundación | Implementado | Hecho |
-| 1 Demo interactiva | Implementado (store, toasts, crear ticket, comentarios, validación, loading) | Marcado pendiente |
-| 2 Listados | Implementado (paginación, skeletons, vacíos) | Marcado pendiente |
-| 3 Multi-tenant | Parcial: tickets/usuarios/dashboard sí; inventario/conocimiento no | Marcado pendiente |
-| 4 Navegación | Implementado (Cmd+K, header, notificaciones, breadcrumbs, filtros URL) | Marcado pendiente |
-| 5 Tickets | Implementado (panel, timeline, filtros, confirmación, plantillas, relacionados, impresión) | Marcado pendiente |
-| 6 Módulos extra | Implementado (Kanban, conocimiento, ficha usuario, invitar, acciones cliente, formularios inventario) | Marcado pendiente |
-| 7 Supabase-ready | `lib/api`, 403/404, a11y, reduced motion, sessionStorage, contrato de datos | Hecho |
-| 8–9 Pre-Supabase | No iniciado | Pendiente |
-| 10 Fase Supabase | No iniciado | Futuro |
+| Ámbito | En el código |
+|--------|----------------|
+| Fundación, tickets interactivos, listados, navegación, Kanban, conocimiento, inventario (altas) | Implementado (mock) |
+| `lib/api`, 403/404, a11y, preferencias en sessionStorage | Implementado |
+| Tenant persistente, aislamiento total por cliente, invitar/guardar rol, stock al mover | Pendiente — Iniciativa 1 |
+| Backend / Supabase / auth real | Fuera de este ciclo |
 
 ---
 
@@ -395,7 +390,7 @@ No hay `error.tsx` ni `global-error.tsx` (Sprint 9).
 ## 14. Convenciones para contribuir
 
 1. Textos de UI en **español**.
-2. No añadir backend, variables de entorno de API ni cliente Supabase hasta cerrar los Sprints 8 y 9 (ver gate en [`sprint-pre-supabase.md`](./sprint-pre-supabase.md)).
+2. No añadir backend, variables de entorno de API ni cliente Supabase en este ciclo (plan vigente: [`ROADMAP.md`](./ROADMAP.md)).
 3. Lecturas nuevas: función en `src/lib/api` con `tenantId` + `// TODO: supabase.from('...')`. No importar mocks desde `components/` ni `app/`.
 4. Mutaciones de demo: store de sesión, no arrays globales mutables.
 5. Respetar tokens y motion de [`STYLES.md`](./STYLES.md), `docs/DESIGN-README.md` y `src/styles/design-system.css`.
@@ -412,24 +407,15 @@ No hay `error.tsx` ni `global-error.tsx` (Sprint 9).
 | **José** | Frontend | UI liquid glass, command palette, Kanban, accesibilidad |
 | **Sebastián** | Fullstack junior | Formularios, listados, notificaciones, páginas CRUD guiadas |
 
-Historias de usuario y carga por sprint: [`ROADMAP.md`](./ROADMAP.md).
+Historias a implementar ahora: [`ROADMAP.md`](./ROADMAP.md) (Iniciativa 1). El desglose antiguo por sprint está en [`ROADMAP-historico.md`](./ROADMAP-historico.md).
 
 ---
 
-## 16. Hacia Supabase
+## 16. Qué sigue
 
-Orden acordado:
+El plan activo es la **Iniciativa 1** ([`ROADMAP.md`](./ROADMAP.md)): demo coherente en una sesión, todavía sin backend.
 
-```mermaid
-flowchart LR
-  s7[Sprint 7 ✅] --> s8[Sprint 8 — tenantId + lib/api completo]
-  s8 --> s9[Sprint 9 — auth skeleton, errores, E2E, scaffold]
-  s9 --> s10[Sprint 10 — Auth, RLS, Storage, Realtime]
-```
-
-**Sprint 8** (siguiente): `tenantId` en todas las entidades; cero imports de mock en UI; mutaciones async en `lib/api`.  
-**Sprint 9:** middleware + sesión mock, `error.tsx`, E2E multi-tenant, `.env.example` y cliente stub.  
-**Sprint 10:** proyecto Supabase real. Detalle: [`sprints-8-9-pre-supabase.md`](./sprints-8-9-pre-supabase.md) y [`supabase.md`](./supabase.md).
+Contrato de datos y notas de un ciclo anterior (no se ejecutan ahora): [`supabase.md`](./supabase.md), [`ROADMAP-historico.md`](./ROADMAP-historico.md).
 
 ---
 
@@ -443,11 +429,12 @@ flowchart LR
 | [STYLES.md](./STYLES.md) | Tokens CSS, clases, tema MUI, motion, foco e impresión |
 | [DESIGN-README.md](./DESIGN-README.md) | Identidad visual y shell (guía corta) |
 | [system-design.md](./system-design.md) | Especificación inicial de la maqueta |
-| [ROADMAP.md](./ROADMAP.md) | Sprints e historias de usuario |
+| [ROADMAP.md](./ROADMAP.md) | Plan vigente: Iniciativa 1 (front mock) |
+| [ROADMAP-historico.md](./ROADMAP-historico.md) | Archivo del plan por sprints 0–10 |
 | [auth.md](./auth.md) | Login actual y plan Better Auth / sesión |
-| [supabase.md](./supabase.md) | Tablas, RLS, Storage, Realtime |
-| [sprint-pre-supabase.md](./sprint-pre-supabase.md) | Gate Sprint 7 (cerrado) |
-| [sprints-8-9-pre-supabase.md](./sprints-8-9-pre-supabase.md) | Trabajo pendiente antes de Postgres |
+| [supabase.md](./supabase.md) | Tablas, RLS, Storage, Realtime (ciclo anterior) |
+| [sprint-pre-supabase.md](./sprint-pre-supabase.md) | Notas Sprint 7 (archivo) |
+| [sprints-8-9-pre-supabase.md](./sprints-8-9-pre-supabase.md) | Notas pre-Supabase (archivo) |
 
 ---
 

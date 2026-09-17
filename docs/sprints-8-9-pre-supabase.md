@@ -1,5 +1,7 @@
 # Sprints 8 y 9 — Mejoras antes de Supabase
 
+> **Archivo.** No es el plan activo. Lo vigente es [`ROADMAP.md`](./ROADMAP.md) (Iniciativa 1). Este documento se conserva por si se retoma el ciclo Supabase.
+
 Con el **Sprint 7 cerrado** (incluida S7·HU-7 E2E), el prototipo UI está listo en funcionalidad. Antes de crear el proyecto en Supabase conviene ejecutar **dos sprints adicionales** que reducen riesgo en la migración: alinear el modelo multi-tenant en toda la app y preparar auth, errores y mutaciones en `lib/api`.
 
 ```mermaid
@@ -329,7 +331,7 @@ Paralelo  Sebastián → S9·HU-5 · José → S9·HU-6
 
 ### Sprint 10 — Fase Supabase (después del gate)
 
-Ver [`ROADMAP.md` § Backlog — Fase Supabase](./ROADMAP.md#backlog--fase-supabase-post-prototipo):
+Ver [`ROADMAP-historico.md` § Backlog — Fase Supabase](./ROADMAP-historico.md#backlog--fase-supabase-post-prototipo):
 
 1. Crear proyecto Supabase + aplicar migración
 2. Auth real + claim `tenant_id`
@@ -356,7 +358,8 @@ Invertir S8–S9 evita rehacer pantallas durante la migración: Supabase solo ca
 - Proyecto (arquitectura y estado): [`PROJECT.md`](./PROJECT.md)
 - Sprint 7 (cerrado): [`sprint-pre-supabase.md`](./sprint-pre-supabase.md)
 - Schema: [`supabase.md`](./supabase.md)
-- Roadmap: [`ROADMAP.md`](./ROADMAP.md)
+- Plan vigente: [`ROADMAP.md`](./ROADMAP.md)
+- Roadmap por sprints (archivo): [`ROADMAP-historico.md`](./ROADMAP-historico.md)
 - Auth: [`auth.md`](./auth.md)
 
 ---

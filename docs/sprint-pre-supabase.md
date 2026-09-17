@@ -1,5 +1,7 @@
 # Sprint previo a Supabase — Sprint 7
 
+> **Archivo.** Este texto describe el ciclo de sprints hacia Supabase. El plan de trabajo vigente es [`ROADMAP.md`](./ROADMAP.md) (Iniciativa 1, solo front mock).
+
 Antes de crear el proyecto en Supabase y ejecutar la **Fase Supabase** (auth, RLS, Storage, Realtime), el equipo debe cerrar el **Sprint 7 — Pulido y preparación para Supabase** y, recomendado, los **Sprints 8 y 9** de consolidación.
 
 Los sprints 0–6 construyen el prototipo UI (mesa de ayuda, listados, multi-tenant, navegación, tickets, módulos secundarios). El Sprint 7 consolida esa base en una capa lista para sustituir mocks por PostgreSQL sin reescribir pantallas.
@@ -14,7 +16,7 @@ Los sprints 0–6 construyen el prototipo UI (mesa de ayuda, listados, multi-ten
 | ¿Qué sprints son prerequisito? | **Sprints 0–6** (features que consume `lib/api`) |
 | ¿Qué documento define el schema? | [`supabase.md`](./supabase.md) |
 | ¿Mejoras adicionales propuestas? | [`sprints-8-9-pre-supabase.md`](./sprints-8-9-pre-supabase.md) |
-| ¿Qué viene después? | **Sprint 10 / Fase Supabase** — ver [`ROADMAP.md` § Backlog](./ROADMAP.md#backlog--fase-supabase-post-prototipo) |
+| ¿Qué viene después? | Plan vigente: [`ROADMAP.md`](./ROADMAP.md). Ciclo sprints: [`ROADMAP-historico.md`](./ROADMAP-historico.md) |
 
 ```mermaid
 flowchart LR
@@ -128,7 +130,8 @@ El Sprint 7 cierra la funcionalidad de demo, pero el análisis del código revel
 
 - Proyecto (arquitectura y estado): [`PROJECT.md`](./PROJECT.md)
 - Mejoras propuestas S8–S9: [`sprints-8-9-pre-supabase.md`](./sprints-8-9-pre-supabase.md)
-- Roadmap completo: [`ROADMAP.md`](./ROADMAP.md)
+- Plan vigente: [`ROADMAP.md`](./ROADMAP.md)
+- Roadmap por sprints (archivo): [`ROADMAP-historico.md`](./ROADMAP-historico.md)
 - Contrato de datos: [`supabase.md`](./supabase.md)
 - Auth (migración futura): [`auth.md`](./auth.md)
 - Capa API: `src/lib/api/`
