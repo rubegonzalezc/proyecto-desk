@@ -2,6 +2,8 @@
 
 Prototipo visual **Apple Liquid Enterprise**: glass suave, sidebar navy, motion tipo iOS. Sin estética fintech ni tinte lila.
 
+Documentación del producto y la arquitectura: [`PROJECT.md`](./PROJECT.md).
+
 ## Arranque
 
 ```bash
@@ -62,7 +64,7 @@ Fuente: Plus Jakarta Sans (`next/font/google`), fallback SF Pro / sistema.
 
 ## Dark mode
 
-Toggle en header y en login. Estado en memoria (`ThemeModeProvider`). Sin `localStorage`.
+Toggle en header y en login. Preferencia en `sessionStorage` (`ThemeModeProvider` + `ui-preferences-storage`). Sin `localStorage`.
 
 - Fondo: `#020617`
 - Superficie: `#0F172A`

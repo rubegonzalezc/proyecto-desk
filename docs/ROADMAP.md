@@ -1,5 +1,7 @@
 # Roadmap — SynchroDesk
 
+> Visión del producto, arquitectura y **estado real del código**: [`PROJECT.md`](./PROJECT.md). Este roadmap es el plan de sprints; varios de los Sprints 1–6 ya están implementados aunque sigan marcados *Pendiente* aquí.
+
 Plan de trabajo por sprints para la fase de **prototipo UI**. Solo frontend; los mocks y la capa `lib/api` preparan la migración futura a **Supabase** (PostgreSQL, Auth, Storage, Realtime).
 
 **Stack:** Next.js 16 · TypeScript · MUI v6 · datos mock en `src/shared/mock/`
@@ -1298,6 +1300,7 @@ Día 5     José → HU-6             │  Rubén → code review + demo sprint
 
 ## Referencias
 
+- Proyecto (arquitectura y estado): [`PROJECT.md`](./PROJECT.md)
 - Diseño: [`DESIGN-README.md`](./DESIGN-README.md)
 - Especificación UI: [`system-design.md`](./system-design.md)
 - Auth (migrar a Supabase): [`auth.md`](./auth.md)
