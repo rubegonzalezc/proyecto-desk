@@ -9,8 +9,8 @@
 | [STYLES.md](./STYLES.md) | Sistema de estilos: tokens, clases CSS, tema MUI, motion, a11y, print |
 | [DESIGN-README.md](./DESIGN-README.md) | Guía de diseño: tokens, shell, componentes, motion |
 | [system-design.md](./system-design.md) | Brief original de la maqueta (Apple Liquid Enterprise) |
-| **[ROADMAP.md](./ROADMAP.md)** | Plan vigente: Iniciativa 1 (historias de usuario, front mock) |
-| [ROADMAP-historico.md](./ROADMAP-historico.md) | Archivo del roadmap por sprints 0–10 |
+| **[ROADMAP.md](./ROADMAP.md)** | Plan vigente: épica Mesa de ayuda IT lista para backend (sprints 1–5, front mock) |
+| [ROADMAP-historico.md](./ROADMAP-historico.md) | Archivo del ciclo anterior hacia Supabase (sprints 0–10) |
 | [auth.md](./auth.md) | Login de demo y plan de autenticación |
 | [supabase.md](./supabase.md) | Schema PostgreSQL (ciclo anterior) |
 | [sprint-pre-supabase.md](./sprint-pre-supabase.md) | Notas Sprint 7 (archivo) |

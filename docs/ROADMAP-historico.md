@@ -1,7 +1,7 @@
 # Roadmap histórico — sprints 0–10 (archivo)
 
 > **Este documento ya no es el plan de trabajo activo.** Se conserva como archivo del ciclo anterior (historias `S{n}·HU-{m}` hacia Supabase).  
-> Plan vigente: [`ROADMAP.md`](./ROADMAP.md) — Iniciativa 1, historias de usuario.
+> Plan vigente: [`ROADMAP.md`](./ROADMAP.md) — épica Mesa de ayuda IT lista para backend (sprints 1–5).
 
 ---
 
@@ -1307,7 +1307,7 @@ Día 5     José → HU-6             │  Rubén → code review + demo sprint
 
 ## Referencias
 
-- Plan vigente (Iniciativa 1): [`ROADMAP.md`](./ROADMAP.md)
+- Plan vigente (épica Mesa de ayuda IT lista para backend): [`ROADMAP.md`](./ROADMAP.md)
 - Proyecto (arquitectura y estado): [`PROJECT.md`](./PROJECT.md)
 - Funcionalidades mock actuales: [`FEATURES.md`](./FEATURES.md)
 - Estilos: [`STYLES.md`](./STYLES.md)

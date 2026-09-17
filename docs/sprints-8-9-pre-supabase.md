@@ -1,6 +1,6 @@
 # Sprints 8 y 9 — Mejoras antes de Supabase
 
-> **Archivo.** No es el plan activo. Lo vigente es [`ROADMAP.md`](./ROADMAP.md) (Iniciativa 1).
+> **Archivo.** No es el plan activo. Lo vigente es [`ROADMAP.md`](./ROADMAP.md) (épica Mesa de ayuda IT lista para backend).
 
 Con el **Sprint 7 cerrado** (incluida S7·HU-7 E2E), el prototipo UI está listo en funcionalidad. Antes de crear el proyecto en Supabase conviene ejecutar **dos sprints adicionales** que reducen riesgo en la migración: alinear el modelo multi-tenant en toda la app y preparar auth, errores y mutaciones en `lib/api`.
 
@@ -331,7 +331,7 @@ Paralelo  Sebastián → S9·HU-5 · José → S9·HU-6
 
 ### Sprint 10 — Fase Supabase (después del gate)
 
-Ver [`ROADMAP.md` § Backlog — Fase Supabase](./ROADMAP.md#backlog--fase-supabase-post-prototipo):
+Ver el archivo [`ROADMAP-historico.md`](./ROADMAP-historico.md) (ciclo anterior). El plan activo es [`ROADMAP.md`](./ROADMAP.md) y **no** incluye esta fase hasta cerrar la épica de front mock:
 
 1. Crear proyecto Supabase + aplicar migración
 2. Auth real + claim `tenant_id`
