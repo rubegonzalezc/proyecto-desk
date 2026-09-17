@@ -358,7 +358,8 @@ Los **roles de producto** no son el login: son autorización de negocio en `/rol
 
 Identidad **Apple Liquid Enterprise**: glass suave, sidebar navy, motion tipo iOS. Sin estética fintech ni tinte lila.
 
-Guía operativa: [`DESIGN-README.md`](./DESIGN-README.md).  
+Catálogo de estilos (tokens CSS, clases, tema MUI, badges, print): [`STYLES.md`](./STYLES.md).  
+Guía operativa corta: [`DESIGN-README.md`](./DESIGN-README.md).  
 Especificación original de la maqueta: [`system-design.md`](./system-design.md).
 
 | Token | Valor |
@@ -395,7 +396,7 @@ No hay `error.tsx` ni `global-error.tsx` (Sprint 9).
 2. No añadir backend, variables de entorno de API ni cliente Supabase hasta cerrar los Sprints 8 y 9 (ver gate en [`sprint-pre-supabase.md`](./sprint-pre-supabase.md)).
 3. Lecturas nuevas: función en `src/lib/api` con `tenantId` + `// TODO: supabase.from('...')`. No importar mocks desde `components/` ni `app/`.
 4. Mutaciones de demo: store de sesión, no arrays globales mutables.
-5. Respetar tokens y motion de `docs/DESIGN-README.md` y `src/styles/design-system.css`.
+5. Respetar tokens y motion de [`STYLES.md`](./STYLES.md), `docs/DESIGN-README.md` y `src/styles/design-system.css`.
 6. `'use client'` solo si hace falta estado, efectos o APIs del navegador.
 7. Compilar con `npm run dev` / `npm run lint` sin errores.
 
@@ -436,7 +437,8 @@ flowchart LR
 |-----------|-----------|
 | [README](../README.md) | Arranque rápido y mapa del producto |
 | [PROJECT.md](./PROJECT.md) | Este documento: producto + arquitectura + estado |
-| [DESIGN-README.md](./DESIGN-README.md) | Tokens, shell, componentes visuales |
+| [STYLES.md](./STYLES.md) | Tokens CSS, clases, tema MUI, motion, foco e impresión |
+| [DESIGN-README.md](./DESIGN-README.md) | Identidad visual y shell (guía corta) |
 | [system-design.md](./system-design.md) | Especificación inicial de la maqueta |
 | [ROADMAP.md](./ROADMAP.md) | Sprints e historias de usuario |
 | [auth.md](./auth.md) | Login actual y plan Better Auth / sesión |

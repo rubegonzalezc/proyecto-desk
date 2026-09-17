@@ -1301,6 +1301,7 @@ Día 5     José → HU-6             │  Rubén → code review + demo sprint
 ## Referencias
 
 - Proyecto (arquitectura y estado): [`PROJECT.md`](./PROJECT.md)
+- Estilos: [`STYLES.md`](./STYLES.md)
 - Diseño: [`DESIGN-README.md`](./DESIGN-README.md)
 - Especificación UI: [`system-design.md`](./system-design.md)
 - Auth (migrar a Supabase): [`auth.md`](./auth.md)

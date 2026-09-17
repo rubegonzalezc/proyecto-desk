@@ -2,7 +2,8 @@
 
 Prototipo visual **Apple Liquid Enterprise**: glass suave, sidebar navy, motion tipo iOS. Sin estética fintech ni tinte lila.
 
-Documentación del producto y la arquitectura: [`PROJECT.md`](./PROJECT.md).
+Documentación del producto y la arquitectura: [`PROJECT.md`](./PROJECT.md).  
+Catálogo de estilos (clases, tokens, MUI, badges): [`STYLES.md`](./STYLES.md).
 
 ## Arranque
 

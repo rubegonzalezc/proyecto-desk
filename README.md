@@ -116,6 +116,7 @@ No instalar Better Auth ni el cliente Supabase hasta cerrar los Sprints 8 y 9.
 | Documento | Contenido |
 |-----------|-----------|
 | [`docs/PROJECT.md`](./docs/PROJECT.md) | Producto, arquitectura, estado del código y convenciones |
+| [`docs/STYLES.md`](./docs/STYLES.md) | Tokens, clases CSS, tema MUI, motion, foco e impresión |
 | [`docs/DESIGN-README.md`](./docs/DESIGN-README.md) | Identidad visual y tokens |
 | [`docs/system-design.md`](./docs/system-design.md) | Especificación inicial de UI |
 | [`docs/ROADMAP.md`](./docs/ROADMAP.md) | Sprints e historias de usuario |
