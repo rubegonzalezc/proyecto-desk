@@ -407,7 +407,7 @@ No hay `error.tsx` ni `global-error.tsx` (Sprint 9).
 | **José** | Frontend junior | Header, Cmd+K, pestañas, empty states; I1·HU-2, HU-8, HU-9 |
 | **Sebastián** | Fullstack junior | Formularios, modal invitar, roles, settings; I1·HU-3, HU-5, HU-6 |
 
-Historias vigentes: [`ROADMAP.md`](./ROADMAP.md). Archivo por sprints: [`ROADMAP-historico.md`](./ROADMAP-historico.md).
+Historias vigentes: [`ROADMAP.md`](./ROADMAP.md) (orden HU-1 … HU-9). **Solo Rubén mergea PRs.** Archivo por sprints: [`ROADMAP-historico.md`](./ROADMAP-historico.md).
 
 ---
 
