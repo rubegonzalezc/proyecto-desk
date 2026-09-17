@@ -107,7 +107,7 @@ Ruta: `/dashboard`.
 | Kanban | Navegable | Toggle tabla/kanban; columnas Nuevo, En progreso, Pendiente, Resuelto; clic → detalle. **Sin drag & drop** |
 | Filtro texto | URL | Asunto / ID |
 | Chips de estado | URL | Todos + 5 estados |
-| Filtros avanzados | URL | Prioridad, técnico, categoría, desde/hasta; “Limpiar filtros” |
+| Filtros avanzados | URL | Prioridad (Baja/Media/Alta/Crítica), técnico, categoría, desde/hasta; “Limpiar filtros” |
 | Paginación | URL + **Sesión** | Página en query; tamaño en `sessionStorage` |
 | Empty state | Navegable | CTA crear ticket o limpiar filtros |
 | Vista compartible | URL | `q`, `estado`, `prioridad`, `tecnico`, `categoria`, `desde`, `hasta`, `vista`, `page`, `size` |
@@ -118,7 +118,7 @@ Al cambiar de tenant la página vuelve a 1 y la cola se recorta a ese `tenantId`
 
 | Funcionalidad | Tipo | Qué hace |
 |---------------|------|----------|
-| Formulario | **Sesión** | Asunto, descripción, categoría, prioridad, solicitante, técnico, equipo |
+| Formulario | **Sesión** | Asunto, descripción, categoría, prioridad (Baja/Media/Alta/Crítica a mano), solicitante, técnico, equipo |
 | Validación | Memoria | Asunto y descripción obligatorios; errores inline + toast |
 | Adjuntos | **Sesión** (blob URL) | Dropzone de imágenes → evidencias del ticket |
 | Loading | Visual | Botón disabled 400–800 ms |
@@ -130,7 +130,7 @@ El ticket hereda el `tenantId` activo.
 
 | Funcionalidad | Tipo | Qué hace |
 |---------------|------|----------|
-| Metadatos | Navegable | Estado, prioridad, categoría, equipo, SLA |
+| Metadatos | Navegable | Estado, prioridad (Baja/Media/Alta/Crítica), categoría, equipo, SLA (texto libre, no calculado) |
 | Panel de gestión | **Sesión** | Editar estado, prioridad, técnico, categoría (desktop; drawer en móvil) |
 | Confirmar resolver/cerrar | **Sesión** | Diálogo antes de Resuelto o Cerrado |
 | Timeline | **Sesión** | Creado, asignado, cambio de estado, comentario, resuelto |
@@ -142,6 +142,8 @@ El ticket hereda el `tenantId` activo.
 | 404 | Navegable | ID inexistente |
 
 Kanban no incluye la columna Cerrado; esos tickets solo salen en tabla si se filtra.
+
+**Prioridades hoy vs. mesa de soporte IT:** el prototipo ya usa Baja · Media · Alta · Crítica. No hay código P1–P4, ni tipo (Incidente/Solicitud/Problema/Cambio), ni impacto × urgencia, ni SLA calculado por nivel (el texto de SLA es decorativo; `/configuracion` solo guarda primera respuesta crítica y resolución alta). El modelo objetivo está en [`ROADMAP.md`](./ROADMAP.md#modelo-de-prioridades--soporte-informático) (Sprint 2).
 
 ---
 
@@ -191,7 +193,7 @@ Ruta: `/configuracion`.
 | Campo | Tipo |
 |-------|------|
 | Cliente (org) y dominio | **Sesión** (por `tenantId`) |
-| SLA: primera respuesta crítica, resolución alta, horario | **Sesión** |
+| SLA: primera respuesta crítica, resolución alta, horario | **Sesión** (solo P1 respuesta + P2/P1 resolución; no hay matriz de 4 niveles) |
 | Zona horaria e idioma | Visual (`defaultValue`) |
 | Switches de notificaciones | Visual |
 | Guardar cambios | Toast “Cambios guardados (demo)” |
@@ -263,7 +265,7 @@ Catálogos mock. Sin alta ni edición.
 - Adjuntos reales (hoy son blob URLs locales)
 - Playwright en el repo (`package.json` no tiene `test:e2e`)
 
-Próximo trabajo: **Iniciativa 1** — [`ROADMAP.md`](./ROADMAP.md) (historias I1·HU-1 … HU-9, sin backend). El plan por sprints quedó en [`ROADMAP-historico.md`](./ROADMAP-historico.md).
+Próximo trabajo: épica **Mesa de ayuda IT lista para backend** — [`ROADMAP.md`](./ROADMAP.md) (sprints 1–5, HU-1 … HU-33, sin backend). Incluye el modelo de prioridades de soporte informático (se conservan Baja/Media/Alta/Crítica; se añaden P1–P4, impacto, urgencia, tipo y SLA por nivel). El ciclo anterior hacia Supabase quedó en [`ROADMAP-historico.md`](./ROADMAP-historico.md).
 
 ---
 

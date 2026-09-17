@@ -110,7 +110,7 @@ Atajo `Ctrl/Cmd+K`: búsqueda global de tickets, clientes, usuarios y rutas.
 API real, autenticación, persistencia entre dispositivos, RLS, WebSockets.  
 No instalar Better Auth ni cliente Supabase en este ciclo.
 
-Qué se va a añadir ahora: [`docs/ROADMAP.md`](./docs/ROADMAP.md) (Iniciativa 1, historias de usuario).
+Qué se va a añadir ahora: [`docs/ROADMAP.md`](./docs/ROADMAP.md) (épica **Mesa de ayuda IT lista para backend**, sprints 1–5).
 
 ---
 
@@ -123,8 +123,8 @@ Qué se va a añadir ahora: [`docs/ROADMAP.md`](./docs/ROADMAP.md) (Iniciativa 1
 | [`docs/STYLES.md`](./docs/STYLES.md) | Tokens, clases CSS, tema MUI, motion, foco e impresión |
 | [`docs/DESIGN-README.md`](./docs/DESIGN-README.md) | Identidad visual y tokens |
 | [`docs/system-design.md`](./docs/system-design.md) | Especificación inicial de UI |
-| [`docs/ROADMAP.md`](./docs/ROADMAP.md) | Plan vigente: Iniciativa 1 (historias de usuario) |
-| [`docs/ROADMAP-historico.md`](./docs/ROADMAP-historico.md) | Archivo del plan por sprints |
+| [`docs/ROADMAP.md`](./docs/ROADMAP.md) | Plan vigente: épica Mesa de ayuda IT lista para backend (sprints 1–5) |
+| [`docs/ROADMAP-historico.md`](./docs/ROADMAP-historico.md) | Archivo del ciclo anterior hacia Supabase |
 | [`docs/auth.md`](./docs/auth.md) | Login actual y plan de sesión |
 | [`docs/supabase.md`](./docs/supabase.md) | Contrato de datos (ciclo anterior) |
 | [`docs/sprint-pre-supabase.md`](./docs/sprint-pre-supabase.md) | Notas Sprint 7 (archivo) |

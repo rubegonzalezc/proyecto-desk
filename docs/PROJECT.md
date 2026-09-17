@@ -74,18 +74,19 @@ Inventario detallado de pantallas y acciones: [`FEATURES.md`](./FEATURES.md).
 - Persistencia entre pestañas, dispositivos o recargas de navegador distintas
 - CRUD real ni validaciones de servidor
 - Playwright en el árbol de código (el Sprint 7 lo da por hecho; `package.json` no incluye el script)
-- `tenantId` en inventario, conocimiento, roles, equipos, activos y notificaciones (Iniciativa 1 · HU-1)
+- `tenantId` en inventario, conocimiento, roles, equipos, activos y notificaciones (épica vigente · S1·HU-1)
 
 ### Cómo leer el resto de `docs/`
 
-Plan de trabajo vigente: [`ROADMAP.md`](./ROADMAP.md) (Iniciativa 1 — historias de usuario, front mock).  
-El ciclo anterior por sprints está en [`ROADMAP-historico.md`](./ROADMAP-historico.md). Este documento y `src/` describen el estado del código.
+Plan de trabajo vigente: [`ROADMAP.md`](./ROADMAP.md) (épica **Mesa de ayuda IT lista para backend**, sprints 1–5, front mock).  
+El ciclo anterior hacia Supabase está en [`ROADMAP-historico.md`](./ROADMAP-historico.md). Este documento y `src/` describen el estado del código.
 
 | Ámbito | En el código |
 |--------|----------------|
 | Fundación, tickets interactivos, listados, navegación, Kanban, conocimiento, inventario (altas) | Implementado (mock) |
 | `lib/api`, 403/404, a11y, preferencias en sessionStorage | Implementado |
-| Tenant persistente, aislamiento total, invitar/guardar rol, stock al mover | Pendiente — Iniciativa 1 |
+| Tenant persistente, aislamiento total, invitar/guardar rol, stock al mover | Pendiente — Sprint 1 de la épica |
+| Prioridades IT (P1–P4, impacto, urgencia, SLA por nivel), catálogos, flujo operativo | Pendiente — Sprints 2–5 |
 | Backend / Supabase / auth real | Fuera de este ciclo |
 
 ---
@@ -266,7 +267,8 @@ El sidebar cambia según el sistema activo (`src/shared/systems.ts`). Al abrir u
 Si el tenant no contrata inventario, `InventoryAccessGuard` renderiza **403** dentro del shell.
 
 Estados de ticket: Nuevo · En progreso · Pendiente · Resuelto · Cerrado.  
-Prioridades: Baja · Media · Alta · Crítica.
+Prioridades **hoy:** Baja · Media · Alta · Crítica (chips; el SLA es texto libre).  
+**Objetivo de la épica (Sprint 2):** se conservan esas cuatro etiquetas y se completan con código P1–P4, tipo (Incidente / Solicitud / Problema / Cambio), impacto × urgencia y SLA por nivel. Detalle: [`ROADMAP.md` · modelo de prioridades](./ROADMAP.md#modelo-de-prioridades--soporte-informático).
 
 ---
 
@@ -293,7 +295,7 @@ Hay 12 tenants en el catálogo (Google, Nexus Salud, Andes Logistics, Aurora Ban
 |---------|-------------------------------------|
 | Tickets, usuarios, dashboard | Sí |
 | Clientes (plataforma) | Listado global (correcto: es consola de operador) |
-| Inventario, conocimiento, roles, equipos, activos, notificaciones | No — seeds globales; Sprint 8 |
+| Inventario, conocimiento, roles, equipos, activos, notificaciones | No — seeds globales; Sprint 1 de la épica vigente |
 
 ---
 
@@ -403,17 +405,17 @@ No hay `error.tsx` ni `global-error.tsx` (Sprint 9).
 
 | Persona | Rol | Enfoque |
 |---------|-----|---------|
-| **Rubén** | Fullstack senior | Arquitectura, stores, `tenantId`, lógica de inventario; I1·HU-1, HU-4, HU-7 |
-| **José** | Frontend junior | Header, Cmd+K, pestañas, empty states; I1·HU-2, HU-8, HU-9 |
-| **Sebastián** | Fullstack junior | Formularios, modal invitar, roles, settings; I1·HU-3, HU-5, HU-6 |
+| **Rubén** | Fullstack senior | Arquitectura, stores, `tenantId`, motor SLA, inventario; S1·HU-1/4/7, S2·HU-10/11, S3·HU-16/19, S4·HU-22/26, S5·HU-28/32 |
+| **José** | Frontend junior | Header, Cmd+K, badges, filtros, pestañas, cromo de settings; S1·HU-2/8/9, S2·HU-14/15, S3·HU-20/21, S4·HU-25/27, S5·HU-31/33 |
+| **Sebastián** | Fullstack junior | Formularios, CRUD de catálogos, settings, alta de ticket; S1·HU-3/5/6, S2·HU-12/13, S3·HU-17/18, S4·HU-23/24, S5·HU-29/30 |
 
-Historias vigentes: [`ROADMAP.md`](./ROADMAP.md) (orden HU-1 … HU-9). **Solo Rubén mergea PRs.** Archivo por sprints: [`ROADMAP-historico.md`](./ROADMAP-historico.md).
+Historias vigentes: [`ROADMAP.md`](./ROADMAP.md) (S1·HU-1 … S5·HU-33). **Solo Rubén mergea PRs.** El ciclo anterior hacia Supabase: [`ROADMAP-historico.md`](./ROADMAP-historico.md).
 
 ---
 
 ## 16. Qué sigue
 
-El plan activo es la **Iniciativa 1** ([`ROADMAP.md`](./ROADMAP.md)): nueve historias de usuario, front mock, asignadas a Rubén, José y Sebastián.
+El plan activo es la épica **Mesa de ayuda IT lista para backend** ([`ROADMAP.md`](./ROADMAP.md)): cinco sprints de front mock (aislamiento, prioridades/SLA, catálogos, flujo operativo, configuración del tenant).
 
 Notas de un ciclo anterior (no se ejecutan ahora): [`supabase.md`](./supabase.md), [`ROADMAP-historico.md`](./ROADMAP-historico.md).
 
@@ -429,8 +431,8 @@ Notas de un ciclo anterior (no se ejecutan ahora): [`supabase.md`](./supabase.md
 | [STYLES.md](./STYLES.md) | Tokens CSS, clases, tema MUI, motion, foco e impresión |
 | [DESIGN-README.md](./DESIGN-README.md) | Identidad visual y shell (guía corta) |
 | [system-design.md](./system-design.md) | Especificación inicial de la maqueta |
-| [ROADMAP.md](./ROADMAP.md) | Plan vigente: Iniciativa 1 (historias de usuario, front mock) |
-| [ROADMAP-historico.md](./ROADMAP-historico.md) | Archivo del plan por sprints 0–10 |
+| [ROADMAP.md](./ROADMAP.md) | Plan vigente: épica Mesa de ayuda IT lista para backend (sprints 1–5) |
+| [ROADMAP-historico.md](./ROADMAP-historico.md) | Archivo del ciclo anterior hacia Supabase (sprints 0–10) |
 | [auth.md](./auth.md) | Login actual y plan Better Auth / sesión |
 | [supabase.md](./supabase.md) | Tablas, RLS, Storage, Realtime (ciclo anterior) |
 | [sprint-pre-supabase.md](./sprint-pre-supabase.md) | Notas Sprint 7 (archivo) |

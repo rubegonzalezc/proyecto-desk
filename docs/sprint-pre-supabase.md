@@ -1,6 +1,6 @@
 # Sprint previo a Supabase — Sprint 7
 
-> **Archivo.** El plan vigente es [`ROADMAP.md`](./ROADMAP.md) (Iniciativa 1). Este texto describe el ciclo de sprints hacia Supabase.
+> **Archivo.** El plan vigente es [`ROADMAP.md`](./ROADMAP.md) (épica Mesa de ayuda IT lista para backend). Este texto describe el ciclo anterior hacia Supabase.
 
 Antes de crear el proyecto en Supabase y ejecutar la **Fase Supabase** (auth, RLS, Storage, Realtime), el equipo debe cerrar el **Sprint 7 — Pulido y preparación para Supabase** y, recomendado, los **Sprints 8 y 9** de consolidación.
 
@@ -16,7 +16,7 @@ Los sprints 0–6 construyen el prototipo UI (mesa de ayuda, listados, multi-ten
 | ¿Qué sprints son prerequisito? | **Sprints 0–6** (features que consume `lib/api`) |
 | ¿Qué documento define el schema? | [`supabase.md`](./supabase.md) |
 | ¿Mejoras adicionales propuestas? | [`sprints-8-9-pre-supabase.md`](./sprints-8-9-pre-supabase.md) |
-| ¿Qué viene después? | **Sprint 10 / Fase Supabase** — ver [`ROADMAP.md` § Backlog](./ROADMAP.md#backlog--fase-supabase-post-prototipo) |
+| ¿Qué viene después? | El plan activo ya no es este ciclo: [`ROADMAP.md`](./ROADMAP.md) (épica actual). El backlog Supabase de este archivo quedó en [`ROADMAP-historico.md`](./ROADMAP-historico.md) |
 
 ```mermaid
 flowchart LR
