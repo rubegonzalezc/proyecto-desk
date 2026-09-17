@@ -1,5 +1,7 @@
 # Supabase — contrato de datos y RLS previsto
 
+> **No forma parte del plan vigente.** El trabajo actual es la Iniciativa 1 ([`ROADMAP.md`](./ROADMAP.md)). Este contrato se conserva para un ciclo posterior.
+
 Documento de referencia para alinear al equipo **antes** de crear el proyecto en Supabase. Describe tablas, columnas, políticas RLS, Storage y Realtime que sustituirán los mocks actuales (`src/shared/mock/`) y la capa `src/lib/api/`.
 
 Arquitectura actual del prototipo: [`PROJECT.md`](./PROJECT.md).

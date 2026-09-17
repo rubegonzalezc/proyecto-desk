@@ -1,5 +1,7 @@
 # Sprints 8 y 9 — Mejoras antes de Supabase
 
+> **Archivo.** No es el plan activo. Lo vigente es [`ROADMAP.md`](./ROADMAP.md) (Iniciativa 1).
+
 Con el **Sprint 7 cerrado** (incluida S7·HU-7 E2E), el prototipo UI está listo en funcionalidad. Antes de crear el proyecto en Supabase conviene ejecutar **dos sprints adicionales** que reducen riesgo en la migración: alinear el modelo multi-tenant en toda la app y preparar auth, errores y mutaciones en `lib/api`.
 
 ```mermaid
